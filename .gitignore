@@ -1,0 +1,14 @@
+/dist/
+/node_modules/
+
+/config/production.*
+/config/local*
+
+/tests/logs/
+
+.vscode
+
+dependencies.svg
+dependencies-directory.svg
+dependencies.html
+dependencies-directory.html

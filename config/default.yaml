@@ -1,0 +1,57 @@
+cluster:
+  # Number of workers for the web server. 0 = 1 per cpu (minus the number of notifiers).
+  workers: 0
+  notifiers: 1
+
+cookies:
+  prefix: 'bop'
+
+database:
+  # Supported types: mariadb and mysql
+  type: 'mariadb'
+  hostname: 'localhost'
+  port: 3306
+  dbname: ~
+  username: ~
+  password: ~
+  log: false
+  pool:
+    # max pools by workers. You have to multiply by cluster.workers to have the real number of connections.
+    # NB: the master will use the same number of pools, but will disconnect as soon as migrations are done.
+    max: 5
+
+log:
+  level: info
+  console:
+    enabled: false
+  syslog:
+    enabled: true
+    # see https://github.com/winstonjs/winston-syslog for configuration
+    host: 'localhost'
+    port: ~
+    protocol: ~
+    path: ~
+    localhost: ~
+    type: ~
+  file:
+    enabled: false
+    path: ~
+
+redis:
+  hostname: localhost
+  port: 6379,
+  prefix: ~
+  auth: ~
+
+server:
+  hostname: ~
+  port: ~
+  # https: if your server is behind a reverse proxy that use https (recommanded),
+  # set this to true. It will for example affecf cookies to set them as secure.
+  https: ~
+
+notifier:
+  # Socket-io server configuration.
+  hostname: ~
+  post: ~
+  https: ~

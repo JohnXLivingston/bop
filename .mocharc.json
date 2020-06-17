@@ -1,0 +1,9 @@
+{
+  "extension": ["ts"],
+  "spec": [
+    "./tests/index.ts"
+  ],
+  "require": "ts-node/register",
+  "bail": true,
+  "exit": true
+}

@@ -1,0 +1,22 @@
+{
+	"compilerOptions": {
+		"target": "es6",
+		"experimentalDecorators": true, // Needed for sequelize-typescript
+		"emitDecoratorMetadata": true, // Needed for sequelize-typescript
+		"module": "commonjs",
+		"moduleResolution": "node", // Tell tsc to look in node_modules for modules
+		"strict": true,
+		"alwaysStrict": true,
+		"forceConsistentCasingInFileNames": true,
+		"noImplicitAny": true,
+		"noImplicitReturns": true,
+		"noUnusedLocals": true,
+		"outDir": "dist",
+		"baseUrl": ".",
+		"paths": {
+			"*": ["node_modules/*"]
+		}
+	},
+	"include": ["src/**/*"],
+	"exclude": ["src/public"]
+}

@@ -1,0 +1,37 @@
+cluster:
+  # 2 workers in test mode. It should be enough.
+  workers: 2
+  notifiers: 2
+
+cookies:
+  prefix: 'bop_test'
+
+database:
+  # Supported types: mariadb and mysql
+  dbname: 'bop_test'
+  username: 'bop_test'
+  password: 'bop'
+  log: true
+
+log:
+  level: debug
+  console:
+    enabled: false
+  syslog:
+    enabled: false
+  file:
+    enabled: true
+    path: './tests/logs/tests.log'
+
+redis:
+  prefix: bop_test
+
+server:
+  hostname: localhost
+  port: 12340
+  https: false
+
+notifier:
+  hostname: localhost
+  port: 12341
+  https: false

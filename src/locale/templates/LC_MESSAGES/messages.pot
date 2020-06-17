@@ -1,0 +1,30 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2020-04-02 07:38+0000\n"
+
+#: /home/john/dev/bop/dist/views/login.html:14
+#: /home/john/dev/bop/dist/views/login.html:15
+msgid "Login"
+msgstr ""
+
+#: /home/john/dev/bop/dist/views/login.html:18
+#: /home/john/dev/bop/dist/views/login.html:19
+msgid "Password"
+msgstr ""
+
+#: /home/john/dev/bop/dist/views/login.html:22
+msgid "Login failed."
+msgstr ""
+
+#: /home/john/dev/bop/dist/views/index.html:26
+msgid "Logout"
+msgstr ""

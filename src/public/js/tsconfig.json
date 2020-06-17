@@ -1,0 +1,15 @@
+{
+	"compilerOptions": {
+		"target": "es6",
+		"module": "commonJS",
+		"sourceMap": true,
+		"moduleResolution": "node", // Tell tsc to look in node_modules for modules
+		"strict": true,
+		"alwaysStrict": true,
+		"forceConsistentCasingInFileNames": true,
+		"noImplicitAny": true,
+		"noImplicitReturns": true,
+		"noUnusedLocals": true,
+		"outDir": "../../../dist/public/js"
+	}
+}

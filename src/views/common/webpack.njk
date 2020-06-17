@@ -1,0 +1,21 @@
+{% macro stylesheets(webpackManifest, name) %}
+  {# FIXME: should be sorted... #}
+  {% for key, value in webpackManifest | dictsort %}
+    {% set parts = key.replace(r/^commons-([^-]*)-.*$/, "$1").split('~') %}
+    {% if parts.indexOf(name) >= 0 and webpackManifest[key].css %}
+      <link rel="stylesheet" href="{{ webpackManifest[key].css }}">
+    {% endif %}
+  {% endfor %}
+{% endmacro %}
+{% macro headScripts(webpackManifest, name) %}
+  {% if webpackManifest.manifest.text %}<script>{{ webpackManifest.manifest.text | safe }}</script>{% endif %}
+{% endmacro %}
+{% macro bodyScripts(webpackManifest, name) %}
+  {# FIXME: should be sorted... #}
+  {% for key, value in webpackManifest | dictsort %}
+    {% set parts = key.replace(r/^commons-([^-]*)-.*$/, "$1").split('~') %}
+    {% if parts.indexOf(name) >= 0 and webpackManifest[key].js %}
+      {% if webpackManifest[key].js %}<script src="{{ webpackManifest[key].js }}"></script>{% endif %}
+    {% endif %}
+  {% endfor %}
+{% endmacro %}
