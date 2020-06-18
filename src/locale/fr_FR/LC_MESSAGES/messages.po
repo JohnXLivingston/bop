@@ -15,7 +15,7 @@ msgstr ""
 #: /home/john/dev/bop/dist/views/login.html:14
 #: /home/john/dev/bop/dist/views/login.html:15
 msgid "Login"
-msgstr "Connexion"
+msgstr "Identifiant"
 
 #: /home/john/dev/bop/dist/views/login.html:18
 #: /home/john/dev/bop/dist/views/login.html:19

@@ -1,3 +1,20 @@
+@import 'common/variables';
+
 * {
   box-sizing: border-box;
+}
+
+html {
+  background-color: $background-color-empty;
+  color: $base-color;
+  font-family: Arial, Helvetica, sans-serif;
+  height: 100%;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  font-size: 1.4rem;
+  height: 100%;
+  margin: 0;
+  word-wrap: break-word;
 }

@@ -1,1 +1,25 @@
 @import 'common/common';
+@import 'common/error';
+@import 'common/flex';
+@import 'common/scroll';
+@import 'common/size';
+@import 'common/variables';
+
+.login-content {
+  margin: auto;
+  max-width: 380px;
+
+  h1 {
+    text-align: center;
+  }
+}
+
+.login-form {
+  border: solid 1px $border-color-dark;
+  padding: 40px;
+}
+
+footer {
+  border-top: solid 1px $border-color-light;
+  padding: 14px 16px;
+}

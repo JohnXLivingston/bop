@@ -1,6 +1,6 @@
 {% macro localeButtons(changeLocaleInformations) %}
   {% if changeLocaleInformations %}
-    <ul>
+    <ul class="flex">
       {% for info in changeLocaleInformations %}
         <li><a href="{{ info.url }}">{{ info.language }}</a></li>
       {% endfor %}

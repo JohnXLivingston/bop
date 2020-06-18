@@ -9,26 +9,35 @@
     {{ webpack.headScripts(webpackManifest, 'login') }}
   </head>
   <body>
-    <form action="" method="POST">
-      <label>
-        {{ gettext('Login') }}
-        <input type="text" name="login" placeholder="{{ gettext('Login') }}" required value="{{ login }}">
-      </label>
-      <label>
-        {{ gettext('Password') }}
-        <input type="password" name="password" placeholder="{{ gettext('Password') }}" required>
-      </label>
-      {% if loginFailed %}
-        {{ gettext('Login failed.') }}
-      {% endif %}
-      <input type="hidden" name="loginForm" value="1">
-      <input type="submit">
-    </form>
-    {% if changeLocaleInformations %}
-      <div>
-        {{ commonLocale.localeButtons(changeLocaleInformations) }}
+    <div class="v-scroll h-full">
+      <div class="flex flex-v">
+        <div class="flex-full-fix">
+          <section class="flex flex-v login-content">
+            <h1>{{ gettext('Sign in to BOP') }}</h1>
+            <form action="" method="POST" class="login-form">
+              <div class="flex flex-v">
+                <input type="text" name="login" placeholder="{{ gettext('Login') }}" required value="{{ login }}">
+                <input type="password" name="password" placeholder="{{ gettext('Password') }}" required>
+                {% if loginFailed %}
+                  <div class="error">
+                    {{ gettext('Login failed.') }}
+                  </div>
+                {% endif %}
+                <input type="hidden" name="loginForm" value="1">
+                <input type="submit" value="{{ gettext('Sign in') }}">
+              </div>
+            </form>
+          </section>
+        </div>
+        <footer class="flex-fix">
+          {% if changeLocaleInformations %}
+            <div>
+              {{ commonLocale.localeButtons(changeLocaleInformations) }}
+            </div>
+          {% endif %}
+        </footer>
       </div>
-    {% endif %}
+    </div>
     {{ webpack.bodyScripts(webpackManifest, 'login') }}
   </body>
 </html>
