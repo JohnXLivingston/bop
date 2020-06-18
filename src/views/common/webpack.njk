@@ -10,7 +10,9 @@
 {% macro headScripts(webpackManifest, name) %}
   {% if webpackManifest.manifest.text %}<script>{{ webpackManifest.manifest.text | safe }}</script>{% endif %}
 {% endmacro %}
-{% macro bodyScripts(webpackManifest, name) %}
+{% macro bodyScripts(locale, webpackManifest, name) %}
+  {# FIXME: i18n files should pass through webpack, to minimize and add an hash in url. #}
+  <script src="i18n/{{ locale }}/messages.js"></script>
   {# FIXME: should be sorted... #}
   {% for key, value in webpackManifest | dictsort %}
     {% set parts = key.replace(r/^commons-([^-]*)-.*$/, "$1").split('~') %}

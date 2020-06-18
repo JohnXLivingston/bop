@@ -1,3 +1,5 @@
+import { gettext } from '../utils/i18n'
+
 function initWidgetsLocale () {
   let changeDialog: JQuery | undefined
   $('body').on('click', '[widget-locale-change]>a', (ev) => {
@@ -6,7 +8,7 @@ function initWidgetsLocale () {
     if (!changeDialog) {
       changeDialog = widget.find('>div')
       changeDialog.dialog({
-        closeText: '', // FIXME: use gettext in frontend ?
+        closeText: gettext('Close'),
         draggable: false,
         height: 'auto',
         maxHeight: 600,

@@ -9,6 +9,8 @@ import { setSharedLogger } from '../../shared/utils/logger'
 
 setSharedLogger(getLogger('shared'))
 
+require('./utils/i18n')
+
 require('jquery-ui/themes/base/core.css')
 require('jquery-ui/themes/base/theme.css')
 

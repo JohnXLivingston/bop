@@ -122,6 +122,7 @@ function newServer () {
   app.use(logRequest)
 
   app.use(express.static(path.join(__dirname, './public')))
+  app.use('/i18n', express.static(path.join(__dirname, './i18n')))
 
   app.use(i18n)
   app.use(commonConstants) // It as to be after i18n, because of a bug: https://github.com/mozilla/i18n-abide/issues/89
