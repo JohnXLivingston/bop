@@ -9,21 +9,26 @@
     {{ webpack.headScripts(webpackManifest, 'main') }}
   </head>
   <body>
-    {% if not isProduction %}
-      <label>
-        <input type="checkbox" checked="checked" auto-reload-dev-mode>
-        Auto reload
-      </label>
-      <br>
-    {% endif %}
-    Here we go!
-    {% if changeLocaleInformations %}
+    <header>
+      <h1>BOP</h1>
+      {% if not isProduction %}
+        <label>
+          <input type="checkbox" checked="checked" auto-reload-dev-mode>
+          Auto reload
+        </label>
+        <br>
+      {% endif %}
+      {% if changeLocaleInformations %}
+        <div>
+          {{ commonLocale.localeButtons(changeLocaleInformations) }}
+        </div>
+      {% endif %}
       <div>
-        {{ commonLocale.localeButtons(changeLocaleInformations) }}
+        <a href="/logout">{{ gettext('Logout') }}</a>
       </div>
-    {% endif %}
+    </header>
     <div>
-      <a href="/logout">{{ gettext('Logout') }}</a>
+      Here we go!
     </div>
     {{ webpack.bodyScripts(webpackManifest, 'main') }}
   </body>

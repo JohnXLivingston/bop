@@ -1,27 +1,25 @@
-.flex {
+%flex, .flex {
   display: flex;
   align-items: center;
 }
 
-.flex-inline {
+%flex-inline, .flex-inline {
   display: inline-flex;
   align-items: center;
 }
 
-.flex-v {
-  flex-direction: column;
+%flex-v, .flex-v {
   align-items: stretch;
-}
-.flex.flex-v {
+  flex-direction: column;
   height: 100%;
 }
 
-.flex-full-fix {
+%flex-full-fix, .flex-full-fix {
   flex-grow: 1;
   flex-shrink: 0;
   flex-basis: auto;
 }
-.flex-fix {
+%flex-fix, .flex-fix {
   flex-grow: 0;
   flex-shrink: 0;
   flex-basis: auto;

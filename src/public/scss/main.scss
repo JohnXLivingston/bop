@@ -1,1 +1,16 @@
 @import 'common/common';
+@import 'common/error';
+@import 'common/flex';
+@import 'common/scroll';
+@import 'common/size';
+@import 'common/variables';
+
+body {
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
+header {
+  @extend %flex;
+  border-bottom: solid 1px $border-color-dark;
+}
