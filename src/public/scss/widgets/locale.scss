@@ -1,0 +1,7 @@
+@import 'common/button';
+
+[widget-locale-change] {
+  a {
+    @extend %link-clickable
+  }
+}

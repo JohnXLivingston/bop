@@ -1,9 +1,15 @@
-{% macro localeButtons(changeLocaleInformations) %}
-  {% if changeLocaleInformations %}
-    <ul class="flex">
-      {% for info in changeLocaleInformations %}
-        <li><a href="{{ info.url }}">{{ info.language }}</a></li>
-      {% endfor %}
-    </ul>
-  {% endif %}
-{% endmacro %}
+{% if changeLocaleInformations %}
+  <div widget-locale-change>
+    {{ gettext('Current locale:') }}
+    <a>
+      {{ locale }}
+    </a>
+    <div class="hidden">
+      <ul>
+        {% for info in changeLocaleInformations %}
+          <li><a href="{{ info.url }}">{{ info.language }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+{% endif %}

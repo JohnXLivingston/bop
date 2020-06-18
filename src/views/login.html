@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 {%- import "common/webpack.njk" as webpack -%}
-{%- import "common/locale.njk" as commonLocale -%}
 <html lang="{{ lang }}" dir="{{ lang_dir }}" bop-context="{{ context | dump }}">
   <head>
     <meta charset="utf-8">
@@ -32,7 +31,7 @@
         <footer class="flex-fix">
           {% if changeLocaleInformations %}
             <div>
-              {{ commonLocale.localeButtons(changeLocaleInformations) }}
+              {% include "common/locale.njk" %}
             </div>
           {% endif %}
         </footer>

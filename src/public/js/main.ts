@@ -1,22 +1,10 @@
 import getLogger from './utils/logger'
 import { notifications } from './lib/notifications'
 import { testFunction } from '../../shared/test'
+import { initWidgetsLocale } from './widgets/locale'
 import '../scss/main.scss'
 
 require('./common')
-
-require('jquery-ui/themes/base/core.css')
-require('jquery-ui/themes/base/theme.css')
-
-require('jquery-ui/ui/widget')
-
-require('jquery-ui/themes/base/accordion.css')
-require('jquery-ui/ui/widgets/accordion')
-
-require('jquery-ui/themes/base/draggable.css')
-require('jquery-ui/ui/widgets/draggable')
-
-require('jquery-ui/ui/position')
 
 const logger = getLogger('main.ts')
 logger.debug('JS is okay.')
@@ -31,5 +19,7 @@ $(() => {
     const cb = $(ev.currentTarget)
     notifications.autoReloadDevMode(cb.is(':checked'))
   })
+
+  initWidgetsLocale()
 })
 testFunction()

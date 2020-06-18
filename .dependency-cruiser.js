@@ -16,6 +16,11 @@ module.exports = {
         }
     },
     {
+      comment: 'Widgets may use any lib or utils.',
+      from: { path: '^src/public/js/widgets' },
+      to: { path: '^src/(shared|public/js/(lib|utils))/' }
+    },
+    {
       comment: 'Public libs are high level code.',
       from: { path: '^src/public/js/lib'},
       to: { path: '^src/(shared|public/js/(lib|utils))/' }

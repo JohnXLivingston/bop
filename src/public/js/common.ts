@@ -8,3 +8,24 @@ import 'regenerator-runtime/runtime'
 import { setSharedLogger } from '../../shared/utils/logger'
 
 setSharedLogger(getLogger('shared'))
+
+require('jquery-ui/themes/base/core.css')
+require('jquery-ui/themes/base/theme.css')
+
+require('jquery-ui/ui/widget')
+
+require('jquery-ui/themes/base/accordion.css')
+require('jquery-ui/ui/widgets/accordion')
+
+require('jquery-ui/themes/base/draggable.css')
+require('jquery-ui/ui/widgets/draggable')
+
+require('jquery-ui/themes/base/resizable.css')
+require('jquery-ui/ui/widgets/resizable')
+
+require('jquery-ui/themes/base/dialog.css')
+require('jquery-ui/ui/widgets/dialog')
+
+require('jquery-ui/ui/effect')
+
+require('jquery-ui/ui/position')
