@@ -1,7 +1,11 @@
 msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
-"POT-Creation-Date: 2020-06-19 01:20+0000\n"
+"POT-Creation-Date: 2020-06-19 01:32+0000\n"
+
+#: src/public/js/widgets/locale.ts:17
+msgid "Change your locale"
+msgstr ""
 
 #: src/public/js/widgets/locale.ts:11
 msgid "Close"

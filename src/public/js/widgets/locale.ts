@@ -14,7 +14,7 @@ function initWidgetsLocale () {
         maxHeight: 600,
         modal: true,
         resizable: true,
-        // TODO: title: gettext('...') ?
+        title: gettext('Change your locale'),
         width: 380
       })
     }

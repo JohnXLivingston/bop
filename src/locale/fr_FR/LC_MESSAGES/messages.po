@@ -12,6 +12,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
+#: src/public/js/widgets/locale.ts:17
+msgid "Change your locale"
+msgstr "Changez de langue"
+
 #: src/public/js/widgets/locale.ts:11
 msgid "Close"
 msgstr "Fermer"
