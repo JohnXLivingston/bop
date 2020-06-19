@@ -27,15 +27,14 @@ const jsxgettextCmd = './node_modules/.bin/jsxgettext -j -L jinja \
    --from-code=utf-8 \
    --output=messages.pot \
   `find ./src -name \'*.html\' -o -name \'*.njk\' | grep -v node_modules | grep -v "\.git"`;'
-exec(jsxgettextCmd), function (err, stdout, stderr) {
+exec(jsxgettextCmd, function (err, stdout, stderr) {
   if (err) {
     console.error(stdout);
     console.error(stderr);
     throw "Error."
   }
   console.log('done');
-
-}
+})
 
 
 // #!/bin/bash
