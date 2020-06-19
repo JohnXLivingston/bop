@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-02 07:38+0000\n"
+"POT-Creation-Date: 2020-06-19 01:20+0000\n"
 "PO-Revision-Date: 2020-03-24 20:12+0100\n"
 "Last-Translator: John <i18n@jonathandolle.fr>\n"
 "Language-Team: English\n"
@@ -12,20 +12,34 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: /home/john/dev/bop/dist/views/login.html:14
-#: /home/john/dev/bop/dist/views/login.html:15
+#: src/public/js/widgets/locale.ts:11
+msgid "Close"
+msgstr ""
+
+#: src/views/common/locale.njk:3
+msgid "Current locale:"
+msgstr ""
+
+#: src/views/login.html:15
+msgid "Sign in to BOP"
+msgstr ""
+
+#: src/views/login.html:18
 msgid "Login"
 msgstr "Login"
 
-#: /home/john/dev/bop/dist/views/login.html:18
-#: /home/john/dev/bop/dist/views/login.html:19
+#: src/views/login.html:19
 msgid "Password"
 msgstr "Password"
 
-#: /home/john/dev/bop/dist/views/login.html:22
+#: src/views/login.html:22
 msgid "Login failed."
 msgstr ""
 
-#: /home/john/dev/bop/dist/views/index.html:26
+#: src/views/login.html:26
+msgid "Sign in"
+msgstr ""
+
+#: src/views/index.html:26
 msgid "Logout"
 msgstr "Logout"
