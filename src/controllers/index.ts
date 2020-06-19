@@ -10,7 +10,7 @@ indexRouter.get('/', (req, res) => {
 })
 
 indexRouter.get('/index', i18nChangeLocale, authenticatedOrLogin, (req, res) => {
-  res.render('index.html')
+  res.render('index.njk')
 })
 
 indexRouter.use('/api', apiRouter)

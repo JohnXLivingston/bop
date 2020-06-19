@@ -45,7 +45,7 @@
       </div>
     </div>
     <div>
-      Here we go!
+      {% block content %}{% endblock %}
     </div>
     {{ webpack.bodyScripts(locale, webpackManifest, 'main') }}
   </body>
