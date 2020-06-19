@@ -13,5 +13,11 @@ body {
 
 header {
   @extend %flex;
+  background-color: $background-color-filled;
   border-bottom: solid 1px $border-color-dark;
+  color: $color-filled;
+
+  h1 {
+    font-size: 2rem;
+  }
 }
