@@ -1,0 +1,55 @@
+@import 'common/button';
+@import 'common/flex';
+@import 'common/variables';
+
+.sidebar-wrapper {
+  @extend %flex-v;
+  background-color: $background-color-light;
+  border: solid 1px $border-color-dark;
+  height: 100%;
+  position: relative;
+  overflow: auto;
+}
+
+.sidebar-header {
+  @extend %flex;
+  background-color: $background-color-filled;
+  border-bottom: solid 1px $border-color-dark;
+  color: $color-filled;
+  padding: 0 20px;
+
+  h1 {
+    @extend %flex-full-fix;
+  }
+
+  [sidebar-close] {
+    @extend %flex-fix;
+    @extend %button-picto;
+
+    border-left: solid 1px $border-color-filled-light;
+    font-weight: bolder;
+    font-size: 2rem;
+    padding: 20px 20px;
+    transition: 150ms;
+
+    &:hover {
+      background-color: $background-color-filled-light;
+    }
+  }
+}
+
+.sidebar-content {
+  ul {
+    @extend %flex-v;
+    list-style: none;
+    padding: 0;
+  }
+
+  li {
+    padding: 20px;
+  }
+
+  li:hover {
+    background-color: $background-color-light-hover;
+  }
+}

@@ -5,6 +5,7 @@
 @import 'common/size';
 @import 'common/variables';
 @import 'widgets/locale';
+@import 'widgets/sidebar';
 
 body {
   overflow-x: hidden;
@@ -19,5 +20,27 @@ header {
 
   h1 {
     font-size: 2rem;
+  }
+
+  .header-first-block {
+    @extend %flex-full-fix;
+    padding: 0 20px;
+  }
+
+  .header-last-block {
+    @extend %flex-fix;
+    border-left: solid 1px $border-color-filled-light;
+    padding: 0 20px;
+  }
+
+  [main-sidebar-open] {
+    @extend %button-picto;
+    font-size: 2rem;
+    padding: 0 5px;
+    transition: 150ms;
+
+    &:hover {
+      background-color: $background-color-filled-light;
+    }
   }
 }

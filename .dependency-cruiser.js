@@ -12,13 +12,16 @@ module.exports = {
         path:
           '^src/(public/js|shared)/' +
           '|^src/(public/scss)/' +
-          '|^node_modules/(jquery-ui/(ui|themes)/|regenerator-runtime/|core-js/stable/)'
+          '|^node_modules/(jquery|jquery-ui/(ui|themes)/|regenerator-runtime/|core-js/stable/)'
         }
     },
     {
       comment: 'Widgets may use any lib or utils.',
       from: { path: '^src/public/js/widgets' },
-      to: { path: '^src/(shared|public/js/(lib|utils))/' }
+      to: { path:
+        '^src/(shared|public/js/(lib|utils))/' +
+        '|^node_modules/@dcdeiv/simpler-sidebar'
+      }
     },
     {
       comment: 'Public libs are high level code.',
@@ -276,7 +279,7 @@ module.exports = {
        for a complete list
     */
     doNotFollow: {
-      // path: 'node_modules',
+      path: 'node_modules',
       dependencyTypes: [
         'npm',
         'npm-dev',

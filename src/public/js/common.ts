@@ -11,6 +11,8 @@ setSharedLogger(getLogger('shared'))
 
 require('./utils/i18n')
 
+require('jquery')
+
 require('jquery-ui/themes/base/core.css')
 require('jquery-ui/themes/base/theme.css')
 

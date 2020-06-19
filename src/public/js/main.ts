@@ -2,6 +2,7 @@ import getLogger from './utils/logger'
 import { notifications } from './lib/notifications'
 import { testFunction } from '../../shared/test'
 import { initWidgetsLocale } from './widgets/locale'
+import { initWidgetsSidebar } from './widgets/sidebar'
 import '../scss/main.scss'
 
 require('./common')
@@ -21,5 +22,6 @@ $(() => {
   })
 
   initWidgetsLocale()
+  initWidgetsSidebar()
 })
 testFunction()
