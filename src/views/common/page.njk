@@ -11,6 +11,16 @@
     <header>
       <div class="header-first-block">
         <h1>BOP</h1>
+        <nav>
+          <ul>
+            <li><a href="/index" {% if currentPage === 'index' %}class="selected"{% endif %}>
+              <span class="icon-home"></span>
+            </a></li>
+            <li><a href="/index">
+              <span class="icon-home"></span>
+            </a></li>
+          </ul>
+        </nav>
       </div>
       <div class="header-last-block">
         <a main-sidebar-open>&#x2630;</a>

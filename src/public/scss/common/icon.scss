@@ -1,0 +1,12 @@
+%icon {
+  background-repeat: no-repeat;
+  display: inline-block;
+  height: 18px;
+  text-decoration: none !important;
+  width: 18px;
+}
+
+%icon-home, .icon-home {
+  @extend %icon;
+  background-image: url('../images/home.svg');
+}
