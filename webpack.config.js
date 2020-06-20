@@ -64,6 +64,12 @@ module.exports = {
             options: { sourceMap: !isProd }
           },
           {
+            loader: 'resolve-url-loader',
+            options: {
+              sourceMap: !isProd
+            }
+          },
+          {
             loader: 'sass-loader',
             options: { sourceMap: !isProd }
           }
