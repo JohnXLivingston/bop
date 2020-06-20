@@ -1,4 +1,52 @@
 {%- extends 'common/page.njk' -%}
 {%- block content -%}
-  .
+  <div class="planning-header">
+    <div class="planning-label">
+      Title...
+    </div>
+    <div class="planning-dates">
+      <div class="planning-week">
+        <div class="planning-week-label">
+          <div>S01.</div>
+          <div>Jan.</div>
+        </div>
+        <div class="planning-week-days">
+          <div>1</div>
+          <div>2</div>
+          <div>3</div>
+          <div>4</div>
+          <div>5</div>
+          <div>6</div>
+          <div>7</div>
+        </div>
+      </div>
+      <div class="planning-week">
+        <div class="planning-week-label">
+          <div>S02.</div>
+          <div>Jan.</div>
+        </div>
+        <div class="planning-week-days">
+          <div>8</div>
+          <div>9</div>
+          <div>10</div>
+          <div>11</div>
+          <div>12</div>
+          <div>13</div>
+          <div>14</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="planning-content">
+  {% for i in range(1, 100) %}
+    <div class="planning-line">
+      <div class="planning-label">
+        Resource {{ i }}
+      </div>
+      <div class="planning-data">
+
+      </div>
+    </div>
+  {% endfor %}
+  </div>
 {%- endblock -%}

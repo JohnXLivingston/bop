@@ -1,11 +1,11 @@
-.scroll {
+%scroll, .scroll {
   overflow: auto;
 }
 
-.v-scroll {
+%v-scroll, .v-scroll {
   overflow-y: auto;
 }
 
-.h-scroll {
+%h-scroll, .h-scroll {
   overflow-x: auto;
 }

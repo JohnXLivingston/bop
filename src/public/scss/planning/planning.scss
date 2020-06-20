@@ -1,0 +1,60 @@
+// @import 'common/flex';
+// @import 'common/scroll';
+// @import 'common/variables';
+
+.planning-header {
+  @extend %flex;
+
+  height: 45px;
+
+  &>* {
+    height: 100%;
+  }
+
+  .planning-label {
+    @extend %flex-fix;
+
+    border: solid 1px $border-color-light;
+    width: 300px;
+  }
+
+  .planning-dates {
+    @extend %flex-full-fix;
+    @extend %flex;
+
+    border: solid 1px $border-color-light;
+
+    .planning-week {
+      @extend %flex-v;
+
+      .planning-week-label {
+        @extend %flex-v;
+      }
+
+      .planning-week-days {
+        @extend %flex;
+  
+        &>* {
+          @extend %flex-fix;
+
+          width: 45px;
+        }
+      }
+    }
+
+  }
+}
+
+.planning-content {
+  @extend %v-scroll;
+
+  .planning-line {
+    @extend %flex;
+  
+    height: 45px;
+  
+    &>* {
+      height: 100%;
+    }
+  }
+}
