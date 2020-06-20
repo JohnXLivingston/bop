@@ -10,3 +10,8 @@
   @extend %icon;
   background-image: url('../../images/home.svg');
 }
+
+%icon-planning, .icon-planning {
+  @extend %icon;
+  background-image: url('../../images/planning.svg');
+}

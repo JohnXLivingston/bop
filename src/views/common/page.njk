@@ -16,6 +16,10 @@
             <span class="icon-home"></span>
             <span>{{ gettext('Home') }}</span>
           </a>
+          <a href="/planning" {% if currentPage === 'planning' %}class="selected"{% endif %}>
+            <span class="icon-planning"></span>
+            <span>{{ gettext('Planning') }}</span>
+          </a>
         </nav>
       </div>
       <div class="header-last-block">
