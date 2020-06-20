@@ -30,32 +30,3 @@ ul {
 .error {
   @include error();
 }
-
-// FIXME: remove flex* classes.
-.flex {
-  @include flex();
-}
-
-.flex-inline {
-  @include flex-inline();
-}
-
-.flex-v {
-  @include flex-v();
-}
-
-.flex-full-fix {
-  @include flex-full-fix();
-}
-
-.flex-fix {
-  @include flex-fix();
-}
-
-// FIXME: remove *-full
-.w-full {
-  width: 100%;
-}
-.h-full {
-  height: 100%;
-}

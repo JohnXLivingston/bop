@@ -8,35 +8,32 @@
     {{ webpack.headScripts(webpackManifest, 'login') }}
   </head>
   <body>
-    <div class="v-scroll h-full">
-      <div class="flex flex-v">
-        <div class="flex-full-fix">
-          <section class="flex flex-v login-content">
-            <h1>{{ gettext('Sign in to BOP') }}</h1>
-            <form action="" method="POST" class="login-form">
-              <div class="flex flex-v">
-                <input type="text" name="login" placeholder="{{ gettext('Login') }}" required value="{{ login }}">
-                <input type="password" name="password" placeholder="{{ gettext('Password') }}" required>
-                {% if loginFailed %}
-                  <div class="error">
-                    {{ gettext('Login failed.') }}
-                  </div>
-                {% endif %}
-                <input type="hidden" name="loginForm" value="1">
-                <input type="submit" value="{{ gettext('Sign in') }}">
-              </div>
-            </form>
-          </section>
-        </div>
-        <footer class="flex-fix">
-          {% if changeLocaleInformations %}
-            <div>
-              {% include "common/locale.njk" %}
+    <div class="login-content">
+      <h1>{{ gettext('Sign in to BOP') }}</h1>
+  
+      <section>
+        <form action="" method="POST" class="login-form">
+          <input type="text" name="login" placeholder="{{ gettext('Login') }}" required value="{{ login }}">
+          <input type="password" name="password" placeholder="{{ gettext('Password') }}" required>
+          {% if loginFailed %}
+            <div class="error">
+              {{ gettext('Login failed.') }}
             </div>
           {% endif %}
-        </footer>
-      </div>
+          <input type="hidden" name="loginForm" value="1">
+          <input type="submit" value="{{ gettext('Sign in') }}">
+        </form>
+      </section>
+  
+      <footer>
+        {% if changeLocaleInformations %}
+          <div>
+            {% include "common/locale.njk" %}
+          </div>
+        {% endif %}
+      </footer>
     </div>
+
     {{ webpack.bodyScripts(locale, webpackManifest, 'login') }}
   </body>
 </html>

@@ -4,22 +4,33 @@
 @import 'common/common';
 @import 'widgets/locale';
 
+body {
+  @include v-scroll;
+}
+
 .login-content {
+  @include flex-v;
+
+  height: 100%;
   margin: auto;
   max-width: 380px;
 
-  h1 {
+  &>h1 {
+    text-align: center;
+  }
+
+  &>footer {
+    @include flex-fix;
+
+    border-top: solid 1px $border-color-light;
+    padding: 14px 16px;
     text-align: center;
   }
 }
 
 .login-form {
-  border: solid 1px;
-  border-color: $border-color-dark;
-  padding: 40px;
-}
+  @include flex-v;
 
-footer {
-  border-top: solid 1px $border-color-light;
-  padding: 14px 16px;
+  border: solid 1px $border-color-dark;
+  padding: 40px;
 }
