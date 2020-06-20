@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-19 01:20+0000\n"
+"POT-Creation-Date: 2020-06-20 01:23+0000\n"
 "PO-Revision-Date: 2020-03-24 20:12+0100\n"
 "Last-Translator: John <i18n@jonathandolle.fr>\n"
 "Language-Team: French\n"
@@ -24,6 +24,14 @@ msgstr "Fermer"
 msgid "Current locale:"
 msgstr "Langue courante :"
 
+#: src/views/common/page.njk:17 src/views/common/page.njk:21
+msgid "Home"
+msgstr "Accueil"
+
+#: src/views/common/page.njk:51
+msgid "Logout"
+msgstr "Déconnexion"
+
 #: src/views/login.html:15
 msgid "Sign in to BOP"
 msgstr "Connectez-vous à BOP"
@@ -43,7 +51,3 @@ msgstr "Échec de l'authentification."
 #: src/views/login.html:26
 msgid "Sign in"
 msgstr "Se connecter"
-
-#: src/views/index.html:26
-msgid "Logout"
-msgstr "Déconnexion"

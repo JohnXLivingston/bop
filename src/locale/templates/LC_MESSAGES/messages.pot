@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
-"POT-Creation-Date: 2020-06-19 01:32+0000\n"
+"POT-Creation-Date: 2020-06-20 01:23+0000\n"
 
 #: src/public/js/widgets/locale.ts:17
 msgid "Change your locale"
@@ -13,6 +13,15 @@ msgstr ""
 
 #: ./src/views/common/locale.njk:3
 msgid "Current locale:"
+msgstr ""
+
+#: ./src/views/common/page.njk:17
+#: ./src/views/common/page.njk:21
+msgid "Home"
+msgstr ""
+
+#: ./src/views/common/page.njk:51
+msgid "Logout"
 msgstr ""
 
 #: ./src/views/login.html:15
@@ -33,8 +42,4 @@ msgstr ""
 
 #: ./src/views/login.html:26
 msgid "Sign in"
-msgstr ""
-
-#: ./src/views/index.html:26
-msgid "Logout"
 msgstr ""
