@@ -1,9 +1,5 @@
-// @import 'common/flex';
-// @import 'common/scroll';
-// @import 'common/variables';
-
 .planning-header {
-  @extend %flex;
+  @include flex;
 
   height: 45px;
 
@@ -12,30 +8,30 @@
   }
 
   .planning-label {
-    @extend %flex-fix;
+    @include flex-fix;
 
     border: solid 1px $border-color-light;
     width: 300px;
   }
 
   .planning-dates {
-    @extend %flex-full-fix;
-    @extend %flex;
+    @include flex-full-fix;
+    @include flex;
 
     border: solid 1px $border-color-light;
 
     .planning-week {
-      @extend %flex-v;
+      @include flex-v;
 
       .planning-week-label {
-        @extend %flex-v;
+        @include flex-v;
       }
 
       .planning-week-days {
-        @extend %flex;
+        @include flex;
   
         &>* {
-          @extend %flex-fix;
+          @include flex-fix;
 
           width: 45px;
         }
@@ -46,10 +42,10 @@
 }
 
 .planning-content {
-  @extend %v-scroll;
+  @include v-scroll;
 
   .planning-line {
-    @extend %flex;
+    @include flex;
   
     height: 45px;
   

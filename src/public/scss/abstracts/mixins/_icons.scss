@@ -1,0 +1,11 @@
+@mixin icon($name) {
+  background-repeat: no-repeat;
+  display: inline-block;
+  height: 18px;
+  text-decoration: none !important;
+  width: 18px;
+
+  @if $name {
+    background-image: url('../../../images/' + $name + '.svg');
+  }
+}

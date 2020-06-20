@@ -1,9 +1,7 @@
+@import 'abstracts/variables';
+@import 'abstracts/mixins';
+
 @import 'common/common';
-@import 'common/error';
-@import 'common/flex';
-@import 'common/scroll';
-@import 'common/size';
-@import 'common/variables';
 @import 'widgets/locale';
 
 .login-content {
@@ -16,7 +14,8 @@
 }
 
 .login-form {
-  border: solid 1px $border-color-dark;
+  border: solid 1px;
+  border-color: $border-color-dark;
   padding: 40px;
 }
 

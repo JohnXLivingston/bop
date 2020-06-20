@@ -1,26 +1,26 @@
-%flex, .flex {
+@mixin flex {
   display: flex;
   align-items: center;
 }
 
-%flex-inline, .flex-inline {
+@mixin flex-inline {
   display: inline-flex;
   align-items: center;
 }
 
-%flex-v, .flex-v {
+@mixin flex-v {
   align-items: stretch;
   display: flex;
   flex-direction: column;
   height: 100%;
 }
 
-%flex-full-fix, .flex-full-fix {
+@mixin flex-full-fix {
   flex-grow: 1;
   flex-shrink: 0;
   flex-basis: auto;
 }
-%flex-fix, .flex-fix {
+@mixin flex-fix {
   flex-grow: 0;
   flex-shrink: 0;
   flex-basis: auto;

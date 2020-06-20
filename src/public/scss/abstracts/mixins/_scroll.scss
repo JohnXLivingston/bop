@@ -1,11 +1,11 @@
-%scroll, .scroll {
+@mixin scroll {
   overflow: auto;
 }
 
-%v-scroll, .v-scroll {
+@mixin v-scroll {
   overflow-y: auto;
 }
 
-%h-scroll, .h-scroll {
+@mixin h-scroll {
   overflow-x: auto;
 }

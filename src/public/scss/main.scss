@@ -1,14 +1,10 @@
-@import 'common/common';
-@import 'common/error';
-@import 'common/flex';
-@import 'common/icon';
-@import 'common/scroll';
-@import 'common/size';
-@import 'common/variables';
-@import 'widgets/locale';
-@import 'widgets/sidebar';
+@import 'abstracts/variables';
+@import 'abstracts/mixins';
 
-@import 'planning/planning';
+@import 'common';
+@import 'widgets';
+
+@import 'planning';
 
 body {
   overflow-x: hidden;
@@ -16,7 +12,7 @@ body {
 }
 
 header {
-  @extend %flex;
+  @include flex;
   background-color: $background-color-filled;
   border-bottom: solid 1px $border-color-dark;
   color: $color-filled;
@@ -28,10 +24,10 @@ header {
   }
 
   nav {
-    @extend %flex;
+    @include flex;
 
     a {
-      @extend %flex;
+      @include flex;
       color: $color-filled;
       height: 42px;
       margin-left: 5px;
@@ -68,19 +64,19 @@ header {
   }
 
   .header-first-block {
-    @extend %flex-full-fix;
-    @extend %flex;
+    @include flex-full-fix;
+    @include flex;
     padding: 0 20px;
   }
 
   .header-last-block {
-    @extend %flex-fix;
+    @include flex-fix;
     border-left: solid 1px $border-color-filled-light;
     padding: 0 20px;
   }
 
   [main-sidebar-open] {
-    @extend %button-picto;
+    @include button-picto;
     font-size: 2rem;
     padding: 0 5px;
     transition: $hover-transition-time;

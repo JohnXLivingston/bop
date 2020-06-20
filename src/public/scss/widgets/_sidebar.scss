@@ -1,9 +1,5 @@
-@import 'common/button';
-@import 'common/flex';
-@import 'common/variables';
-
 .sidebar-wrapper {
-  @extend %flex-v;
+  @include flex-v;
   background-color: $background-color-light;
   border: solid 1px $border-color-dark;
   height: 100%;
@@ -12,19 +8,19 @@
 }
 
 .sidebar-header {
-  @extend %flex;
+  @include flex;
   background-color: $background-color-filled;
   border-bottom: solid 1px $border-color-dark;
   color: $color-filled;
   padding: 0 20px;
 
   h1 {
-    @extend %flex-full-fix;
+    @include flex-full-fix;
   }
 
   [sidebar-close] {
-    @extend %flex-fix;
-    @extend %button-picto;
+    @include flex-fix;
+    @include button-picto;
 
     border-left: solid 1px $border-color-filled-light;
     font-weight: bolder;
@@ -40,7 +36,7 @@
 
 .sidebar-content {
   ul {
-    @extend %flex-v;
+    @include flex-v;
   }
 
   li {

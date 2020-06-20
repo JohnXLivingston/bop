@@ -1,8 +1,8 @@
-%link-clickable {
+@mixin link-clickable {
   cursor: pointer;
   text-decoration: underline;
 }
 
-%button-picto {
+@mixin button-picto {
   cursor: pointer;
 }
