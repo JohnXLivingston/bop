@@ -20,11 +20,54 @@ header {
   color: $color-filled;
 
   h1 {
+    border-right: solid 1px $border-color-filled-light;
     font-size: 2rem;
+    padding: 0 20px;
+  }
+
+  nav {
+    @extend %flex;
+
+    a {
+      @extend %flex;
+      color: $color-filled;
+      height: 42px;
+      margin-left: 5px;
+      margin-right: 5px;
+      min-width: 42px;
+      position: relative; // FIXME: keep?
+      text-align: center;
+      text-decoration: none;
+
+      &>* {
+        margin: 0 5px;
+      }
+
+      &.selected {
+        font-weight: bold;
+
+        &::before {
+          background-color: $background-color-empty;
+          bottom: -2px;
+          content: '';
+          height: 3px;
+          left: 0;
+          position: absolute;
+          right: 0;
+        }
+      }
+
+      &:hover {
+        background-color: $background-color-filled-light;
+        border-radius: 21px;
+        transition: $hover-transition-time;
+      }
+    }
   }
 
   .header-first-block {
     @extend %flex-full-fix;
+    @extend %flex;
     padding: 0 20px;
   }
 
@@ -38,7 +81,7 @@ header {
     @extend %button-picto;
     font-size: 2rem;
     padding: 0 5px;
-    transition: 150ms;
+    transition: $hover-transition-time;
 
     &:hover {
       background-color: $background-color-filled-light;

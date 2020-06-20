@@ -41,8 +41,6 @@
 .sidebar-content {
   ul {
     @extend %flex-v;
-    list-style: none;
-    padding: 0;
   }
 
   li {
