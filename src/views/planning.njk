@@ -16,8 +16,8 @@
                 <div>Jan.</div>
               </div>
               <div class="widget-planning-week-days">
-                {% for j in range (1, 7) %}
-                  <div>{{ j }}</div>
+                {% for j in range (1, 8) %}
+                  <div>{{ (7 * (i - 1)) + j }}</div>
                 {% endfor %}
               </div>
             </div>
