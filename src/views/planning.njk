@@ -8,7 +8,7 @@
         <div class="widget-planning-label">
           Title...
         </div>
-        <div class="widget-planning-dates">
+        <div class="widget-planning-calendar">
           {% for i in range(1, nbweeks) %}
             <div class="widget-planning-week">
               <div class="widget-planning-week-label">
@@ -25,14 +25,20 @@
         </div>
       </div>
       <div class="widget-planning-content">
-        {% for i in range(1, nblines) %}
+        {% for l in range(1, nblines) %}
           <div class="widget-planning-line">
             <div class="widget-planning-label">
-              Resource {{ i }}
+              Resource {{ l }}
             </div>
-            <div class="widget-planning-data">
+            <div class="widget-planning-calendar">
               {% for i in range(1, nbweeks) %}
-                <div></div>
+                <div class="widget-planning-week">
+                  <div class="widget-planning-week-days">
+                    {% for j in range (1, 8) %}
+                      <div></div>
+                    {% endfor %}
+                  </div>
+                </div>
               {% endfor %}
             </div>
           </div>

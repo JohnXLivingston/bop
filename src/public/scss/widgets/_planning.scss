@@ -33,10 +33,7 @@
   /**
     The right part title line
   */
-  .widget-planning-dates {
-    @include flex-full-fix;
-    @include flex;
-
+  .widget-planning-calendar {
     border: solid 1px $border-color-light;
 
     /**
@@ -47,19 +44,15 @@
 
       .widget-planning-week-label {
         @include flex;
+        @include flex-full-fix;
       }
 
       .widget-planning-week-days {
-        @include flex;
-  
-        &>* {
-          @include flex-fix;
+        @include flex-fix;
 
-          width: 45px;
-        }
+        text-align: center;
       }
     }
-
   }
 }
 
@@ -79,9 +72,19 @@
       height: 100%;
     }
 
-    .widget-planning-data {
+    .widget-planning-calendar {
+      .widget-planning-week {
+        height: 100%;
+      }
+    }
+
+    .widget-planning-week-days {
+      height: 100%;
+
       &>* {
-        width: 7 * 45px;
+        @include flex-full-fix;
+
+        height: 100%;
       }
     }
   }
@@ -99,4 +102,24 @@
   position: sticky;
   left: 0;
   width: 300px;
+}
+
+/**
+  The right part (the calendar).
+*/
+.widget-planning-calendar {
+  @include flex-full-fix;
+  @include flex;
+}
+
+/**
+  .widget-planning-week-days: contain one div per day.
+*/
+.widget-planning-week-days {
+  @include flex;
+
+  &>* {
+    border: solid 1px $border-color-light;
+    width: 45px;
+  }
 }
