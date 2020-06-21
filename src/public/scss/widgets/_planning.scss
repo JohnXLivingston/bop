@@ -86,6 +86,16 @@
 
         height: 100%;
       }
+
+      .widget-planning-dayoff {
+        background: repeating-linear-gradient(
+          -45deg,
+          $background-color-empty,
+          $background-color-empty $background-stripes-width,
+          $background-color-light $background-stripes-width,
+          $background-color-light ($background-stripes-width * 2)
+        );
+      }
     }
   }
 }

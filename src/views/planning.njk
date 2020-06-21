@@ -17,7 +17,9 @@
               </div>
               <div class="widget-planning-week-days">
                 {% for j in range (1, 8) %}
-                  <div>{{ (7 * (i - 1)) + j }}</div>
+                  <div {% if j >= 6 %}class="widget-planning-dayoff"{% endif %}>
+                    {{ (7 * (i - 1)) + j }}
+                  </div>
                 {% endfor %}
               </div>
             </div>
@@ -35,7 +37,7 @@
                 <div class="widget-planning-week">
                   <div class="widget-planning-week-days">
                     {% for j in range (1, 8) %}
-                      <div></div>
+                      <div {% if j >= 6 %}class="widget-planning-dayoff"{% endif %}></div>
                     {% endfor %}
                   </div>
                 </div>
