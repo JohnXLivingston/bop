@@ -63,7 +63,7 @@
   /**
     One line
   */
-  .widget-planning-line {
+  .widget-planning-node-line {
     @include flex;
   
     height: 45px;
@@ -112,6 +112,18 @@
   position: sticky;
   left: 0;
   width: 300px;
+}
+
+.widget-planning-node-childs {
+  .widget-planning-label {
+    padding-left: 45px;
+  }
+
+  .widget-planning-node-childs {
+    .widget-planning-label {
+      padding-left: 90px;
+    }
+  }
 }
 
 /**

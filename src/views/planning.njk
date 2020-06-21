@@ -28,20 +28,70 @@
       </div>
       <div class="widget-planning-content">
         {% for l in range(1, nblines) %}
-          <div class="widget-planning-line">
-            <div class="widget-planning-label">
-              Resource {{ l }}
+          <div class="widget-planning-node">
+            <div class="widget-planning-node-line">
+              <div class="widget-planning-label">
+                Resource {{ l }}
+              </div>
+              <div class="widget-planning-calendar">
+                {% for i in range(1, nbweeks) %}
+                  <div class="widget-planning-week">
+                    <div class="widget-planning-week-days">
+                      {% for j in range (1, 8) %}
+                        <div {% if j >= 6 %}class="widget-planning-dayoff"{% endif %}></div>
+                      {% endfor %}
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
             </div>
-            <div class="widget-planning-calendar">
-              {% for i in range(1, nbweeks) %}
-                <div class="widget-planning-week">
-                  <div class="widget-planning-week-days">
-                    {% for j in range (1, 8) %}
-                      <div {% if j >= 6 %}class="widget-planning-dayoff"{% endif %}></div>
-                    {% endfor %}
+            <div class="widget-planning-node-childs">
+
+              {% if l === 1 %}
+                <div class="widget-planning-node">
+                  <div class="widget-planning-node-line">
+                    <div class="widget-planning-label">
+                      Sub node
+                    </div>
+                    <div class="widget-planning-calendar">
+                      {% for i in range(1, nbweeks) %}
+                        <div class="widget-planning-week">
+                          <div class="widget-planning-week-days">
+                            {% for j in range (1, 8) %}
+                              <div {% if j >= 6 %}class="widget-planning-dayoff"{% endif %}></div>
+                            {% endfor %}
+                          </div>
+                        </div>
+                      {% endfor %}
+                    </div>
+                  </div>
+                  
+                  <div class="widget-planning-node-childs">
+                    {% if l === 1 %}
+                      <div class="widget-planning-node">
+                        <div class="widget-planning-node-line">
+                          <div class="widget-planning-label">
+                            Sub Sub node
+                          </div>
+                          <div class="widget-planning-calendar">
+                            {% for i in range(1, nbweeks) %}
+                              <div class="widget-planning-week">
+                                <div class="widget-planning-week-days">
+                                  {% for j in range (1, 8) %}
+                                    <div {% if j >= 6 %}class="widget-planning-dayoff"{% endif %}></div>
+                                  {% endfor %}
+                                </div>
+                              </div>
+                            {% endfor %}
+                          </div>
+                        </div>
+                      </div>
+                    {% endif %}
                   </div>
                 </div>
-              {% endfor %}
+
+              {% endif %}
+
             </div>
           </div>
         {% endfor %}
