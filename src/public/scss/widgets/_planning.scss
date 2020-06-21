@@ -1,3 +1,10 @@
+// The header of the widget must be on front of the left column (labels)
+$zindex-planning-header: 30;
+// The labels must be in front of items when scroller horizontally.
+$zindex-planning-label: 20;
+// Items must be on front of the grid.
+$zindex-planning-item: 10;
+
 .widget-planning {
   bottom: 50px; // to let space for horizontal scrollbar.
   left: 0;
@@ -24,7 +31,7 @@
   height: 45px;
   position: sticky;
   top: 0;
-  z-index: 2; // in order to be on front of the sticky left column
+  z-index: $zindex-planning-header;
 
   &>* {
     height: 100%;
@@ -34,23 +41,26 @@
     The right part title line
   */
   .widget-planning-calendar {
-    border: solid 1px $border-color-light;
 
-    /**
-      title for one week
-    */
-    .widget-planning-week {
-      @include flex-v;
+    .widget-planning-weeks {
+      border: solid 1px $border-color-light;
 
-      .widget-planning-week-label {
-        @include flex;
-        @include flex-full-fix;
-      }
+      /**
+        title for one week
+      */
+      .widget-planning-week {
+        @include flex-v;
 
-      .widget-planning-week-days {
-        @include flex-fix;
+        .widget-planning-week-label {
+          @include flex;
+          @include flex-full-fix;
+        }
 
-        text-align: center;
+        .widget-planning-week-days {
+          @include flex-fix;
+
+          text-align: center;
+        }
       }
     }
   }
@@ -73,8 +83,29 @@
     }
 
     .widget-planning-calendar {
-      .widget-planning-week {
-        height: 100%;
+      position: relative; // so that childs absolute refers to parent.
+
+      .widget-planning-weeks {
+        .widget-planning-week {
+          height: 100%;
+        }
+      }
+
+      .widget-planning-items {
+        bottom: 0;
+        left: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+
+        .widget-planning-item {
+          // left and width are set by the template.
+          bottom: 0;
+          color: $color-filled;
+          top: 0;
+          position: absolute;
+          z-index: $zindex-planning-item;
+        }
       }
     }
 
@@ -112,6 +143,7 @@
   position: sticky;
   left: 0;
   width: 300px;
+  z-index: $zindex-planning-label;
 }
 
 .widget-planning-node-childs {
@@ -131,7 +163,12 @@
 */
 .widget-planning-calendar {
   @include flex-full-fix;
-  @include flex;
+
+  .widget-planning-weeks {
+    @include flex;
+
+    height: 100%;
+  }
 }
 
 /**

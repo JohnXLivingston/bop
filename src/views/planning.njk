@@ -7,21 +7,23 @@
           Title...
         </div>
         <div class="widget-planning-calendar">
-          {% for i in range(1, planningProperties.nbWeeks) %}
-            <div class="widget-planning-week">
-              <div class="widget-planning-week-label">
-                <div>S0{{ i }}.</div>
-                <div>Jan.</div>
+          <div class="widget-planning-weeks">
+            {% for i in range(1, planningProperties.nbWeeks) %}
+              <div class="widget-planning-week">
+                <div class="widget-planning-week-label">
+                  <div>S0{{ i }}.</div>
+                  <div>Jan.</div>
+                </div>
+                <div class="widget-planning-week-days">
+                  {% for j in range (1, 8) %}
+                    <div {% if j >= 6 %}class="widget-planning-dayoff"{% endif %}>
+                      {{ (7 * (i - 1)) + j }}
+                    </div>
+                  {% endfor %}
+                </div>
               </div>
-              <div class="widget-planning-week-days">
-                {% for j in range (1, 8) %}
-                  <div {% if j >= 6 %}class="widget-planning-dayoff"{% endif %}>
-                    {{ (7 * (i - 1)) + j }}
-                  </div>
-                {% endfor %}
-              </div>
-            </div>
-          {% endfor %}
+            {% endfor %}
+          </div>
         </div>
       </div>
       <div class="widget-planning-content">
@@ -32,15 +34,28 @@
                 {{ node.name }}
               </div>
               <div class="widget-planning-calendar">
-                {% for i in range(1, planningProperties.nbWeeks) %}
-                  <div class="widget-planning-week">
-                    <div class="widget-planning-week-days">
-                      {% for j in range (1, 8) %}
-                        <div {% if j >= 6 %}class="widget-planning-dayoff"{% endif %}></div>
-                      {% endfor %}
+                <div class="widget-planning-weeks">
+                  {% for i in range(1, planningProperties.nbWeeks) %}
+                    <div class="widget-planning-week">
+                      <div class="widget-planning-week-days">
+                        {% for j in range (1, 8) %}
+                          <div {% if j >= 6 %}class="widget-planning-dayoff"{% endif %}></div>
+                        {% endfor %}
+                      </div>
                     </div>
-                  </div>
-                {% endfor %}
+                  {% endfor %}
+                </div>
+                <div class="widget-planning-items">
+                  {% for item in node.data %}
+                    <div class="widget-planning-item"
+                      style="
+                        background-color: {{ item.color }};
+                        left: {{ item.left }}px;
+                        width: {{ item.width }}px;
+                      "
+                    >{{ item.label }}</div>
+                  {% endfor %}
+                </div>
               </div>
             </div>
             <div class="widget-planning-node-childs">
