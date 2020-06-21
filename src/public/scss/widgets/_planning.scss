@@ -1,0 +1,102 @@
+.widget-planning {
+  bottom: 50px; // to let space for horizontal scrollbar.
+  left: 0;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.widget-planning-container {
+  height: 100%;
+  overflow-x: scroll;
+  overflow-y: auto;
+  position: relative;
+  width: 100%;
+}
+
+/**
+  .widget-planning-header is the title line for the planning widget.
+*/
+.widget-planning-header {
+  @include flex;
+
+  background-color: $background-color-empty;
+  height: 45px;
+  position: sticky;
+  top: 0;
+  z-index: 2; // in order to be on front of the sticky left column
+
+  &>* {
+    height: 100%;
+  }
+
+  /**
+    The right part title line
+  */
+  .widget-planning-dates {
+    @include flex-full-fix;
+    @include flex;
+
+    border: solid 1px $border-color-light;
+
+    /**
+      title for one week
+    */
+    .widget-planning-week {
+      @include flex-v;
+
+      .widget-planning-week-label {
+        @include flex;
+      }
+
+      .widget-planning-week-days {
+        @include flex;
+  
+        &>* {
+          @include flex-fix;
+
+          width: 45px;
+        }
+      }
+    }
+
+  }
+}
+
+/**
+  Planning data zone.
+*/
+.widget-planning-content {
+  /**
+    One line
+  */
+  .widget-planning-line {
+    @include flex;
+  
+    height: 45px;
+  
+    &>* {
+      height: 100%;
+    }
+
+    .widget-planning-data {
+      &>* {
+        width: 7 * 45px;
+      }
+    }
+  }
+}
+
+/**
+  .widget-planning-label: the left column content.
+  Common part between title and lines.
+*/
+.widget-planning-label {
+  @include flex-fix;
+
+  background-color: $background-color-empty;
+  border: solid 1px $border-color-light;
+  position: sticky;
+  left: 0;
+  width: 300px;
+}

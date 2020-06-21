@@ -1,52 +1,43 @@
 {%- extends 'common/page.njk' -%}
 {%- block content -%}
-  <div class="planning-header">
-    <div class="planning-label">
-      Title...
-    </div>
-    <div class="planning-dates">
-      <div class="planning-week">
-        <div class="planning-week-label">
-          <div>S01.</div>
-          <div>Jan.</div>
+  {% set nbweeks = 9 %}
+  {% set nblines = 90 %}
+  <div class="widget-planning">
+    <div class="widget-planning-container">
+      <div class="widget-planning-header">
+        <div class="widget-planning-label">
+          Title...
         </div>
-        <div class="planning-week-days">
-          <div>1</div>
-          <div>2</div>
-          <div>3</div>
-          <div>4</div>
-          <div>5</div>
-          <div>6</div>
-          <div>7</div>
-        </div>
-      </div>
-      <div class="planning-week">
-        <div class="planning-week-label">
-          <div>S02.</div>
-          <div>Jan.</div>
-        </div>
-        <div class="planning-week-days">
-          <div>8</div>
-          <div>9</div>
-          <div>10</div>
-          <div>11</div>
-          <div>12</div>
-          <div>13</div>
-          <div>14</div>
+        <div class="widget-planning-dates">
+          {% for i in range(1, nbweeks) %}
+            <div class="widget-planning-week">
+              <div class="widget-planning-week-label">
+                <div>S0{{ i }}.</div>
+                <div>Jan.</div>
+              </div>
+              <div class="widget-planning-week-days">
+                {% for j in range (1, 7) %}
+                  <div>{{ j }}</div>
+                {% endfor %}
+              </div>
+            </div>
+          {% endfor %}
         </div>
       </div>
-    </div>
-  </div>
-  <div class="planning-content">
-  {% for i in range(1, 100) %}
-    <div class="planning-line">
-      <div class="planning-label">
-        Resource {{ i }}
-      </div>
-      <div class="planning-data">
-
+      <div class="widget-planning-content">
+        {% for i in range(1, nblines) %}
+          <div class="widget-planning-line">
+            <div class="widget-planning-label">
+              Resource {{ i }}
+            </div>
+            <div class="widget-planning-data">
+              {% for i in range(1, nbweeks) %}
+                <div></div>
+              {% endfor %}
+            </div>
+          </div>
+        {% endfor %}
       </div>
     </div>
-  {% endfor %}
   </div>
 {%- endblock -%}
