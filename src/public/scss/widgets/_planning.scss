@@ -5,6 +5,13 @@ $zindex-planning-label: 20;
 // Items must be on front of the grid.
 $zindex-planning-item: 10;
 
+/*********************************************************/
+/************* Main containers */
+/*********************************************************/
+
+/**
+  The widget planning.
+*/
 .widget-planning {
   bottom: 50px; // to let space for horizontal scrollbar.
   left: 0;
@@ -13,6 +20,10 @@ $zindex-planning-item: 10;
   right: 0;
 }
 
+/**
+  This is the container for the whole widget.
+  Used to set scrollbars.
+*/
 .widget-planning-container {
   height: 100%;
   overflow-x: scroll;
@@ -22,12 +33,13 @@ $zindex-planning-item: 10;
 }
 
 /**
-  .widget-planning-header is the title line for the planning widget.
+  The headers line for the planning widget.
 */
 .widget-planning-header {
   @include flex;
 
   background-color: $background-color-empty;
+  border-bottom: solid 1px $border-color-light;
   height: 45px;
   position: sticky;
   top: 0;
@@ -36,121 +48,175 @@ $zindex-planning-item: 10;
   &>* {
     height: 100%;
   }
-
-  /**
-    The right part title line
-  */
-  .widget-planning-calendar {
-
-    .widget-planning-weeks {
-      border: solid 1px $border-color-light;
-
-      /**
-        title for one week
-      */
-      .widget-planning-week {
-        @include flex-v;
-
-        .widget-planning-week-label {
-          @include flex;
-          @include flex-full-fix;
-        }
-
-        .widget-planning-week-days {
-          @include flex-fix;
-
-          text-align: center;
-        }
-      }
-    }
-  }
 }
 
 /**
-  Planning data zone.
+  The planning's content (the lower part).
 */
-.widget-planning-content {
-  /**
-    One line
-  */
-  .widget-planning-node-line {
-    @include flex;
-  
-    height: 45px;
-  
-    &>* {
-      height: 100%;
-    }
-
-    .widget-planning-calendar {
-      position: relative; // so that childs absolute refers to parent.
-
-      .widget-planning-weeks {
-        .widget-planning-week {
-          height: 100%;
-        }
-      }
-
-      .widget-planning-items {
-        bottom: 0;
-        left: 0;
-        position: absolute;
-        right: 0;
-        top: 0;
-
-        .widget-planning-item {
-          // left and width are set by the template.
-          bottom: 0;
-          color: $color-filled;
-          top: 0;
-          position: absolute;
-          z-index: $zindex-planning-item;
-        }
-      }
-    }
-
-    .widget-planning-week-days {
-      height: 100%;
-
-      &>* {
-        @include flex-full-fix;
-
-        height: 100%;
-      }
-
-      .widget-planning-dayoff {
-        background: repeating-linear-gradient(
-          -45deg,
-          $background-color-empty,
-          $background-color-empty $background-stripes-width,
-          $background-color-light $background-stripes-width,
-          $background-color-light ($background-stripes-width * 2)
-        );
-      }
-    }
-  }
-}
+/*
+.widget-planning-content {}
+*/
 
 /**
-  .widget-planning-label: the left column content.
-  Common part between title and lines.
+  The right part of the widget (the calendar).
+*/
+.widget-planning-calendar {
+  // Take all horizontal space
+  @include flex-full-fix;
+}
+
+/*********************************************************/
+/************* The left column (labels) */
+/*********************************************************/
+
+/**
+  The left column content.
 */
 .widget-planning-label {
   @include flex-fix;
-
+  
   background-color: $background-color-empty;
   border: solid 1px $border-color-light;
-  position: sticky;
   left: 0;
+  position: sticky;
   width: 300px;
   z-index: $zindex-planning-label;
 }
 
+/*********************************************************/
+/************* The background calendar grid */
+/*********************************************************/
+
+/**
+  This is the container in which there will weeks grid.
+*/
+.widget-planning-weeks {
+  @include flex;
+
+  height: 100%;
+}
+
+/**
+  Each week's grid is contained in any of these.
+*/
+.widget-planning-week {
+  // Border between weeks
+  border-right: solid 1px $border-color-light;
+  height: 100%;
+}
+
+/**
+  And a week is filled with days.
+*/
+.widget-planning-week-days {
+  @include flex;
+
+  &>* {
+    width: 45px;
+  }
+}
+
+// /**
+//   In the content grid, days have borders.
+// */
+// .widget-planning-content {
+//   .widget-planning-week-days>* {
+//     border: solid 1px $border-color-light;
+//   }
+// }
+
+/**
+  In the planning header, the week has two lines:
+  - a label (week number, month, ...)
+  - days list
+*/
+.widget-planning-header {
+  .widget-planning-week {
+    // Parts are one on top of each other.
+    @include flex-v;
+
+    .widget-planning-week-label {
+      // The label takes the space.
+      @include flex-full-fix;
+      // The label content is flexed.
+      @include flex;
+
+      border-bottom: solid 1px $border-color-light;
+    }
+
+    .widget-planning-week-days {
+      @include flex-fix;
+
+      text-align: center;
+    }
+  }
+}
+
+/**
+  In the planning content, days are here to draw a grid.
+*/
+.widget-planning-content {
+  .widget-planning-week-days {
+    height: 100%;
+  
+    &>* {
+      @include flex-full-fix;
+  
+      border: solid 1px $border-color-light;
+      height: 100%;
+    }
+  }
+}
+
+/**
+  Non working days (dayoff).
+*/
+.widget-planning-content {
+  .widget-planning-dayoff {
+    background: repeating-linear-gradient(
+      -45deg,
+      $background-color-empty,
+      $background-color-empty $background-stripes-width,
+      $background-color-light $background-stripes-width,
+      $background-color-light ($background-stripes-width * 2)
+    );
+  }
+}
+ */
+/*********************************************************/
+/************* Nodes */
+/*********************************************************/
+
+/**
+  A node content (itself, and childs).
+*/
+/*
+.widget-planning-node {}
+*/
+
+/**
+  The node itself.
+*/
+.widget-planning-node-line {
+  @include flex;
+
+  height: 45px;
+
+  &>* {
+    // The node content must use all available height.
+    height: 100%;
+  }
+}
+
+/**
+  The node's childs
+*/
 .widget-planning-node-childs {
   .widget-planning-label {
     padding-left: 45px;
   }
 
+  // FIXME: find an other way to deal with the tree.
   .widget-planning-node-childs {
     .widget-planning-label {
       padding-left: 90px;
@@ -158,27 +224,31 @@ $zindex-planning-item: 10;
   }
 }
 
-/**
-  The right part (the calendar).
-*/
+/*********************************************************/
+/************* Node items (tasks, sums, ...) */
+/*********************************************************/
+
 .widget-planning-calendar {
-  @include flex-full-fix;
+  position: relative; // so that childs absolute refers to parent.
 
-  .widget-planning-weeks {
-    @include flex;
+  // The item container take all the space.
+  .widget-planning-items {
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
 
-    height: 100%;
+    .widget-planning-item {
+      // An item as absolute position.
+      // left and width are set by the template.
+      bottom: 0;
+      color: $color-filled;
+      top: 0;
+      position: absolute;
+      z-index: $zindex-planning-item;
+    }
   }
 }
 
-/**
-  .widget-planning-week-days: contain one div per day.
-*/
-.widget-planning-week-days {
-  @include flex;
 
-  &>* {
-    border: solid 1px $border-color-light;
-    width: 45px;
-  }
-}
