@@ -256,9 +256,14 @@ $zindex-planning-item: 10;
       // left and width are set by the template.
       bottom: 0;
       color: $color-filled;
+      margin: 5px 0;
       top: 0;
       position: absolute;
       z-index: $zindex-planning-item;
+
+      &[data-widget-planning-item-type=task] {
+        border-radius: 8px;
+      }
     }
   }
 }

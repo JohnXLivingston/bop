@@ -48,6 +48,7 @@
                 <div class="widget-planning-items">
                   {% for item in node.data %}
                     <div class="widget-planning-item"
+                      data-widget-planning-item-type="{{ item.type }}"
                       style="
                         background-color: {{ item.color }};
                         left: {{ item.left }}px;
