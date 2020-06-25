@@ -43,6 +43,12 @@ $zindex-planning-item: 10;
   height: 45px;
   position: sticky;
   top: 0;
+  width: max-content; // This is a trick that's make the
+                      // sticky work. If you remove it,
+                      // the header will only be as large
+                      // as the screen. And scrolling down
+                      // and right will cause the grid to
+                      // display under the header.
   z-index: $zindex-planning-header;
 
   &>* {
@@ -53,9 +59,15 @@ $zindex-planning-item: 10;
 /**
   The planning's content (the lower part).
 */
-/*
-.widget-planning-content {}
-*/
+.widget-planning-content {
+  width: max-content; // This is a trick that's make the
+                      // sticky work for
+                      // .widget-planning-label.
+                      // Without this, scolling to the
+                      // right more that the screen width
+                      // will scoll the label column out of
+                      // the screen.
+}
 
 /**
   The right part of the widget (the calendar).
