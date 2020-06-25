@@ -23,27 +23,31 @@
         </nav>
       </div>
       <div class="header-last-block">
-        <a main-sidebar-open>&#x2630;</a>
+        <a data-main-sidebar-open>&#x2630;</a>
       </div>
     </header>
-    <div class="hidden" widget-sidebar widget-sidebar-open="[main-sidebar-open]" widget-sidebar-close="[main-sidebar-close],[sidebar-close]">
+    <div class="hidden"
+      data-widget-sidebar
+      data-widget-sidebar-open="[data-main-sidebar-open]"
+      data-widget-sidebar-close="[data-main-sidebar-close],[data-sidebar-close]"
+    >
       <div class="sidebar-wrapper">
         <div class="sidebar-header">
           <h1>BOP</h1>
-          <div sidebar-close>&rarr;</div>
+          <div data-sidebar-close>&rarr;</div>
         </div>
         <div class="sidebar-content">
           <ul>
             {% if not isProduction %}
             <li>
               <label>
-                <input type="checkbox" checked="checked" auto-reload-dev-mode>
+                <input type="checkbox" checked="checked" data-auto-reload-dev-mode>
                 Auto reload
               </label>
             </li>
             {% endif %}
             {% if changeLocaleInformations %}
-            <li main-sidebar-close>
+            <li data-main-sidebar-close>
               {% include "common/locale.njk" %}
             </li>
             {% endif %}

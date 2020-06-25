@@ -3,14 +3,14 @@
 require('@dcdeiv/simpler-sidebar/dist/jquery.simpler-sidebar.js')
 
 function initWidgetsSidebar () {
-  $('body').find('[widget-sidebar]:not([widget-sidebar-initialized])').each((i, html) => {
+  $('body').find('[data-widget-sidebar]:not([data-widget-sidebar-initialized])').each((i, html) => {
     const widget = $(html)
-    widget.attr('widget-sidebar-initialized', '')
+    widget.attr('data-widget-sidebar-initialized', '')
     widget.removeClass('hidden')
     widget.simplerSidebar({
       selectors: {
-        trigger: widget.attr('widget-sidebar-open'),
-        quitter: widget.attr('widget-sidebar-close')
+        trigger: widget.attr('data-widget-sidebar-open'),
+        quitter: widget.attr('data-widget-sidebar-close')
       },
       animation: {
         easing: 'easeOutQuint'

@@ -13,10 +13,10 @@ logger.debug('JS is okay.')
 $(() => {
   notifications.connect()
 
-  if ($('[auto-reload-dev-mode]').length) {
-    notifications.autoReloadDevMode($('[auto-reload-dev-mode]').is(':checked'))
+  if ($('[data-auto-reload-dev-mode]').length) {
+    notifications.autoReloadDevMode($('[data-auto-reload-dev-mode]').is(':checked'))
   }
-  $('body').on('click', '[auto-reload-dev-mode]', (ev) => {
+  $('body').on('click', '[data-auto-reload-dev-mode]', (ev) => {
     const cb = $(ev.currentTarget)
     notifications.autoReloadDevMode(cb.is(':checked'))
   })

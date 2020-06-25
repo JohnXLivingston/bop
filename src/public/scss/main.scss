@@ -73,7 +73,7 @@ header {
     padding: 0 20px;
   }
 
-  [main-sidebar-open] {
+  [data-main-sidebar-open] {
     @include button-picto;
     font-size: 2rem;
     padding: 0 5px;
