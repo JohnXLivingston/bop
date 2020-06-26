@@ -1,0 +1,9 @@
+@mixin background-stripes($color1: $background-color-empty, $color2: $background-color-light, $width: $background-stripes-width) {
+  background: repeating-linear-gradient(
+    -45deg,
+    $color1,
+    $color1 $width,
+    $color2 $width,
+    $color2 ($width * 2)
+  );
+}
