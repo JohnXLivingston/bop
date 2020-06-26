@@ -1,11 +1,11 @@
 @mixin flex {
-  display: flex;
   align-items: center;
+  display: flex;
 }
 
 @mixin flex-inline {
-  display: inline-flex;
   align-items: center;
+  display: inline-flex;
 }
 
 @mixin flex-v {
@@ -23,12 +23,12 @@
 // }
 
 @mixin flex-full-fix {
+  flex-basis: auto;
   flex-grow: 1;
   flex-shrink: 0;
-  flex-basis: auto;
 }
 @mixin flex-fix {
+  flex-basis: auto;
   flex-grow: 0;
   flex-shrink: 0;
-  flex-basis: auto;
 }

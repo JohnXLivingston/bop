@@ -3,8 +3,8 @@
   background-color: $background-color-light;
   border: solid 1px $border-color-dark;
   height: 100%;
-  position: relative;
   overflow: auto;
+  position: relative;
 }
 
 .sidebar-header {
@@ -23,9 +23,9 @@
     @include button-picto;
 
     border-left: solid 1px $border-color-filled-light;
-    font-weight: bolder;
     font-size: 2rem;
-    padding: 20px 20px;
+    font-weight: bolder;
+    padding: 20px;
     transition: 150ms;
 
     &:hover {
@@ -41,9 +41,9 @@
 
   li {
     padding: 20px;
-  }
 
-  li:hover {
-    background-color: $background-color-light-hover;
+    &:hover {
+      background-color: $background-color-light-hover;
+    }
   }
 }
