@@ -3,7 +3,7 @@
         "merge-default-rules": true
     },
     "files": {
-        "include": "src/public/scss/*.scss"
+        "include": "src/public/scss/**/*.scss"
     },
     "rules": {
         "extends-before-mixins": 2,
