@@ -16,8 +16,8 @@ $zindex-planning-item: 10;
   bottom: 50px; // to let space for horizontal scrollbar.
   left: 0;
   position: absolute;
-  top: 0;
   right: 0;
+  top: 0;
 }
 
 /**
@@ -43,12 +43,14 @@ $zindex-planning-item: 10;
   height: 45px;
   position: sticky;
   top: 0;
-  width: max-content; // This is a trick that's make the
-                      // sticky work. If you remove it,
-                      // the header will only be as large
-                      // as the screen. And scrolling down
-                      // and right will cause the grid to
-                      // display under the header.
+  // width: max-content :
+  // This is a trick that's make the
+  // sticky work. If you remove it,
+  // the header will only be as large
+  // as the screen. And scrolling down
+  // and right will cause the grid to
+  // display under the header.
+  width: max-content;
   z-index: $zindex-planning-header;
 
   &>* {
@@ -60,13 +62,15 @@ $zindex-planning-item: 10;
   The planning's content (the lower part).
 */
 .widget-planning-content {
-  width: max-content; // This is a trick that's make the
-                      // sticky work for
-                      // .widget-planning-label.
-                      // Without this, scolling to the
-                      // right more that the screen width
-                      // will scoll the label column out of
-                      // the screen.
+  // width: max-content : 
+  // This is a trick that's make the
+  // sticky work for
+  // .widget-planning-label.
+  // Without this, scolling to the
+  // right more that the screen width
+  // will scoll the label column out of
+  // the screen.
+  width: max-content;
 }
 
 /**
@@ -209,7 +213,7 @@ $zindex-planning-item: 10;
 /**
   The node itself.
 */
-.widget-planning-node-line {
+.widget-planning-node-content {
   @include flex;
 
   height: 45px;
@@ -237,35 +241,82 @@ $zindex-planning-item: 10;
 }
 
 /*********************************************************/
-/************* Node items (tasks, sums, ...) */
+/************* Node items (tasks, summaries, ...) */
 /*********************************************************/
 
 .widget-planning-calendar {
   position: relative; // so that childs absolute refers to parent.
 
   // The item container take all the space.
-  .widget-planning-items {
+  .widget-planning-line {
     bottom: 0;
     left: 0;
     position: absolute;
     right: 0;
     top: 0;
-
-    .widget-planning-item {
-      // An item as absolute position.
-      // left and width are set by the template.
-      bottom: 0;
-      color: $color-filled;
-      margin: 5px 0;
-      top: 0;
-      position: absolute;
-      z-index: $zindex-planning-item;
-
-      &[data-widget-planning-item-type=task] {
-        border-radius: 8px;
-      }
-    }
   }
 }
 
+.widget-planning-item {
+  // An item as absolute position.
+  // left and width are set by the template.
+  bottom: 0;
+  color: $color-filled;
+  margin: 5px 0;
+  position: absolute;
+  top: 0;
+  z-index: $zindex-planning-item;
+}
 
+.widget-planning-item-inner {
+  height: 100%;
+  position: relative;
+}
+
+.widget-planning-item-part {
+  @include flex-v;
+  bottom: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+
+  [data-widget-planning-node-type='task'] &:not(.widget-planning-item-part-off) {
+    border-radius: 8px;
+  }
+}
+
+.widget-planning-item-part-off {
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent $background-stripes-width,
+    $background-color-light $background-stripes-width,
+    $background-color-light ($background-stripes-width * 2)
+  );
+}
+
+.widget-planning-item-txt {
+  color: #FFF;
+  max-width: 100%;
+  overflow: hidden;
+  padding: 0 6px;
+  vertical-align: middle;
+  white-space: nowrap;
+  // FIXME?
+  // Fix antialiasing for Safari/macOS
+  // -webkit-font-smoothing: antialiased;
+  // -moz-osx-font-smoothing: grayscale;
+}
+
+.widget-planning-split {
+  left: 0;
+  margin-top: -9px;
+  padding: 8px 0;
+  position: absolute;
+  right: 0;
+  top: 50%;
+}
+
+.widget-planning-split-inner {
+  border-top: dotted 1px;
+}

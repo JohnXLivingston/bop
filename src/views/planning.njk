@@ -28,8 +28,10 @@
       </div>
       <div class="widget-planning-content">
         {% macro planningNode(node, planningProperties) %}
-          <div class="widget-planning-node">
-            <div class="widget-planning-node-line">
+          <div class="widget-planning-node"
+            data-widget-planning-node-type="{{ node.type }}"
+          >
+            <div class="widget-planning-node-content">
               <div class="widget-planning-label">
                 {{ node.name }}
               </div>
@@ -45,18 +47,89 @@
                     </div>
                   {% endfor %}
                 </div>
-                <div class="widget-planning-items">
-                  {% for item in node.data %}
-                    <div class="widget-planning-item"
-                      data-widget-planning-item-type="{{ item.type }}"
-                      style="
-                        background-color: {{ item.color }};
-                        left: {{ item.left }}px;
-                        width: {{ item.width }}px;
-                      "
-                    >{{ item.label }}</div>
-                  {% endfor %}
-                </div>
+                {% if node.type === 'summary' %}
+                  <div class="widget-planning-line">
+                    {% for item in node.data %}
+                      <div class="widget-planning-item"
+                        style="
+                          left: {{ item.left }}px;
+                          width: {{ item.width }}px;
+                        "
+                      >
+                        <div class="widget-planning-item-inner">
+                          <div
+                            class="widget-planning-item-part"
+                            style="background-color: {{ item.color }};"
+                          >
+                            <div class="widget-planning-item-txt">{{ item.label }}</div>
+                          </div>
+                        </div>
+                      </div>
+                    {% endfor %}
+                  </div>
+                {% elif node.type === 'task' %}
+                  <div class="widget-planning-line">
+                    {% for stubGroup in node.stubGroups %}
+                      {% if stubGroup.previousEnd and stubGroup.previousEnd <= 0 %}
+                        {# There is something to the left, outis #}
+                        <div class="widget-planning-item"
+                          style="
+                            left: {{ stubGroup.previousEnd }}px;
+                            width: {{ stubGroup.left - stubGroup.previousEnd }}px;
+                          "
+                        >
+                          <div class="widget-planning-split">
+                            <div class="widget-planning-split-inner"
+                              style="border-color: {{ node.color }}"
+                            ></div>
+                          </div>
+                        </div>
+                      {% endif %}
+                      <div class="widget-planning-item"
+                        style="
+                          left: {{ stubGroup.left }}px;
+                          width: {{ stubGroup.width }}px;
+                        "
+                      >
+                        <div class="widget-planning-item-inner">
+                          <div class="widget-planning-item-part"
+                            style="background-color: {{ node.color }};"
+                          >
+                            <div class="widget-planning-task-txt-wrapper">
+                              {{ stubGroup.label }}
+                            </div>
+                          </div>
+                          {% for stub in stubGroup.stubs %}
+                            {% if (not stub.on) and (not loop.last) and (stub.width != null) %}
+                              <div
+                                class="widget-planning-item-part widget-planning-item-part-off"
+                                style="
+                                  left: {{ stub.left - stubGroup.left }}px;
+                                  width: {{ stub.width }}px;
+                                  background-color: {{ node.color }};
+                                "
+                              ></div>
+                            {% endif %}
+                          {% endfor %}
+                        </div>
+                      </div>
+                      {% if stubGroup.nextStart and stubGroup.nextStart > stubGroup.left + stubGroup.width %}
+                        <div class="widget-planning-item"
+                          style="
+                              left: {{ stubGroup.left + stubGroup.width }}px;
+                              width: {{ stubGroup.nextStart - (stubGroup.left + stubGroup.width) }}px;
+                            "
+                        >
+                          <div class="widget-planning-split">
+                            <div class="widget-planning-split-inner"
+                              style="border-color: {{ node.color }}"
+                            ></div>
+                          </div>
+                        </div>
+                      {% endif %}
+                    {% endfor %}
+                  </div>
+                {% endif %}
               </div>
             </div>
             <div class="widget-planning-node-childs">
