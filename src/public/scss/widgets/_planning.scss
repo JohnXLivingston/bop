@@ -69,6 +69,8 @@ $zindex-planning-item: 10;
 .widget-planning-calendar {
   // Take all horizontal space
   @include flex-full-fix;
+
+  position: relative; // so that childs absolute refers to parent.
 }
 
 // *******************************************************
@@ -103,22 +105,11 @@ $zindex-planning-item: 10;
   // Border between weeks
   border-right: solid 1px $border-color-light;
   height: 100%;
-}
 
-// And a week is filled with days.
-.widget-planning-week-days {
-  @include flex;
-
-  &>* {
-    width: 45px;
-  }
-}
-
-// In the planning header, the week has two lines:
-//  - a label (week number, month, ...)
-//  - days list
-.widget-planning-header {
-  .widget-planning-week {
+  // In the planning header, the week has two lines:
+  //  - a label (week number, month, ...)
+  //  - days list
+  .widget-planning-header & {
     // Parts are one on top of each other.
     @include flex-v;
 
@@ -139,9 +130,16 @@ $zindex-planning-item: 10;
   }
 }
 
-// In the planning content, days are here to draw a grid.
-.widget-planning-content {
-  .widget-planning-week-days {
+// And a week is filled with days.
+.widget-planning-week-days {
+  @include flex;
+
+  &>* {
+    width: 45px;
+  }
+
+  // In the planning content, days are here to draw a grid.
+  .widget-planning-content & {
     height: 100%;
 
     &>* {
@@ -154,8 +152,8 @@ $zindex-planning-item: 10;
 }
 
 // Non working days (dayoff).
-.widget-planning-content {
-  .widget-planning-dayoff {
+.widget-planning-dayoff {
+  .widget-planning-content & {
     @include background-stripes($background-color-empty, $background-color-light);
   }
 }
@@ -197,17 +195,15 @@ $zindex-planning-item: 10;
 // ********** Node items (tasks, summaries, ...)
 // *******************************************************
 
-.widget-planning-calendar {
-  position: relative; // so that childs absolute refers to parent.
-
-  // The item container take all the space.
-  .widget-planning-line {
-    bottom: 0;
-    left: 0;
-    position: absolute;
-    right: 0;
-    top: 0;
-  }
+// The item container take all the space.
+.widget-planning-line {
+  // NB: the parent (.widget-planning-calendar) must have
+  // position: relative.
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
 }
 
 .widget-planning-item {
