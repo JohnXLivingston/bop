@@ -30,6 +30,9 @@
         {% macro planningNode(node, planningProperties) %}
           <div class="widget-planning-node"
             data-widget-planning-node-type="{{ node.type }}"
+            {% if node.color %}
+              data-widget-planning-color="{{ node.color }}"
+            {% endif %}
           >
             <div class="widget-planning-node-content">
               <div class="widget-planning-label">
@@ -51,16 +54,16 @@
                   <div class="widget-planning-line">
                     {% for item in node.data %}
                       <div class="widget-planning-item"
+                        {% if item.color %}
+                          data-widget-planning-color="{{ item.color }}"
+                        {% endif %}
                         style="
                           left: {{ item.left }}px;
                           width: {{ item.width }}px;
                         "
                       >
                         <div class="widget-planning-item-inner">
-                          <div
-                            class="widget-planning-item-part"
-                            style="background-color: {{ item.color }};"
-                          >
+                          <div class="widget-planning-item-part">
                             <div class="widget-planning-item-txt">{{ item.label }}</div>
                           </div>
                         </div>
@@ -79,9 +82,7 @@
                           "
                         >
                           <div class="widget-planning-split">
-                            <div class="widget-planning-split-inner"
-                              style="border-color: {{ node.color }}"
-                            ></div>
+                            <div class="widget-planning-split-inner"></div>
                           </div>
                         </div>
                       {% endif %}
@@ -92,9 +93,7 @@
                         "
                       >
                         <div class="widget-planning-item-inner">
-                          <div class="widget-planning-item-part"
-                            style="background-color: {{ node.color }};"
-                          >
+                          <div class="widget-planning-item-part">
                             <div class="widget-planning-task-txt-wrapper">
                               {{ stubGroup.label }}
                             </div>
@@ -106,7 +105,6 @@
                                 style="
                                   left: {{ stub.left - stubGroup.left }}px;
                                   width: {{ stub.width }}px;
-                                  background-color: {{ node.color }};
                                 "
                               ></div>
                             {% endif %}
@@ -121,9 +119,7 @@
                             "
                         >
                           <div class="widget-planning-split">
-                            <div class="widget-planning-split-inner"
-                              style="border-color: {{ node.color }}"
-                            ></div>
+                            <div class="widget-planning-split-inner"></div>
                           </div>
                         </div>
                       {% endif %}
