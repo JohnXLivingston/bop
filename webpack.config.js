@@ -96,6 +96,10 @@ module.exports = {
             options: 'jQuery'
           }
         ]
+      },
+      {
+        test: /\.njk$/,
+        loader: 'nunjucks-loader'
       }
     ]
   },

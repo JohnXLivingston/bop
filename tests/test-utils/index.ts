@@ -1,5 +1,7 @@
 import { exec } from 'child_process'
 
+export { testNunjucksTemplate } from './nunjucks'
+
 const DBNAME = 'bop_test'
 const DBUSER = 'bop_test'
 const DBPASSWORD = 'bop'

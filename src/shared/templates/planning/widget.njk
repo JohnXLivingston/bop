@@ -1,0 +1,34 @@
+{%- import './render.njk' as render -%}
+<div class="widget-planning">
+  <div class="widget-planning-container">
+    <div class="widget-planning-header">
+      <div class="widget-planning-label">
+        Title...
+      </div>
+      <div class="widget-planning-calendar">
+        <div class="widget-planning-weeks">
+          {% for i in range(1, planningProperties.nbWeeks) %}
+            <div class="widget-planning-week">
+              <div class="widget-planning-week-label">
+                <div>S0{{ i }}.</div>
+                <div>Jan.</div>
+              </div>
+              <div class="widget-planning-week-days">
+                {% for j in range (1, 8) %}
+                  <div {% if j >= 6 %}class="widget-planning-dayoff"{% endif %}>
+                    {{ (7 * (i - 1)) + j }}
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    <div class="widget-planning-content">
+      {% for node in nodes %}
+        {{ render.planningNode(node, planningProperties) }}
+      {% endfor %}
+    </div>
+  </div>
+</div>

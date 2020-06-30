@@ -22,6 +22,7 @@ describe('Tests environment', function () {
       generateMissingTests('initializers')
       generateMissingTests('lib')
       generateMissingTests('models')
+      generateMissingTests('views', n => { return /views\/.*\//.test(n) }) // only test first level templates.
     })
 
     describe('Every shared module must have a test file', function () {
@@ -91,7 +92,11 @@ async function missingTests (dir: string, ignore?: (n:string) => boolean): Promi
   }
   const a = []
   for (let i = 0; i < vs.libs.length; i++) {
-    const lib = vs.libs[i]
+    let lib = vs.libs[i]
+
+    // for nunjucks files, replace extension with ts:
+    lib = lib.replace(/\.(njk|html)$/, '.ts')
+
     let found = false
     if (vs.tests.indexOf(lib) >= 0) {
       found = true

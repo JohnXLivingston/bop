@@ -1,8 +1,7 @@
 import getLogger from './utils/logger'
 import { notifications } from './lib/notifications'
 import { testFunction } from '../../shared/test'
-import { initWidgetsLocale } from './widgets/locale'
-import { initWidgetsSidebar } from './widgets/sidebar'
+import { initAllWidgets } from './widgets'
 import '../scss/main.scss'
 
 require('./common')
@@ -21,7 +20,6 @@ $(() => {
     notifications.autoReloadDevMode(cb.is(':checked'))
   })
 
-  initWidgetsLocale()
-  initWidgetsSidebar()
+  initAllWidgets()
 })
 testFunction()
