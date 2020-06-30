@@ -19,6 +19,22 @@ async function testNunjucksTemplate (name: string, context: any): Promise<string
     name = m[1]
     env = frontendEnv
     args = ['htmlhint', '--config', '.htmlhintrc_njk', 'stdin']
+
+    // FIXME: find a better way...
+    context = Object.assign({}, {
+      gettext: (t:string) => t,
+      format: (fmt: any, obj: any, named: any): string => {
+        if (!fmt) return ''
+        if (!fmt.replace) {
+          return fmt
+        }
+        if (named) {
+          return fmt.replace(/%\(\w+\)s/g, (match: any) => String(obj[match.slice(2, -2)]))
+        } else {
+          return fmt.replace(/%s/g, () => String(obj.shift()))
+        }
+      }
+    }, context)
   } else {
     // FIXME: backend template test is not ready yet:
     // gettext, format are missing.
