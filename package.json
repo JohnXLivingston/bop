@@ -6,9 +6,8 @@
   "description": "Bop Open Planning",
   "scripts": {
     "clean": "rimraf dist/*",
-    "lint": "npm-run-all -s config:lint html:lint sass:lint tsc:lint dependencies:lint",
+    "lint": "npm-run-all -s config:lint sass:lint tsc:lint dependencies:lint",
     "config:lint": "yamllint config/**/*.yaml",
-    "html:lint": "htmlhint src/view/**/*.html",
     "sass:lint": "sass-lint --verbose",
     "tsc:lint": "eslint --ext .ts ./src ./src/public ./tests/",
     "build": "NODE_ENV=production npm run common:build",
