@@ -71,7 +71,10 @@ module.exports = {
           },
           {
             loader: 'sass-loader',
-            options: { sourceMap: !isProd }
+            options: {
+              // need to be true for resolve-url-loader to work
+              sourceMap: true
+            }
           }
         ]
       },
