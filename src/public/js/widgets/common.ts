@@ -1,17 +1,14 @@
 import { initWidgetsLocale } from './locale'
-import { initWidgetsPlanning } from './planning'
 import { initWidgetsSidebar } from './sidebar'
 
 export * from './locale'
-export * from './planning'
 export * from './sidebar'
 
-function initAllWidgets () {
+function initCommonWidgets () {
   initWidgetsLocale()
   initWidgetsSidebar()
-  initWidgetsPlanning()
 }
 
 export {
-  initAllWidgets
+  initCommonWidgets
 }

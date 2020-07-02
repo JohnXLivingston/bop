@@ -21,7 +21,8 @@ module.exports = {
   target: 'web',
   entry: {
     login: './src/public/js/login.ts',
-    main: './src/public/js/main.ts'
+    main: './src/public/js/main.ts',
+    planning: './src/public/js/planning.ts'
   },
   module: {
     rules: [

@@ -1,11 +1,13 @@
 <!DOCTYPE html>
+{#- You can override webpackChunk in childs templates or in backends context -#}
+{%- set webpackChunk = webpackChunk | default('main') -%}
 {%- import "common/webpack.njk" as webpack -%}
 <html lang="{{ lang }}" dir="{{ lang_dir }}" bop-context="{{ context | dump }}">
   <head>
     <meta charset="utf-8">
     <title>BOP</title>
-    {{ webpack.stylesheets(webpackManifest, 'main') }}
-    {{ webpack.headScripts(webpackManifest, 'main') }}
+    {{ webpack.stylesheets(webpackManifest, webpackChunk) }}
+    {{ webpack.headScripts(webpackManifest, webpackChunk) }}
   </head>
   <body>
     <header>
@@ -61,6 +63,6 @@
     <div class="page-content">
       {% block content %}{% endblock %}
     </div>
-    {{ webpack.bodyScripts(locale, webpackManifest, 'main') }}
+    {{ webpack.bodyScripts(locale, webpackManifest, webpackChunk) }}
   </body>
 </html>
