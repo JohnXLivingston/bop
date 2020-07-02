@@ -1,6 +1,8 @@
 import { planningTestSet } from '../../../shared/test'
 import { nunjucksContext, Template } from '../utils/nunjucks'
 
+import '../../scss/widgets/planning.scss'
+
 function initWidgetsPlanning () {
   const widgets = $('[data-widget=planning]:not([data-widget-initialized])')
   let tpl: Template

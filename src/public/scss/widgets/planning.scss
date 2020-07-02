@@ -1,3 +1,6 @@
+@import '../abstracts/variables';
+@import '../abstracts/mixins';
+
 // The header of the widget must be on front of the left column (labels)
 $zindex-planning-header: 30;
 // The labels must be in front of items when scroller horizontally.
