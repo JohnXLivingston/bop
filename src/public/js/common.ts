@@ -33,3 +33,5 @@ require('jquery-ui/ui/widgets/dialog')
 require('jquery-ui/ui/effect')
 
 require('jquery-ui/ui/position')
+
+require('./jquery/utils')

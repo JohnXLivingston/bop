@@ -3,11 +3,20 @@ import { nunjucksContext, Template } from '../utils/nunjucks'
 
 import '../../scss/widgets/planning.scss'
 
-function initWidgetsPlanning () {
-  const widgets = $('[data-widget=planning]:not([data-widget-initialized])')
-  let tpl: Template
-  widgets.each((i, html) => {
-    const target = $(html)
+declare global {
+  interface JQuery {
+    BopPlanning(): JQuery,
+    BopPlanning(options: BopPlanningOptions): JQuery
+  }
+}
+
+interface BopPlanningOptions {}
+
+let tpl: Template
+
+$.widget('bop.BopPlanning', {
+  _create: function () {
+    const content = $(this.element)
     if (!tpl) {
       tpl = require('../../../shared/templates/planning/widget.njk')
     }
@@ -15,12 +24,8 @@ function initWidgetsPlanning () {
       nodes: planningTestSet(),
       planningProperties: { nbWeeks: 9 }
     })))
-    widget.attr('data-widget', 'planning')
-    widget.attr('data-widget-initialized', '')
-    target.replaceWith(widget)
-  })
-}
+    content.empty().append(widget)
+  }
+})
 
-export {
-  initWidgetsPlanning
-}
+export {}
