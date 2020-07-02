@@ -1,23 +1,13 @@
 {% macro stylesheets(webpackManifest, name) %}
-  {# FIXME: should be sorted... #}
-  {% for key, value in webpackManifest | dictsort %}
-    {% set parts = key.replace(r/^commons-([^-]*)-.*$/, "$1").split('~') %}
-    {% if parts.indexOf(name) >= 0 and webpackManifest[key].css %}
-      <link rel="stylesheet" href="{{ webpackManifest[key].css }}">
-    {% endif %}
+  {% for url in webpackManifest.stylesheetUrls(name) %}
+    <link rel="stylesheet" href="{{ url }}">
   {% endfor %}
 {% endmacro %}
 {% macro headScripts(webpackManifest, name) %}
-  {% if webpackManifest.manifest.text %}<script>{{ webpackManifest.manifest.text | safe }}</script>{% endif %}
+  <script>{{ webpackManifest.headerScriptTxt(name) | safe }}</script>
 {% endmacro %}
 {% macro bodyScripts(locale, webpackManifest, name) %}
-  {# FIXME: i18n files should pass through webpack, to minimize and add an hash in url. #}
-  <script src="i18n/{{ locale }}/messages.js"></script>
-  {# FIXME: should be sorted... #}
-  {% for key, value in webpackManifest | dictsort %}
-    {% set parts = key.replace(r/^commons-([^-]*)-.*$/, "$1").split('~') %}
-    {% if parts.indexOf(name) >= 0 and webpackManifest[key].js %}
-      {% if webpackManifest[key].js %}<script src="{{ webpackManifest[key].js }}"></script>{% endif %}
-    {% endif %}
+  {% for url in webpackManifest.scriptUrls(name, locale) %}
+    <script src="{{ url }}"></script>
   {% endfor %}
 {% endmacro %}
