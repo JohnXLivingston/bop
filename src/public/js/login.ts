@@ -1,8 +1,9 @@
-import { initWidgetsLocale } from './widgets/locale'
+import { parseWidgets } from './widgets/utils'
 
 require('./common')
 require('../scss/login.scss')
+require('./widgets/locale')
 
 $(() => {
-  initWidgetsLocale()
+  parseWidgets()
 })

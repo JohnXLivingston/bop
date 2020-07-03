@@ -1,15 +1,8 @@
-import { initWidgetsLocale } from './locale'
-import { initWidgetsSidebar } from './sidebar'
 import getLogger from '../utils/logger'
-
-export * from './locale'
-export * from './sidebar'
 
 const logger = getLogger('widgets/common')
 
 function initCommonWidgets () {
-  initWidgetsLocale()
-  initWidgetsSidebar()
   parseWidgets()
 }
 
@@ -39,7 +32,9 @@ function parseWidgets (dom?: JQuery): void {
 
     widget.bopDataBoolean('data-widget-parsed', true)
     logger.debug('Initializing the widget...')
-    const options: any = widget.bopDataObject('data-widget-options')
+    const options: any = widget.is('[data-widget-options]')
+      ? widget.bopDataObject('data-widget-options')
+      : undefined
     const method: Function = (widget as any)[name] as Function
     method.call(widget, options)
   })

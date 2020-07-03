@@ -1,3 +1,6 @@
+@import '../abstracts/variables';
+@import '../abstracts/mixins';
+
 .sidebar-wrapper {
   @include flex-v;
   background-color: $background-color-light;

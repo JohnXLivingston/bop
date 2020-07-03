@@ -1,10 +1,12 @@
 import getLogger from './utils/logger'
 import { notifications } from './lib/notifications'
 import { testFunction } from '../../shared/test'
-import { initCommonWidgets } from './widgets/common'
+import { parseWidgets } from './widgets/utils'
 import '../scss/main.scss'
 
 require('./common')
+require('./widgets/locale')
+require('./widgets/sidebar')
 
 const logger = getLogger('main.ts')
 logger.debug('JS is okay.')
@@ -20,6 +22,6 @@ $(() => {
     notifications.autoReloadDevMode(cb.is(':checked'))
   })
 
-  initCommonWidgets()
+  parseWidgets()
 })
 testFunction()
