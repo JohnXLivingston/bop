@@ -1,4 +1,5 @@
 {% macro stylesheets(webpackManifest, name) %}
+  {{ webpackManifest.favicons() | safe }}
   {% for url in webpackManifest.stylesheetUrls(name) %}
     <link rel="stylesheet" href="{{ url }}">
   {% endfor %}

@@ -9,6 +9,8 @@ const raw: string = isTest ? '{}' : fs.readFileSync(filename, 'utf-8')
 interface WebpackAsset {
   css?: string,
   js?: string,
+  png?: string[],
+  svg?: string[],
   text?: string
 }
 
@@ -18,10 +20,15 @@ const assets: WebpackAssets = JSON.parse(raw)
 let headerManifestScriptTxt: string
 const cssFiles: {[key: string]: string[]} = {}
 const jsFiles: {[key: string]: string[]} = {}
+let faviconSvg: string | undefined
 for (const key in assets) {
   const asset = assets[key]
   if (key === '') {
     // - '' : here are some images and other stuff
+    // looking for the favicon...
+    if (asset.svg && Array.isArray(asset.svg)) {
+      faviconSvg = asset.svg.find((url: string) => /^\/images\/bop\.\w+\.svg$/.test(url))
+    }
     continue
   }
   if (key === 'manifest') {
@@ -66,12 +73,18 @@ for (const key in assets) {
 // scripts and inject code, data are not stored
 // on the object, but in variables.
 class WebpackManifest {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  headerScriptTxt (name: string) {
+  headerScriptTxt (/* name: string */) {
     // This code will be used in templates.
     // To avoid some code injection, we must always return
     // a clone.
     return headerManifestScriptTxt
+  }
+
+  favicons (/* name: string */): string {
+    if (!faviconSvg) {
+      return ''
+    }
+    return `<link rel="icon" type="image/svg+xml" href="${faviconSvg}">`
   }
 
   stylesheetUrls (name: string) {
