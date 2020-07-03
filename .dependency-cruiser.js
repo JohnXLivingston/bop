@@ -7,7 +7,7 @@ module.exports = {
         'Public javascript can only include files from public or shared directory. ' +
         'CSS can only be included in top level scripts. ' +
         'Some nodes modules are allowed. ',
-      from: { path: '^src/public/js/.*\.ts$'},
+      from: { path: '^src/public/js/[^\/]*\.ts$'},
       to: {
         path:
           '^src/(public/js|shared)/' +
@@ -19,8 +19,9 @@ module.exports = {
       comment: 'Widgets may use any lib or utils.',
       from: { path: '^src/public/js/widgets' },
       to: { path:
-        '^src/(shared|public/js/(lib|utils))/' +
-        '|^node_modules/@dcdeiv/simpler-sidebar'
+        '^src/(shared|public/js/(lib|utils|widgets))/' +
+        '|^node_modules/@dcdeiv/simpler-sidebar' +
+        '|^src/public/scss/widgets'
       }
     },
     {
@@ -35,11 +36,15 @@ module.exports = {
     {
       comment: 'Public utils are low level code.',
       from: { path: '^src/public/js/utils'},
-      to: { path: '^src/(shared|public/js(utils))' }
+      to: { path: '^src/(shared|public/js/(utils))' }
     },
     {
       from: { path: '^src/public/js/utils'},
       to: { path: '^node_modules/(js-logger)/' }
+    },
+    {
+      from: { path: '^src/public/js/jquery' },
+      to: { path: '^src/public/js/(jquery|utils)' }
     },
     /* customs back-end rules */
     {
