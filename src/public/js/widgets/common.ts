@@ -19,7 +19,7 @@ function parseWidgets (dom?: JQuery): void {
   const widgets = dom.bopFindSelf('[data-widget]:not([data-widget-parsed])')
   widgets.each((i, html) => {
     const widget: JQuery = $(html)
-    if (widget.attr('data-widget-parsed')) {
+    if (widget.bopDataBoolean('data-widget-parsed')) {
       logger.debug('This widget was already parsed, skipping...')
       return
     }
@@ -33,16 +33,15 @@ function parseWidgets (dom?: JQuery): void {
       return
     }
     if (!(name in widget) || typeof widget[name] !== 'function') {
-    // if (!(name in widget)) {
       logger.error(`The widget ${name} is in the namespace, but the method is not on the dom element.`)
       return
     }
 
-    widget.attr('data-widget-parsed', '')
+    widget.bopDataBoolean('data-widget-parsed', true)
     logger.debug('Initializing the widget...')
     const options: any = {} // TODO: read options in data-widget-options
     const method: Function = (widget as any)[name] as Function
-    method.apply(widget, options)
+    method.call(widget, options)
   })
 }
 
