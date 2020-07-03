@@ -5,8 +5,8 @@ import '../../scss/widgets/planning.scss'
 
 declare global {
   interface JQuery {
-    BopPlanning(): JQuery,
-    BopPlanning(options: BopPlanningOptions): JQuery
+    bopPlanning(): JQuery,
+    bopPlanning(options: BopPlanningOptions): JQuery
   }
 }
 
