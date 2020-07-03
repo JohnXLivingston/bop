@@ -39,7 +39,7 @@ function parseWidgets (dom?: JQuery): void {
 
     widget.bopDataBoolean('data-widget-parsed', true)
     logger.debug('Initializing the widget...')
-    const options: any = {} // TODO: read options in data-widget-options
+    const options: any = widget.bopDataObject('data-widget-options')
     const method: Function = (widget as any)[name] as Function
     method.call(widget, options)
   })

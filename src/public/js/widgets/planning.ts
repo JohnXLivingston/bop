@@ -10,19 +10,27 @@ declare global {
   }
 }
 
-interface BopPlanningOptions {}
+interface BopPlanningOptions {
+  nbWeeks?: number
+}
+const defaultBopPlanningOptions: BopPlanningOptions = {
+  nbWeeks: 2
+}
 
 let tpl: Template
 
-$.widget('bop.BopPlanning', {
+$.widget('bop.bopPlanning', {
+  options: defaultBopPlanningOptions,
+
   _create: function () {
     const content = $(this.element)
+    const options = this.options
     if (!tpl) {
       tpl = require('../../../shared/templates/planning/widget.njk')
     }
     const widget = $(tpl.render(nunjucksContext({
       nodes: planningTestSet(),
-      planningProperties: { nbWeeks: 9 }
+      planningProperties: { nbWeeks: options.nbWeeks }
     })))
     content.empty().append(widget)
   }
