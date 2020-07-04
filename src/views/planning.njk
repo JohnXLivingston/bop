@@ -2,5 +2,7 @@
 {%- extends 'common/page.njk' -%}
 {%- import 'shared/templates/planning/render.njk' as render -%}
 {%- block content -%}
-  <div data-widget="bopPlanning"></div>
+  <div data-widget="bopPlanning">
+    <div class="waiting-mask"></div>
+  </div>
 {%- endblock -%}

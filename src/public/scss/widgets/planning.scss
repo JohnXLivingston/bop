@@ -8,6 +8,13 @@ $zindex-planning-label: 20;
 // Items must be on front of the grid.
 $zindex-planning-item: 10;
 
+[data-widget='bopPlanning'] {
+  height: 100%;
+  // position relative is required for the inner waiting mask.
+  position: relative;
+  width: 100%;
+}
+
 // *******************************************************
 // ************ Main containers
 // *******************************************************

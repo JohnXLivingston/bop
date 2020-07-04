@@ -1,0 +1,18 @@
+@mixin waiting-wheel($size: 24px) {
+  animation: waiting-wheel-rotation 1s infinite linear;
+  border: 2px solid $waiting-wheel-border-color1;
+  border-left-color: $waiting-wheel-border-color2;
+  border-radius: 50%;
+  height: $size;
+  width: $size;
+}
+
+@keyframes waiting-wheel-rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}

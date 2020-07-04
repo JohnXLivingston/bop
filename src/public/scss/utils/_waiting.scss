@@ -1,0 +1,27 @@
+.waiting-mask {
+  background: $waiting-mask-background-color;
+  bottom: 0;
+  left: 0;
+  min-height: 60px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 1;
+
+  &::after {
+    @include waiting-wheel(24px);
+
+    content: '';
+    left: 50%;
+    margin: 12px;
+    position: absolute;
+    top: 50%;
+    z-index: 1;
+  }
+
+  &:not(.hidden) ~ * .waiting-mask {
+    // no nested masks.
+    display: none;
+  }
+}
+
