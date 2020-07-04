@@ -80,6 +80,8 @@ $zindex-planning-item: 10;
   // Take all horizontal space
   @include flex-full-fix;
 
+  // items will go beyond borders, so we have to hide overflow
+  overflow: hidden;
   position: relative; // so that childs absolute refers to parent.
 }
 
