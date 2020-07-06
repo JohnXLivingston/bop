@@ -56,7 +56,7 @@ export class UserModel extends Model<UserModel> {
     comment: 'Email is optional.',
     type: DataType.STRING(191) // must be <=191, because of InnoDB+utf8bm and unique constraint.
   })
-  email!: string
+  email?: string
 
   @AllowNull(false)
   @Length(CONSTRAINTS.USER.USERNAME)
