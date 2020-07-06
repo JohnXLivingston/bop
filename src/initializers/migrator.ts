@@ -78,7 +78,8 @@ async function _seeds () {
     }
     const data = {
       login: 'admin',
-      password
+      password,
+      username: 'Administrator'
     }
     const user = new UserModel(data)
 

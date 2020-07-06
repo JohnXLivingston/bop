@@ -194,9 +194,7 @@ async function checkUser (arg: any): Promise<undefined | UserModel> {
 
 function _fillResWithUser (res: express.Response, user: UserModel) {
   const context: Context = res.locals.context
-  context.user = {
-    id: user.id
-  }
+  context.user = user.toFormattedJSON()
 }
 
 export {

@@ -1,6 +1,6 @@
 import { Sequelize as SequelizeTypescript } from 'sequelize-typescript'
 import { Transaction } from 'sequelize'
-import { CONFIG, isProduction } from '../helpers/config'
+import { CONFIG, isProduction, isTest } from '../helpers/config'
 import { logger } from '../helpers/log'
 import { ApplicationModel, UserModel } from '../models'
 
@@ -38,7 +38,7 @@ const sequelizeTypescript = new SequelizeTypescript({
 
 let alreadyInitialized = false
 async function initDatabaseModels () {
-  if (alreadyInitialized) {
+  if (alreadyInitialized && !isTest) {
     throw new Error('Calling twice initDatabaseModels. Should not happend.')
   }
   alreadyInitialized = true

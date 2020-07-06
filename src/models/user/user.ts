@@ -16,6 +16,7 @@ import {
 import { CONSTRAINTS } from '../../helpers/config'
 import { comparePassword, cryptPassword } from '../../helpers/crypto'
 import { logger } from '../../helpers/log'
+import { User } from '../../shared/models/user'
 // import { throwIfNotValid } from '../utils'
 
 @Table({
@@ -57,6 +58,13 @@ export class UserModel extends Model<UserModel> {
   })
   email!: string
 
+  @AllowNull(false)
+  @Length(CONSTRAINTS.USER.USERNAME)
+  @Column({
+    type: DataType.STRING(CONSTRAINTS.USER.USERNAME.max)
+  })
+  username!: string
+
   @BeforeCreate
   @BeforeUpdate
   static async cryptPasswordIfNeeded (instance: UserModel) {
@@ -79,5 +87,18 @@ export class UserModel extends Model<UserModel> {
 
   static async countTotal () {
     return UserModel.count()
+  }
+
+  /**
+   * Returns a User, that can be JSON.stringified for the
+   * frontend. Should not contain any value that other users
+   * can't see for privacy reason.
+   */
+  toFormattedJSON (): User {
+    const json: User = {
+      id: this.id,
+      username: this.username
+    }
+    return json
   }
 }

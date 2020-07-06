@@ -1,4 +1,6 @@
 import { exec } from 'child_process'
+// import { initDatabaseModels } from '../../src/initializers/database'
+import { migrate } from '../../src/initializers/migrator'
 
 export { testNunjucksTemplate } from './nunjucks'
 
@@ -42,7 +44,14 @@ async function flushTests () {
   ])
 }
 
+async function flushTestsAndInitDB () {
+  await flushTests()
+  // await initDatabaseModels()
+  await migrate()
+}
+
 export {
   asyncExec,
-  flushTests
+  flushTests,
+  flushTestsAndInitDB
 }
