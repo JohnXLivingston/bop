@@ -12,6 +12,7 @@ module.exports = {
         path:
           '^src/(public/js|shared)/' +
           '|^src/(public/scss)/' +
+          '|^src/(public/images)/' +
           '|^node_modules/(jquery|jquery-ui/(ui|themes)/|regenerator-runtime/|core-js/stable/)'
         }
     },
