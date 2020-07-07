@@ -5,7 +5,7 @@ import {
   Column,
   DataType,
   Default,
-  IsAlphanumeric,
+  Is,
   IsEmail,
   IsIn,
   Length,
@@ -25,7 +25,7 @@ import { User } from '../../shared/models/user'
 })
 export class UserModel extends Model<UserModel> {
   @AllowNull(false)
-  @IsAlphanumeric
+  @Is(/^[a-zA-Z0-9_-]+$/)
   @Length(CONSTRAINTS.USER.LOGIN)
   @Unique
   @Column({
@@ -93,6 +93,9 @@ export class UserModel extends Model<UserModel> {
    * Returns a User, that can be JSON.stringified for the
    * frontend. Should not contain any value that other users
    * can't see for privacy reason.
+   * FIXME: we should perhaps have several format,
+   * including private informations for the user itself,
+   * or for admins.
    */
   toFormattedJSON (): User {
     const json: User = {
