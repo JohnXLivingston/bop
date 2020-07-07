@@ -52,6 +52,7 @@ export class UserModel extends Model<UserModel> {
   @AllowNull(true)
   @IsEmail
   @Unique
+  @Length({ max: 191 })
   @Column({
     comment: 'Email is optional.',
     type: DataType.STRING(191) // must be <=191, because of InnoDB+utf8bm and unique constraint.
