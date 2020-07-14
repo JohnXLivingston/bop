@@ -2,7 +2,8 @@ import { exec } from 'child_process'
 // import { initDatabaseModels } from '../../src/initializers/database'
 import { migrate } from '../../src/initializers/migrator'
 
-export { testNunjucksTemplate } from './nunjucks'
+export * from './nunjucks'
+export * from './database'
 
 const DBNAME = 'bop_test'
 const DBUSER = 'bop_test'

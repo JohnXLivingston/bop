@@ -74,7 +74,7 @@ describe('models/user/user.ts', function () {
       expect(user1.id, 'User id').to.be.equal(2)
 
       user1 = await UserModel.findByPk(user1.id)
-      expect(user1, 'Not undefined').to.be.not.null
+      expect(user1, 'Not null').to.be.not.null
       expect(user1, 'User').to.be.deep.include(omit(user1Data, 'password'))
       expect(await user1!.isPasswordMatch('the user1 password... or not?'), 'wrong password').to.be.false
       expect(await user1!.isPasswordMatch('the user1 password.'), 'password').to.be.true

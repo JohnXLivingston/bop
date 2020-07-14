@@ -2,7 +2,12 @@ import { Sequelize as SequelizeTypescript } from 'sequelize-typescript'
 import { Transaction } from 'sequelize'
 import { CONFIG, isProduction, isTest } from '../helpers/config'
 import { logger } from '../helpers/log'
-import { ApplicationModel, UserModel } from '../models'
+import {
+  ApplicationModel,
+  ProjectModel,
+  TaskModel,
+  UserModel
+} from '../models'
 
 // Please update this version on each new migration file.
 const LAST_MIGRATION_VERSION = 1
@@ -44,6 +49,8 @@ async function initDatabaseModels () {
   alreadyInitialized = true
   sequelizeTypescript.addModels([
     ApplicationModel,
+    ProjectModel,
+    TaskModel,
     UserModel
   ])
   logger.info('Database %s is ready.', CONFIG.DATABASE.DBNAME)

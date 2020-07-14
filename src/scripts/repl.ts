@@ -4,6 +4,7 @@ import { activateCLIMode, logger } from '../helpers/log'
 import { setSharedLogger } from '../shared/utils/logger'
 import * as models from '../models'
 import { initDatabaseModels, sequelizeTypescript } from '../initializers'
+import { migrate } from '../initializers/migrator'
 
 activateCLIMode()
 setSharedLogger(logger)
@@ -31,6 +32,7 @@ const start = async () => {
         env: process.env,
         isProduction,
         logger,
+        migrate,
         models,
         repl: replServer,
         sequelizeTypescript,

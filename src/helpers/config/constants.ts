@@ -5,6 +5,12 @@ const CONSTRAINTS = {
     LOGIN: { min: 4, max: 120 },
     USERNAME: { min: 1, max: 120 },
     PASSWORD: { min: 6, max: 255 }
+  },
+  PROJECT: {
+    NAME: { min: 4, max: 120 }
+  },
+  TASK: {
+    NAME: { min: 0, max: 120 }
   }
 }
 
