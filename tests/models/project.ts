@@ -25,13 +25,15 @@ describe('models/project/project.ts', function () {
     ObjectClass: ProjectModel,
     data: project1Data,
     mandatoryFields: ['name'],
-    expectedObjectId: project1Id
+    expectedObjectId: project1Id,
+    optimisticLocking: true
   })
 
   dbTest.testModelUpdate<ProjectModel>({
     name: 'Project',
     data: project1Data,
     ObjectClass: ProjectModel,
+    optimisticLocking: true,
     updateTests: [
       { name: 'Anoter name' }
     ]
@@ -72,6 +74,7 @@ describe('models/project/project.ts', function () {
         project = await ProjectModel.findByPk(projectId)
         expect(project?.toFormattedJSON()).to.be.deep.equal({
           id: projectId,
+          version: 0,
           name: project1Data.name
         })
       })

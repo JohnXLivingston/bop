@@ -41,13 +41,15 @@ describe('models/task/task.ts', function () {
     ObjectClass: TaskModel,
     data: task1Data,
     mandatoryFields: ['name', 'projectId', 'start', 'end', 'work'],
-    expectedObjectId: task1Id
+    expectedObjectId: task1Id,
+    optimisticLocking: true
   })
 
   dbTest.testModelUpdate<TaskModel>({
     name: 'Task',
     ObjectClass: TaskModel,
     data: task1Data,
+    optimisticLocking: true,
     updateTests: [
       { name: 'Anoter name' },
       { start: '2020-06-01', end: '2020-06-30', work: 7 * 19 * 60 },
@@ -112,6 +114,7 @@ describe('models/task/task.ts', function () {
         expect(task, 'Should be able to retrieve the task').to.not.be.null
         expect(task?.toFormattedJSON(), 'Calling toFormattedJSON').to.be.deep.equal({
           id: taskId,
+          version: 0,
           name: 'This is a task',
           projectId: project2.id,
           start: '2021-01-01',

@@ -21,7 +21,8 @@ import { User } from '../../shared/models/user'
 
 @Table({
   tableName: 'user',
-  timestamps: true
+  timestamps: true,
+  version: true
 })
 export class UserModel extends Model<UserModel> {
   @AllowNull(false)
@@ -101,6 +102,7 @@ export class UserModel extends Model<UserModel> {
   toFormattedJSON (): User {
     const json: User = {
       id: this.id,
+      version: this.version,
       username: this.username
     }
     return json

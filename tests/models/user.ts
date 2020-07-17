@@ -34,6 +34,7 @@ describe('models/user/user.ts', function () {
       it('The toFormattedJSON method should return the correct value.', function () {
         expect(user!.toFormattedJSON()).to.be.deep.equal({
           id: 1,
+          version: 0,
           username: 'Administrator'
         })
       })
@@ -115,6 +116,8 @@ describe('models/user/user.ts', function () {
       expect(await user1!.isPasswordMatch('the user1 password... or not?'), 'wrong password').to.be.false
       expect(await user1!.isPasswordMatch('the user1 password.'), 'password').to.be.true
     })
+
+    it('Test Optimistic Locking')
   })
 
   function failingUser (baseUserData: any, changes: any) {

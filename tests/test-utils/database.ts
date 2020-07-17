@@ -15,7 +15,8 @@ interface TestArgs<T extends Model> {
     new (...args: any[]): T,
     findByPk: (...args: any[]) => Promise<T | null>,
     destroy: () => Promise<number>
-  }
+  },
+  optimisticLocking?: boolean
 }
 
 interface TestArgsCreationAndDeletion<T extends Model> extends TestArgs<T> {
@@ -29,7 +30,8 @@ function testModelCreationAndDeletion<T extends Model> ({
   ObjectClass,
   data,
   mandatoryFields,
-  expectedObjectId
+  expectedObjectId,
+  optimisticLocking
 }: TestArgsCreationAndDeletion<T>): void {
   describe(name + ' creation', function () {
     let object: T | null
@@ -41,9 +43,18 @@ function testModelCreationAndDeletion<T extends Model> ({
       expect(object.id, 'Id not null').to.be.not.null
       objectId = object.id
 
+      if (optimisticLocking) {
+        expect(object.version, 'Opimistic Locking').to.be.equal(0)
+      } else if (object.version !== undefined) {
+        throw new Error(name + ' seems to have a version column, but dont use the optimisticLocking option.')
+      }
+
       object = await ObjectClass.findByPk(objectId)
       expect(object, 'Not null').to.be.not.null
       expect(object, 'Include initial datas').to.deep.include(data)
+      if (optimisticLocking) {
+        expect(object?.version, 'Opimistic Locking').to.be.equal(0)
+      }
     })
 
     if (expectedObjectId) {
@@ -84,14 +95,21 @@ function testModelUpdate<T extends Model> ({
   name,
   data,
   ObjectClass,
+  optimisticLocking,
   updateTests
 }: TestArgsUpdate<T>) {
   describe(name + ' update', function () {
     let objectId: number
+    let version: number | undefined
     before(async () => {
       const object = new ObjectClass(data)
       await object.save()
       objectId = object.id
+      if (optimisticLocking) {
+        version = object.version
+      } else if (object.version !== undefined) {
+        throw new Error(name + ' seems to have a version column, but dont use the optimisticLocking option.')
+      }
     })
     after(async () => {
       const object = await ObjectClass.findByPk(objectId)
@@ -120,15 +138,51 @@ function testModelUpdate<T extends Model> ({
             (object as any)[field] = values[field]
           }
           await object!.save()
+          if (optimisticLocking) {
+            expect(object!.version, 'Opimistic Locking 1').to.be.equal(++version!)
+          }
+
           object = await ObjectClass.findByPk(objectId)
           expect(object, 'The object contains required changes').to.deep.include(values)
+          if (optimisticLocking) {
+            expect(object!.version, 'Opimistic Locking 2').to.be.equal(version!)
+          }
 
           for (const field in previousValues) {
             (object as any)[field] = previousValues[field]
           }
           await object!.save()
+          if (optimisticLocking) {
+            expect(object!.version, 'Opimistic Locking 3').to.be.equal(++version!)
+          }
         }
       )
+    }
+
+    if (optimisticLocking) {
+      const test = updateTests[0]
+      const testName = test.testFunc && typeof test.testFunc === 'function'
+        ? test.testName
+        : Object.keys(test).join('/')
+      it('Optimistic Locking must prevent saving a deprecated instance (using test #1: ' + testName + ')', async function () {
+        const object1 = await ObjectClass.findByPk(objectId)
+        expect(object1, 'Get the object').to.be.not.null
+
+        const object2 = await ObjectClass.findByPk(objectId)
+        expect(object2, 'Get the object').to.be.not.null
+
+        const values: UpdateTestValues = test.testFunc && typeof test.testFunc === 'function'
+          ? await test.testFunc()
+          : test as UpdateTestValues
+
+        for (const field in values) {
+          (<any>object1!)[field] = values[field];
+          (<any>object2!)[field] = values[field]
+        }
+
+        await object1!.save()
+        await expect(object2?.save(), 'Object 2 should not be saved').to.be.rejectedWith(/Attempting to update a stale model instance/)
+      })
     }
   })
 }

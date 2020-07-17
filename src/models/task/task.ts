@@ -16,7 +16,8 @@ import { CONSTRAINTS } from '../../helpers/config'
 
 @Table({
   tableName: 'task',
-  timestamps: true
+  timestamps: true,
+  version: true
 })
 export class TaskModel extends Model<TaskModel> {
   @ForeignKey(() => ProjectModel)
@@ -63,6 +64,7 @@ export class TaskModel extends Model<TaskModel> {
   toFormattedJSON (): Task {
     const json: Task = {
       id: this.id,
+      version: this.version,
       name: this.name,
       projectId: this.projectId,
       start: this.start,
