@@ -1,28 +1,41 @@
 import { planningTestSet } from '../../../shared/test'
 import { nunjucksContext, Template } from '../utils/nunjucks'
 
+import { PlanningTree, getPlanningTree } from '../lib/planning'
+
 import '../../scss/widgets/planning.scss'
 
 declare global {
   interface JQuery {
     bopPlanning(): JQuery,
-    bopPlanning(options: BopPlanningOptions): JQuery
+    bopPlanning(options: BopPlanningOptions): JQuery,
+
+    bopPlanning(methodName: 'getTree'): PlanningTree
   }
 }
 
 interface BopPlanningOptions {
+  display: string,
   nbWeeks?: number
 }
 const defaultBopPlanningOptions: BopPlanningOptions = {
+  display: 'user-task',
   nbWeeks: 2
 }
 
 let tpl: Template
 
+interface BopPlanning extends JQueryUI.WidgetCommonProperties {
+  options: BopPlanningOptions,
+  tree: PlanningTree,
+
+  getTree: () => PlanningTree
+}
+
 $.widget('bop.bopPlanning', {
   options: defaultBopPlanningOptions,
 
-  _create: function () {
+  _create: function (this: BopPlanning) {
     const content = $(this.element)
     const options = this.options
     if (!tpl) {
@@ -33,6 +46,14 @@ $.widget('bop.bopPlanning', {
       planningProperties: { nbWeeks: options.nbWeeks }
     })))
     content.empty().append(widget)
+
+    this.tree = getPlanningTree(options.display, {
+      dom: content
+    })
+  },
+
+  getTree: function (this: BopPlanning): PlanningTree {
+    return this.tree
   }
 })
 
