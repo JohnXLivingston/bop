@@ -1,5 +1,7 @@
 export interface Task {
   id: number,
+  type: 'task',
+  key: string,
   version: number,
   name: string,
   projectId: number,

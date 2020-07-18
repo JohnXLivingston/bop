@@ -27,6 +27,8 @@ export class ProjectModel extends Model<ProjectModel> {
   toFormattedJSON (): Project {
     const json: Project = {
       id: this.id,
+      type: 'project',
+      key: 'project/' + this.id,
       name: this.name,
       version: this.version
     }

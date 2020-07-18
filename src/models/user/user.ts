@@ -102,6 +102,8 @@ export class UserModel extends Model<UserModel> {
   toFormattedJSON (): User {
     const json: User = {
       id: this.id,
+      type: 'user',
+      key: 'user/' + this.id,
       version: this.version,
       username: this.username
     }

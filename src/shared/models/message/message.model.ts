@@ -1,15 +1,13 @@
-import { Project } from '../project'
-import { Task } from '../task'
+import { BopObject } from '../bop-object.model'
 import { User } from '../user'
-
-type MessageObject = Project | Task | User
 
 /**
  * A newly created object.
  */
 export interface MessageCreation {
-  type: 'create',
-  object: MessageObject,
+  type: 'message',
+  messageType: 'create',
+  object: BopObject,
   /**
    * The user that created the object
    */
@@ -20,8 +18,9 @@ export interface MessageCreation {
  * An updated object.
  */
 export interface MessageUpdate {
-  type: 'update',
-  object: MessageObject,
+  type: 'message',
+  messageType: 'update',
+  object: BopObject,
   /**
    * The user that modified the object
    */
@@ -32,9 +31,10 @@ export interface MessageUpdate {
  * A deleted object.
  */
 export interface MessageDeletion {
-  type: 'delete',
+  type: 'message',
+  messageType: 'delete',
   // FIXME: a soft deleted object, or an objectId?
-  object: MessageObject,
+  object: BopObject,
   /**
    * The user that deleted the object
    */
@@ -46,8 +46,9 @@ export interface MessageDeletion {
  * added by the backend.
  */
 export interface MessageRetrieved {
-  type: 'retrieved',
-  object: MessageObject
+  type: 'message',
+  messageType: 'retrieved',
+  object: BopObject
 }
 
 export type Message = MessageCreation | MessageUpdate | MessageDeletion | MessageRetrieved

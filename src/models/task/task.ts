@@ -64,6 +64,8 @@ export class TaskModel extends Model<TaskModel> {
   toFormattedJSON (): Task {
     const json: Task = {
       id: this.id,
+      type: 'task',
+      key: 'task/' + this.id,
       version: this.version,
       name: this.name,
       projectId: this.projectId,

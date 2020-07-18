@@ -74,6 +74,8 @@ describe('models/project/project.ts', function () {
         project = await ProjectModel.findByPk(projectId)
         expect(project?.toFormattedJSON()).to.be.deep.equal({
           id: projectId,
+          type: 'project',
+          key: 'project/' + projectId,
           version: 0,
           name: project1Data.name
         })

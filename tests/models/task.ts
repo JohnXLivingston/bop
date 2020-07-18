@@ -114,6 +114,8 @@ describe('models/task/task.ts', function () {
         expect(task, 'Should be able to retrieve the task').to.not.be.null
         expect(task?.toFormattedJSON(), 'Calling toFormattedJSON').to.be.deep.equal({
           id: taskId,
+          type: 'task',
+          key: 'task/' + taskId,
           version: 0,
           name: 'This is a task',
           projectId: project2.id,
