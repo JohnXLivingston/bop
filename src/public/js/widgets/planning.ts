@@ -1,5 +1,6 @@
 import { planningTestSet } from '../../../shared/test'
 import { nunjucksContext, Template } from '../utils/nunjucks'
+import { parseWidgets } from '../widgets/utils'
 
 import '../../scss/widgets/planning.scss'
 
@@ -32,7 +33,7 @@ $.widget('bop.bopPlanning', {
       nodes: planningTestSet(),
       planningProperties: { nbWeeks: options.nbWeeks }
     })))
-    content.empty().append(widget)
+    parseWidgets(content.empty().append(widget))
   }
 })
 

@@ -1,0 +1,26 @@
+@import '../abstracts/variables';
+@import '../abstracts/mixins';
+
+$widget-wheelmenu-background-color: rgba(128, 128, 128, .3);
+$widget-wheelmenu-zindex: 200;
+
+.widget-wheelmenu-overlay {
+  background-color: $widget-wheelmenu-background-color;
+  bottom: 0;
+  height: 100%;
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 100%;
+  z-index: $widget-wheelmenu-zindex;
+}
+
+.widget-wheelmenu-content {
+  position: absolute;
+
+  li {
+    position: absolute;
+    z-index: $widget-wheelmenu-zindex + 1;
+  }
+}
