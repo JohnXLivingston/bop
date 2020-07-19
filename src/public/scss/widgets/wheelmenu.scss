@@ -4,6 +4,9 @@
 $widget-wheelmenu-background-color: rgba(128, 128, 128, .3);
 $widget-wheelmenu-zindex: 200;
 
+$widget-wheelmenu-item-background-color: $background-color-filled;
+$widget-wheelmenu-item-border-color: $border-color-dark;
+
 .widget-wheelmenu-overlay {
   background-color: $widget-wheelmenu-background-color;
   bottom: 0;
@@ -17,10 +20,15 @@ $widget-wheelmenu-zindex: 200;
 }
 
 .widget-wheelmenu-content {
+  height: 0;
   position: absolute;
+  width: 0;
 
   li {
+    background-color: $widget-wheelmenu-item-background-color;
+    border: 1px solid $widget-wheelmenu-item-border-color;
     position: absolute;
+    white-space: nowrap;
     z-index: $widget-wheelmenu-zindex + 1;
   }
 }
