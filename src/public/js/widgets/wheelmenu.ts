@@ -58,6 +58,7 @@ $.widget('bop.bopWheelmenu', {
       // (centerX, centerY) is the position of the event (cartesian coordinates)
       const centerX = ev.pageX || 0
       const centerY = ev.pageY || 0
+      logger.debug(`The center of the wheelmenu is (${centerX}, ${centerY}).`)
       content.css('left', centerX + 'px')
       content.css('top', centerY + 'px')
 

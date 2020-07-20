@@ -21,12 +21,16 @@ $widget-wheelmenu-item-border-color: $border-color-dark;
 
 .widget-wheelmenu-content {
   height: 0;
+  margin: 0;
+  padding: 0;
   position: absolute;
   width: 0;
 
   li {
     background-color: $widget-wheelmenu-item-background-color;
     border: 1px solid $widget-wheelmenu-item-border-color;
+    border-radius: 50%;
+    padding: 20px;
     position: absolute;
     white-space: nowrap;
     z-index: $widget-wheelmenu-zindex + 1;
