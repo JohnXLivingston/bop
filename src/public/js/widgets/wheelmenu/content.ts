@@ -83,11 +83,7 @@ $.widget('bop.bopWheelmenuContent', {
       // First, we center the item.
       const width = item.outerWidth() || 0
       const height = item.outerHeight() || 0
-      if (item.find('a').length) {
-        item.find('a').attr('tabindex', i + 1)
-      } else {
-        item.attr('tabindex', i + 1)
-      }
+      item.attr('tabindex', i + 1)
       item.css('left', 0 - (width / 2))
       item.css('top', 0 - (height / 2))
 
