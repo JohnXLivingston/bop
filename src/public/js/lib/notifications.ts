@@ -26,9 +26,16 @@ class Notifications {
         // We will not reload immediatly. On case there will be others server restarts.
         reloadTimeout = setTimeout(() => {
           reloadTimeout = undefined
+          logger.info('Reloading...')
           // Just in case we disabled during timeout:
           if (this.autoReloadDevModeActivated) {
-            window.location.reload()
+            // If there is another update, the socket could be disconnected.
+            // The next connect event will reload.
+            if (this.socket?.connected) {
+              window.location.reload()
+            } else {
+              logger.info('The socket was not connected when we want to reload. Waiting next connect.')
+            }
           }
         }, AUTORELOADDELAY)
       }
