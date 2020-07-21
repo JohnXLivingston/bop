@@ -46,7 +46,7 @@ $.widget('bop.bopWheelmenu', {
         return
       }
 
-      const content = $('<ul class="widget-wheelmenu-content" tabindex="-1"></ul>')
+      const content = $('<div class="widget-wheelmenu-content" tabindex="-1"></div>')
       for (let i = 0; i < items.length; i++) {
         const item = $(items[i])
         content.append(item)
@@ -71,7 +71,7 @@ $.widget('bop.bopWheelmenu', {
       $('body').append(content)
       $('body').append(overlay)
 
-      content.find('li').each((i, html) => {
+      content.children().each((i, html) => {
         const item = $(html)
         // First, we center the item.
         const width = item.outerWidth() || 0
@@ -115,11 +115,7 @@ $.widget('bop.bopWheelmenu', {
       })
 
       parseWidgets(content)
-      if (content.find('li:first a').length) {
-        content.find('li:first a').focus()
-      } else {
-        content.find('li:first').focus()
-      }
+      content.children().first().focus()
     }
     if (this.options.onClick) {
       widget.on('click', handler)

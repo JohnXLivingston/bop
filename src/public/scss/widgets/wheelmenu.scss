@@ -26,7 +26,7 @@ $widget-wheelmenu-item-border-color: $border-color-dark;
   position: absolute;
   width: 0;
 
-  li {
+  &>* {
     background-color: $widget-wheelmenu-item-background-color;
     border: 1px solid $widget-wheelmenu-item-border-color;
     border-radius: 50%;
