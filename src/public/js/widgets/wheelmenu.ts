@@ -67,17 +67,19 @@ $.widget('bop.bopWheelmenu', {
 
       content.find('li').each((i, html) => {
         const item = $(html)
+        // First, we center the item.
         const width = item.outerWidth() || 0
         const height = item.outerHeight() || 0
-        const alpha = (i * 2 * Math.PI / items.length) - (Math.PI / 2)
-        // (cX, cY) is the position of the item's center (cartesian coordinates)
-        const cX = this.options.radius * Math.cos(alpha)
-        const cY = this.options.radius * Math.sin(alpha)
-        // (x, y) is the cordinates for the top left corner
-        const x = Math.round(cX - (width / 2))
-        const y = Math.round(cY - (height / 2))
-        item.css('left', x + 'px')
-        item.css('top', y + 'px')
+        item.css('left', 0 - (width / 2))
+        item.css('top', 0 - (height / 2))
+
+        // Next, we compute the angle (in deg) relative to the vertical line.
+        const alpha = Math.round(i * 360 / items.length)
+        // Then, we apply a transform and an animation.
+        item.css({
+          transform: 'rotate(' + alpha + 'deg) translateY(-' + this.options.radius + 'px) rotate(' + (0 - alpha) + 'deg)',
+          animation: 'wheelmenu-rotation 200ms linear'
+        })
       })
 
       const close = () => {

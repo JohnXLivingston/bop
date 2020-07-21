@@ -1,7 +1,7 @@
 @import '../abstracts/variables';
 @import '../abstracts/mixins';
 
-$widget-wheelmenu-background-color: rgba(128, 128, 128, .3);
+$widget-wheelmenu-background-color: rgba(128, 128, 128, .7);
 $widget-wheelmenu-zindex: 200;
 
 $widget-wheelmenu-item-background-color: $background-color-filled;
@@ -35,4 +35,8 @@ $widget-wheelmenu-item-border-color: $border-color-dark;
     white-space: nowrap;
     z-index: $widget-wheelmenu-zindex + 1;
   }
+}
+
+@keyframes wheelmenu-rotation {
+  0% { transform: rotate(0deg) scale(.1, .1); }
 }
