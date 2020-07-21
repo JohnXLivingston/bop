@@ -34,6 +34,10 @@ $widget-wheelmenu-item-border-color: $border-color-dark;
     position: absolute;
     white-space: nowrap;
     z-index: $widget-wheelmenu-zindex + 1;
+
+    &:focus {
+      border-width: 2px;
+    }
   }
 }
 
