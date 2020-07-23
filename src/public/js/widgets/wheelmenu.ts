@@ -63,6 +63,13 @@ $.widget('bop.bopWheelmenu', {
     content.css('top', y + 'px')
 
     content.bopWheelmenuContent(this.options)
+  },
+  createDebugItems (n: number): void {
+    const items: string[] = []
+    for (let i = 1; i < n + 1; i++) {
+      items.push('<a>' + i + '</a>')
+    }
+    $(this.element).bopDataArray('data-widget-wheelmenu-items', items)
   }
 })
 
