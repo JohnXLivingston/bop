@@ -49,7 +49,7 @@ $.widget('bop.bopWheelmenuContent', {
     $('body').append(content)
     $('body').append(overlay)
 
-    this.positionItems()
+    this.positionItems(true)
 
     this._on(overlay, {
       click: () => this.close(),
@@ -73,7 +73,7 @@ $.widget('bop.bopWheelmenuContent', {
     })
 
     this._on($(window), {
-      resize: () => this.positionItems()
+      resize: () => this.positionItems(false)
     })
 
     parseWidgets(content)
@@ -82,7 +82,7 @@ $.widget('bop.bopWheelmenuContent', {
   isCurrentWheelmenu: function () {
     return +this.overlay.css('z-index') === maxWheelmenuOverlayZIndex()
   },
-  positionItems () {
+  positionItems (firstCall?: boolean) {
     const content = this.content
 
     const items: JQuery[] = []
@@ -205,10 +205,13 @@ $.widget('bop.bopWheelmenuContent', {
       // Next, we compute the angle (in deg) relative to the vertical line.
       const alpha = Math.round(angle[0] + (i * step))
       // Then, we apply a transform and an animation.
-      item.css({
-        transform: 'rotate(' + alpha + 'deg) translateY(-' + radius + 'px) rotate(' + (0 - alpha) + 'deg)',
-        animation: 'wheelmenu-rotation 200ms linear'
-      })
+      const transform: any = {
+        transform: 'rotate(' + alpha + 'deg) translateY(-' + radius + 'px) rotate(' + (0 - alpha) + 'deg)'
+      }
+      if (firstCall) {
+        transform.animation = 'wheelmenu-rotation 200ms linear'
+      }
+      item.css(transform)
     }
   },
   close: function () {
