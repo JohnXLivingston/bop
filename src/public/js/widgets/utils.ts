@@ -6,8 +6,8 @@ const logger = getLogger('widgets/common')
 type JQueryUIHandler = (ev: JQuery.Event) => void | boolean
 type JQUeryUIHandlers = {[key: string]: JQueryUIHandler}
 interface JQueryUIOn {
-  (handlers: JQUeryUIHandlers): JQuery
-  (el: JQuery, handlers: JQUeryUIHandlers): JQuery
+  (handlers: JQUeryUIHandlers): void
+  <T>(el: JQuery<T>, handlers: JQUeryUIHandlers): void
 }
 declare global {
   namespace JQueryUI {
