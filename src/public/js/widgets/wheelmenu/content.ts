@@ -72,6 +72,10 @@ $.widget('bop.bopWheelmenuContent', {
       }
     })
 
+    this._on($(window), {
+      resize: () => this.positionItems()
+    })
+
     parseWidgets(content)
     content.find(':focusable:first').focus()
   },
