@@ -30,6 +30,7 @@ $.widget('bop.bopWheelmenu', {
       const centerX = ev.pageX || 0
       const centerY = ev.pageY || 0
       this.open(centerX, centerY)
+      return false
     }
     if (this.options.onClick) {
       this._on({
