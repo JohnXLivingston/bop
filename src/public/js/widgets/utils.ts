@@ -3,7 +3,7 @@ import getLogger from '../utils/logger'
 const logger = getLogger('widgets/common')
 
 /* This is a workaround, because @types/jqueryui does not declare these methods. */
-type JQueryUIHandler = (ev: JQuery.Event) => void | boolean
+type JQueryUIHandler = (ev: JQuery.TriggeredEvent) => void | boolean
 type JQUeryUIHandlers = {[key: string]: JQueryUIHandler}
 interface JQueryUIOn {
   (handlers: JQUeryUIHandlers): void
