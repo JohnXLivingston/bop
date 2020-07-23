@@ -204,7 +204,7 @@ $.widget('bop.bopWheelmenuContent', {
         break
     }
 
-    const step = angle[1] - angle[0] === 360
+    const step = angle[1] - angle[0] === 360 || items.length === 1
       ? (angle[1] - angle[0]) / items.length
       : (angle[1] - angle[0]) / (items.length - 1)
 
