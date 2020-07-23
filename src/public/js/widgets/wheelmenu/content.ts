@@ -126,12 +126,57 @@ $.widget('bop.bopWheelmenuContent', {
     const windowScrollLeft = $window.scrollLeft() || 0
     const windowScrollTop = $window.scrollTop() || 0
 
+    const firstItem = items[0]
+    const lastItem = items[items.length - 1]
+
     const intersectTop = centerY - radius - (maxHeight / 2) - margin < windowScrollTop ? 1 : 0
     const intersectRight = centerX + radius + (maxWidth / 2) + margin > windowWidth + windowScrollLeft ? 2 : 0
     const intersectBottom = centerY + radius + (maxHeight / 2) + margin > windowHeight + windowScrollTop ? 4 : 0
     const intersectLeft = centerX - radius - (maxWidth / 2) - margin < windowScrollLeft ? 8 : 0
-    let angle: [number, number]
     const intersect = intersectTop + intersectLeft + intersectBottom + intersectRight
+
+    function angleTopDeg (item: JQuery, lowerBound?: number): [number, number] {
+      const height = item.outerHeight() || 0
+      const yTop = windowScrollTop + margin + (height / 2)
+      const h = centerY - yTop
+      let a = 180 * Math.acos(h / radius) / Math.PI
+      if (lowerBound && a < lowerBound) {
+        a = lowerBound
+      }
+      return [Math.ceil(a), Math.floor(360 - a)]
+    }
+    function angleRightDeg (item: JQuery, lowerBound?: number): [number, number] {
+      const width = item.outerWidth() || 0
+      const xRight = windowWidth + windowScrollLeft - margin - (width / 2)
+      const w = xRight - centerX
+      let a = 180 * Math.acos(w / radius) / Math.PI
+      if (lowerBound && a < lowerBound) {
+        a = lowerBound
+      }
+      return [Math.ceil(90 + a), Math.floor(360 - a + 90)]
+    }
+    function angleBottomDeg (item: JQuery, lowerBound?: number): [number, number] {
+      const height = item.outerHeight() || 0
+      const yTop = windowHeight + windowScrollTop - margin - (height / 2)
+      const h = yTop - centerY
+      let a = 180 * Math.acos(h / radius) / Math.PI
+      if (lowerBound && a < lowerBound) {
+        a = lowerBound
+      }
+      return [Math.ceil(180 + a), Math.floor(360 - a + 180)]
+    }
+    function angleLeftDeg (item: JQuery, lowerBound?: number): [number, number] {
+      const width = item.outerWidth() || 0
+      const yLeft = windowScrollLeft + margin + (width / 2)
+      const w = centerX - yLeft
+      let a = 180 * Math.acos(w / radius) / Math.PI
+      if (lowerBound && a < lowerBound) {
+        a = lowerBound
+      }
+      return [Math.ceil(a - 90), Math.floor(360 - a - 90)]
+    }
+
+    let angle: [number, number]
     switch (intersect) {
       case 0:
         logger.debug('No intersection, using 360deg.')
@@ -139,59 +184,101 @@ $.widget('bop.bopWheelmenuContent', {
         break
       case 1:
         logger.debug('Intersecting only the top.')
-        angle = [90, 270]
+        angle = [
+          angleTopDeg(firstItem, 180 / items.length)[0],
+          angleTopDeg(lastItem, 180 / items.length)[1]
+        ]
         break
       case 2:
         logger.debug('Intersecting only the right side.')
-        angle = [180, 360]
+        angle = [
+          angleRightDeg(firstItem, 180 / items.length)[0],
+          angleRightDeg(lastItem, 180 / items.length)[1]
+        ]
         break
       case 3:
         logger.debug('Intersecting top and right.')
-        angle = [180, 270]
+        angle = [
+          angleRightDeg(firstItem)[0],
+          angleTopDeg(lastItem)[1]
+        ]
         break
       case 4:
         logger.debug('Intersecting only the bottom.')
-        angle = [270, 450]
+        angle = [
+          angleBottomDeg(firstItem, 180 / items.length)[0],
+          angleBottomDeg(lastItem, 180 / items.length)[1]
+        ]
         break
       case 5:
         logger.debug('Intersecting Top and Bottom.')
-        angle = [45, 135]
+        angle = [
+          angleTopDeg(firstItem)[0],
+          angleBottomDeg(lastItem)[1] - 360
+        ]
         break
       case 6:
         logger.debug('Intersecting Right and bottom.')
-        angle = [270, 360]
+        angle = [
+          angleBottomDeg(firstItem)[0],
+          angleRightDeg(lastItem)[1]
+        ]
         break
       case 7:
         logger.debug('Intersecting Top, Right and bottom.')
-        angle = [225, 315]
+        angle = [
+          angleBottomDeg(firstItem)[0],
+          angleTopDeg(lastItem)[1]
+        ]
         break
       case 8:
-        logger.debug('Intersecting only the right side.')
-        angle = [0, 180]
+        logger.debug('Intersecting only the left side.')
+        angle = [
+          angleLeftDeg(firstItem, 180 / items.length)[0],
+          angleLeftDeg(lastItem, 180 / items.length)[1]
+        ]
         break
       case 9:
         logger.debug('Intersecting Left and Top.')
-        angle = [90, 180]
+        angle = [
+          angleTopDeg(firstItem)[0],
+          angleLeftDeg(lastItem)[1]
+        ]
         break
       case 10:
         logger.debug('Intersecting Left and Right')
-        angle = [315, 395]
+        angle = [
+          angleLeftDeg(firstItem)[0] + 360,
+          angleRightDeg(lastItem)[1]
+        ]
         break
       case 11:
         logger.debug('Intersecting Top, Right and Left')
-        angle = [135, 225]
+        angle = [
+          angleRightDeg(firstItem)[0],
+          angleLeftDeg(lastItem)[1]
+        ]
         break
       case 12:
         logger.debug('Intersecting Left and Bottom')
-        angle = [0, 90]
+        angle = [
+          angleLeftDeg(firstItem)[0],
+          angleBottomDeg(lastItem)[1] - 360
+        ]
         break
       case 13:
-        logger.debug('Intersecting Top, Left annd Bottom')
-        angle = [45, 135]
+        logger.debug('Intersecting Top, Left and Bottom')
+        angle = [
+          angleTopDeg(firstItem)[0],
+          angleBottomDeg(lastItem)[1] - 360
+        ]
         break
       case 14:
-        logger.debug('Intersecting Left, Bottom, Right')
-        angle = [315, 395]
+        logger.debug('Intersecting Left, Bottom and Right')
+        angle = [
+          angleLeftDeg(firstItem)[0] + 360,
+          angleRightDeg(lastItem)[1]
+        ]
         break
       case 15:
         logger.error('Intersecting all sides.')
@@ -203,6 +290,7 @@ $.widget('bop.bopWheelmenuContent', {
         angle = [0, 360]
         break
     }
+    logger.debug(`We are going to use angles ${angle[0]} and ${angle[1]}`)
 
     const step = angle[1] - angle[0] === 360 || items.length === 1
       ? (angle[1] - angle[0]) / items.length

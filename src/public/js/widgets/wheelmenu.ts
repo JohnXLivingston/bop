@@ -65,10 +65,16 @@ $.widget('bop.bopWheelmenu', {
 
     content.bopWheelmenuContent(this.options)
   },
-  createDebugItems (n: number): void {
+  createDebugItems (n: number, variousLength?: boolean): void {
     const items: string[] = []
     for (let i = 1; i < n + 1; i++) {
-      items.push('<a>' + i + '</a>')
+      let s: string
+      if (variousLength) {
+        s = 'x'.repeat(i + 1)
+      } else {
+        s = '' + i
+      }
+      items.push('<a>' + s + '</a>')
     }
     $(this.element).bopDataArray('data-widget-wheelmenu-items', items)
   }
