@@ -42,8 +42,9 @@ $.widget('bop.bopWheelmenuContent', {
 
     const previousZIndex = maxWheelmenuOverlayZIndex()
     if (previousZIndex) {
-      overlay.css('z-index', previousZIndex + 2)
-      content.css('z-index', previousZIndex + 3)
+      // NB : z-index: x+0=overlay, x+1=content, x+2=focused/hovered item
+      overlay.css('z-index', previousZIndex + 3)
+      content.css('z-index', previousZIndex + 4)
     }
 
     $('body').append(content)
@@ -74,6 +75,20 @@ $.widget('bop.bopWheelmenuContent', {
 
     this._on($(window), {
       resize: () => this.positionItems(false)
+    })
+
+    const itemZIndex = () => {
+      const items = content.children()
+      items.css('z-index', '')
+      const focused = items.filter(':focus:first')
+      if (focused.length) {
+        focused.css('z-index', overlay.css('z-index') + 2)
+      }
+    }
+    this._on(content.children(), {
+      blur: itemZIndex,
+      focus: itemZIndex,
+      mouseenter: (ev) => { $(ev.currentTarget).focus() }
     })
 
     parseWidgets(content)
