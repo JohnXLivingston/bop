@@ -29,14 +29,11 @@ function maxWheelmenuOverlayZIndex (): number | undefined {
 }
 
 enum IntersectionSide {
-  top,
-  right,
-  bottom,
-  left
+  top = 0,
+  right = 1,
+  bottom = 2,
+  left = 3
 }
-
-type IntersectionSideHorizontal = IntersectionSide.left | IntersectionSide.right
-type IntersectionSideVertical = IntersectionSide.top | IntersectionSide.bottom
 
 $.widget('bop.bopWheelmenuContent', {
   options: bopWheelmenuContentDefaultOptions,
@@ -145,60 +142,36 @@ $.widget('bop.bopWheelmenuContent', {
     const intersectLeft = centerX - radius - (maxWidth / 2) - margin < windowScrollLeft ? 8 : 0
     const intersect = intersectTop + intersectLeft + intersectBottom + intersectRight
 
-    function angleTopDeg (item: JQuery, side: IntersectionSideHorizontal, lowerBound?: number): number {
-      const height = item.outerHeight() || 0
-      const yTop = windowScrollTop + margin + (height / 2)
-      const h = centerY - yTop
-      let a = 180 * Math.acos(h / radius) / Math.PI
+    function computeAngle (item: JQuery, screenSide: IntersectionSide, intersection: IntersectionSide, lowerBound?: number): number {
+      let l: number
+      let secondaryAngle: boolean
+      if (screenSide === IntersectionSide.top) {
+        const height = item.outerHeight() || 0
+        l = centerY - (windowScrollTop + margin + (height / 2))
+        secondaryAngle = intersection === IntersectionSide.left
+      } else if (screenSide === IntersectionSide.bottom) {
+        const height = item.outerHeight() || 0
+        l = windowHeight + windowScrollTop - margin - (height / 2) - centerY
+        secondaryAngle = intersection === IntersectionSide.right
+      } else if (screenSide === IntersectionSide.right) {
+        const width = item.outerWidth() || 0
+        l = windowWidth + windowScrollLeft - margin - (width / 2) - centerX
+        secondaryAngle = intersection === IntersectionSide.top
+      } else if (screenSide === IntersectionSide.left) {
+        const width = item.outerWidth() || 0
+        l = centerX - (windowScrollLeft + margin + (width / 2))
+        secondaryAngle = intersection === IntersectionSide.bottom
+      } else {
+        throw new Error('Invalid side value.')
+      }
+      let a = 180 * Math.acos(l / radius) / Math.PI
       if (lowerBound && a < lowerBound) {
         a = lowerBound
       }
-      if (side === IntersectionSide.right) {
-        return Math.ceil(a)
+      if (!secondaryAngle) {
+        return Math.ceil(a + (90 * screenSide))
       } else {
-        return Math.floor(360 - a)
-      }
-    }
-    function angleRightDeg (item: JQuery, side: IntersectionSideVertical, lowerBound?: number): number {
-      const width = item.outerWidth() || 0
-      const xRight = windowWidth + windowScrollLeft - margin - (width / 2)
-      const w = xRight - centerX
-      let a = 180 * Math.acos(w / radius) / Math.PI
-      if (lowerBound && a < lowerBound) {
-        a = lowerBound
-      }
-      if (side === IntersectionSide.bottom) {
-        return Math.ceil(90 + a)
-      } else {
-        return Math.floor(360 - a + 90)
-      }
-    }
-    function angleBottomDeg (item: JQuery, side: IntersectionSideHorizontal, lowerBound?: number): number {
-      const height = item.outerHeight() || 0
-      const yTop = windowHeight + windowScrollTop - margin - (height / 2)
-      const h = yTop - centerY
-      let a = 180 * Math.acos(h / radius) / Math.PI
-      if (lowerBound && a < lowerBound) {
-        a = lowerBound
-      }
-      if (side === IntersectionSide.left) {
-        return Math.ceil(180 + a)
-      } else {
-        return Math.floor(360 - a + 180)
-      }
-    }
-    function angleLeftDeg (item: JQuery, side: IntersectionSideVertical, lowerBound?: number): number {
-      const width = item.outerWidth() || 0
-      const yLeft = windowScrollLeft + margin + (width / 2)
-      const w = centerX - yLeft
-      let a = 180 * Math.acos(w / radius) / Math.PI
-      if (lowerBound && a < lowerBound) {
-        a = lowerBound
-      }
-      if (side === IntersectionSide.top) {
-        return Math.ceil(a - 90)
-      } else {
-        return Math.floor(360 - a - 90)
+        return Math.floor(360 - a + (90 * screenSide))
       }
     }
 
@@ -211,99 +184,99 @@ $.widget('bop.bopWheelmenuContent', {
       case 1:
         logger.debug('Intersecting only the top.')
         angle = [
-          angleTopDeg(firstItem, IntersectionSide.right, 180 / items.length),
-          angleTopDeg(lastItem, IntersectionSide.left, 180 / items.length)
+          computeAngle(firstItem, IntersectionSide.top, IntersectionSide.right, 180 / items.length),
+          computeAngle(lastItem, IntersectionSide.top, IntersectionSide.left, 180 / items.length)
         ]
         break
       case 2:
         logger.debug('Intersecting only the right side.')
         angle = [
-          angleRightDeg(firstItem, IntersectionSide.bottom, 180 / items.length),
-          angleRightDeg(lastItem, IntersectionSide.top, 180 / items.length)
+          computeAngle(firstItem, IntersectionSide.right, IntersectionSide.bottom, 180 / items.length),
+          computeAngle(lastItem, IntersectionSide.right, IntersectionSide.top, 180 / items.length)
         ]
         break
       case 3:
         logger.debug('Intersecting top and right.')
         angle = [
-          angleRightDeg(firstItem, IntersectionSide.bottom),
-          angleTopDeg(lastItem, IntersectionSide.left)
+          computeAngle(firstItem, IntersectionSide.right, IntersectionSide.bottom),
+          computeAngle(lastItem, IntersectionSide.top, IntersectionSide.left)
         ]
         break
       case 4:
         logger.debug('Intersecting only the bottom.')
         angle = [
-          angleBottomDeg(firstItem, IntersectionSide.left, 180 / items.length),
-          angleBottomDeg(lastItem, IntersectionSide.right, 180 / items.length)
+          computeAngle(firstItem, IntersectionSide.bottom, IntersectionSide.left, 180 / items.length),
+          computeAngle(lastItem, IntersectionSide.bottom, IntersectionSide.right, 180 / items.length)
         ]
         break
       case 5:
         logger.debug('Intersecting Top and Bottom.')
         angle = [
-          angleTopDeg(firstItem, IntersectionSide.right),
-          angleBottomDeg(lastItem, IntersectionSide.right) - 360
+          computeAngle(firstItem, IntersectionSide.top, IntersectionSide.right),
+          computeAngle(lastItem, IntersectionSide.bottom, IntersectionSide.right) - 360
         ]
         break
       case 6:
         logger.debug('Intersecting Right and bottom.')
         angle = [
-          angleBottomDeg(firstItem, IntersectionSide.left),
-          angleRightDeg(lastItem, IntersectionSide.top)
+          computeAngle(firstItem, IntersectionSide.bottom, IntersectionSide.left),
+          computeAngle(lastItem, IntersectionSide.right, IntersectionSide.top)
         ]
         break
       case 7:
         logger.debug('Intersecting Top, Right and bottom.')
         angle = [
-          angleBottomDeg(firstItem, IntersectionSide.left),
-          angleTopDeg(lastItem, IntersectionSide.left)
+          computeAngle(firstItem, IntersectionSide.bottom, IntersectionSide.left),
+          computeAngle(lastItem, IntersectionSide.top, IntersectionSide.left)
         ]
         break
       case 8:
         logger.debug('Intersecting only the left side.')
         angle = [
-          angleLeftDeg(firstItem, IntersectionSide.top, 180 / items.length),
-          angleLeftDeg(lastItem, IntersectionSide.bottom, 180 / items.length)
+          computeAngle(firstItem, IntersectionSide.left, IntersectionSide.top, 180 / items.length),
+          computeAngle(lastItem, IntersectionSide.left, IntersectionSide.bottom, 180 / items.length)
         ]
         break
       case 9:
         logger.debug('Intersecting Left and Top.')
         angle = [
-          angleTopDeg(firstItem, IntersectionSide.right),
-          angleLeftDeg(lastItem, IntersectionSide.bottom)
+          computeAngle(firstItem, IntersectionSide.top, IntersectionSide.right),
+          computeAngle(lastItem, IntersectionSide.left, IntersectionSide.bottom) - 360
         ]
         break
       case 10:
         logger.debug('Intersecting Left and Right')
         angle = [
-          angleLeftDeg(firstItem, IntersectionSide.top) + 360,
-          angleRightDeg(lastItem, IntersectionSide.top)
+          computeAngle(firstItem, IntersectionSide.left, IntersectionSide.top),
+          computeAngle(lastItem, IntersectionSide.right, IntersectionSide.top)
         ]
         break
       case 11:
         logger.debug('Intersecting Top, Right and Left')
         angle = [
-          angleRightDeg(firstItem, IntersectionSide.bottom),
-          angleLeftDeg(lastItem, IntersectionSide.bottom)
+          computeAngle(firstItem, IntersectionSide.right, IntersectionSide.bottom),
+          computeAngle(lastItem, IntersectionSide.left, IntersectionSide.bottom) - 360
         ]
         break
       case 12:
         logger.debug('Intersecting Left and Bottom')
         angle = [
-          angleLeftDeg(firstItem, IntersectionSide.top),
-          angleBottomDeg(lastItem, IntersectionSide.right) - 360
+          computeAngle(firstItem, IntersectionSide.left, IntersectionSide.top),
+          computeAngle(lastItem, IntersectionSide.bottom, IntersectionSide.right)
         ]
         break
       case 13:
         logger.debug('Intersecting Top, Left and Bottom')
         angle = [
-          angleTopDeg(firstItem, IntersectionSide.right),
-          angleBottomDeg(lastItem, IntersectionSide.right) - 360
+          computeAngle(firstItem, IntersectionSide.top, IntersectionSide.right),
+          computeAngle(lastItem, IntersectionSide.bottom, IntersectionSide.right) - 360
         ]
         break
       case 14:
         logger.debug('Intersecting Left, Bottom and Right')
         angle = [
-          angleLeftDeg(firstItem, IntersectionSide.top) + 360,
-          angleRightDeg(lastItem, IntersectionSide.top)
+          computeAngle(firstItem, IntersectionSide.left, IntersectionSide.top),
+          computeAngle(lastItem, IntersectionSide.right, IntersectionSide.top)
         ]
         break
       case 15:
