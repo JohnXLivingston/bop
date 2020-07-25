@@ -45,13 +45,14 @@ enum IntersectionSide {
   left = 3
 }
 
-$.widget('bop.bopWheelmenuContent', {
+$.widget('bop.bopWheelmenuContent', $.bop.bop, {
   options: bopWheelmenuContentDefaultOptions,
   content: $('<div>'),
   overlay: $('<div>'),
   opener: $('<div>') as JQuery<HTMLElement>,
 
   _create: function () {
+    this._super()
     logger.debug('Creating the wheelmenu content...')
     const content = $(this.element)
     this.content = content

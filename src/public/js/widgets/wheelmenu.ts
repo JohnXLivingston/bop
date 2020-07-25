@@ -22,9 +22,10 @@ const bopWheelmenuDefaultOptions: BopWheelmenuOptions = Object.assign({}, bopWhe
   onContextMenu: true
 })
 
-$.widget('bop.bopWheelmenu', {
+$.widget('bop.bopWheelmenu', $.bop.bop, {
   options: bopWheelmenuDefaultOptions,
   _create: function () {
+    this._super()
     const handler = (ev: JQuery.Event) => {
       ev.preventDefault()
       const centerX = ev.pageX || 0

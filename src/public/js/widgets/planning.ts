@@ -20,10 +20,11 @@ const defaultBopPlanningOptions: BopPlanningOptions = {
 
 let tpl: Template
 
-$.widget('bop.bopPlanning', {
+$.widget('bop.bopPlanning', $.bop.bop, {
   options: defaultBopPlanningOptions,
 
   _create: function () {
+    this._super()
     const content = $(this.element)
     const options = this.options
     if (!tpl) {

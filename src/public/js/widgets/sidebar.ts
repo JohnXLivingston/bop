@@ -10,8 +10,9 @@ declare global {
   }
 }
 
-$.widget('bop.bopSidebar', {
+$.widget('bop.bopSidebar', $.bop.bop, {
   _create: function () {
+    this._super()
     const content = $(this.element)
     content.removeClass('hidden')
     content.simplerSidebar({

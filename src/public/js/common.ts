@@ -38,3 +38,5 @@ require('./jquery/utils')
 
 // bop.svg is needed for the favicon.
 require('../images/bop.svg')
+
+require('./widgets/utils')
