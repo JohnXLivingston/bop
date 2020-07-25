@@ -80,6 +80,26 @@ $.widget('bop.bopWheelmenuContent', {
       }
     })
 
+    // Trap focus:
+    const firstFocusable = content.find(':focusable:first')
+    const lastFocusable = content.find(':focusable:last')
+    this._on(firstFocusable, {
+      keydown: (ev: JQuery.Event) => {
+        if (ev.key === 'Tab' && ev.shiftKey) {
+          lastFocusable.focus()
+          ev.preventDefault()
+        }
+      }
+    })
+    this._on(lastFocusable, {
+      keydown: (ev: JQuery.Event) => {
+        if (ev.key === 'Tab' && !ev.shiftKey) {
+          firstFocusable.focus()
+          ev.preventDefault()
+        }
+      }
+    })
+
     this._on($(window), {
       resize: () => this.positionItems(false)
     })
