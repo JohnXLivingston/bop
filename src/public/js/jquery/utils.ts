@@ -11,6 +11,7 @@ declare global {
   interface JQuery {
     bopDataString: BopDataMethod<string>
     bopDataBoolean : BopDataMethod<boolean>
+    bopDataInteger: BopDataMethod<number>
     bopDataObject: BopDataMethod<object>
     bopDataArray: BopDataMethod<Array<any>>
     bopDataAny: BopDataMethod<any>
@@ -50,6 +51,15 @@ const bopDataBoolean: BopDataMethod<boolean> = function (this: JQuery, name: str
     return s && s !== '0' && s !== 'false'
   }
   return el.attr(name, value ? 1 : null)
+}
+
+const bopDataInteger: BopDataMethod<number> = function (this: JQuery, name: string, value?: number): any {
+  const el = $(this)
+  if (arguments.length <= 1) {
+    const i = el.attr(name) || 0
+    return +i | 0
+  }
+  return el.attr(name, +value! | 0)
 }
 
 const bopDataObject: BopDataMethod<object> = function (this: JQuery, name: string, value?: object): any {
@@ -156,6 +166,7 @@ function makeAttributeSelector (attr: string, value?: string, test?: string): st
 jQuery.fn.extend({
   bopDataString,
   bopDataBoolean,
+  bopDataInteger,
   bopDataObject,
   bopDataArray,
   bopDataAny,
