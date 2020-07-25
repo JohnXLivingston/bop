@@ -28,6 +28,16 @@ function maxWheelmenuOverlayZIndex (): number | undefined {
   return zindex
 }
 
+enum IntersectionSide {
+  top,
+  right,
+  bottom,
+  left
+}
+
+type IntersectionSideHorizontal = IntersectionSide.left | IntersectionSide.right
+type IntersectionSideVertical = IntersectionSide.top | IntersectionSide.bottom
+
 $.widget('bop.bopWheelmenuContent', {
   options: bopWheelmenuContentDefaultOptions,
   content: $('<div>'),
@@ -135,7 +145,7 @@ $.widget('bop.bopWheelmenuContent', {
     const intersectLeft = centerX - radius - (maxWidth / 2) - margin < windowScrollLeft ? 8 : 0
     const intersect = intersectTop + intersectLeft + intersectBottom + intersectRight
 
-    function angleTopDeg (item: JQuery, lowerBound?: number): [number, number] {
+    function angleTopDeg (item: JQuery, side: IntersectionSideHorizontal, lowerBound?: number): number {
       const height = item.outerHeight() || 0
       const yTop = windowScrollTop + margin + (height / 2)
       const h = centerY - yTop
@@ -143,9 +153,13 @@ $.widget('bop.bopWheelmenuContent', {
       if (lowerBound && a < lowerBound) {
         a = lowerBound
       }
-      return [Math.ceil(a), Math.floor(360 - a)]
+      if (side === IntersectionSide.right) {
+        return Math.ceil(a)
+      } else {
+        return Math.floor(360 - a)
+      }
     }
-    function angleRightDeg (item: JQuery, lowerBound?: number): [number, number] {
+    function angleRightDeg (item: JQuery, side: IntersectionSideVertical, lowerBound?: number): number {
       const width = item.outerWidth() || 0
       const xRight = windowWidth + windowScrollLeft - margin - (width / 2)
       const w = xRight - centerX
@@ -153,9 +167,13 @@ $.widget('bop.bopWheelmenuContent', {
       if (lowerBound && a < lowerBound) {
         a = lowerBound
       }
-      return [Math.ceil(90 + a), Math.floor(360 - a + 90)]
+      if (side === IntersectionSide.bottom) {
+        return Math.ceil(90 + a)
+      } else {
+        return Math.floor(360 - a + 90)
+      }
     }
-    function angleBottomDeg (item: JQuery, lowerBound?: number): [number, number] {
+    function angleBottomDeg (item: JQuery, side: IntersectionSideHorizontal, lowerBound?: number): number {
       const height = item.outerHeight() || 0
       const yTop = windowHeight + windowScrollTop - margin - (height / 2)
       const h = yTop - centerY
@@ -163,9 +181,13 @@ $.widget('bop.bopWheelmenuContent', {
       if (lowerBound && a < lowerBound) {
         a = lowerBound
       }
-      return [Math.ceil(180 + a), Math.floor(360 - a + 180)]
+      if (side === IntersectionSide.left) {
+        return Math.ceil(180 + a)
+      } else {
+        return Math.floor(360 - a + 180)
+      }
     }
-    function angleLeftDeg (item: JQuery, lowerBound?: number): [number, number] {
+    function angleLeftDeg (item: JQuery, side: IntersectionSideVertical, lowerBound?: number): number {
       const width = item.outerWidth() || 0
       const yLeft = windowScrollLeft + margin + (width / 2)
       const w = centerX - yLeft
@@ -173,7 +195,11 @@ $.widget('bop.bopWheelmenuContent', {
       if (lowerBound && a < lowerBound) {
         a = lowerBound
       }
-      return [Math.ceil(a - 90), Math.floor(360 - a - 90)]
+      if (side === IntersectionSide.top) {
+        return Math.ceil(a - 90)
+      } else {
+        return Math.floor(360 - a - 90)
+      }
     }
 
     let angle: [number, number]
@@ -185,99 +211,99 @@ $.widget('bop.bopWheelmenuContent', {
       case 1:
         logger.debug('Intersecting only the top.')
         angle = [
-          angleTopDeg(firstItem, 180 / items.length)[0],
-          angleTopDeg(lastItem, 180 / items.length)[1]
+          angleTopDeg(firstItem, IntersectionSide.right, 180 / items.length),
+          angleTopDeg(lastItem, IntersectionSide.left, 180 / items.length)
         ]
         break
       case 2:
         logger.debug('Intersecting only the right side.')
         angle = [
-          angleRightDeg(firstItem, 180 / items.length)[0],
-          angleRightDeg(lastItem, 180 / items.length)[1]
+          angleRightDeg(firstItem, IntersectionSide.bottom, 180 / items.length),
+          angleRightDeg(lastItem, IntersectionSide.top, 180 / items.length)
         ]
         break
       case 3:
         logger.debug('Intersecting top and right.')
         angle = [
-          angleRightDeg(firstItem)[0],
-          angleTopDeg(lastItem)[1]
+          angleRightDeg(firstItem, IntersectionSide.bottom),
+          angleTopDeg(lastItem, IntersectionSide.left)
         ]
         break
       case 4:
         logger.debug('Intersecting only the bottom.')
         angle = [
-          angleBottomDeg(firstItem, 180 / items.length)[0],
-          angleBottomDeg(lastItem, 180 / items.length)[1]
+          angleBottomDeg(firstItem, IntersectionSide.left, 180 / items.length),
+          angleBottomDeg(lastItem, IntersectionSide.right, 180 / items.length)
         ]
         break
       case 5:
         logger.debug('Intersecting Top and Bottom.')
         angle = [
-          angleTopDeg(firstItem)[0],
-          angleBottomDeg(lastItem)[1] - 360
+          angleTopDeg(firstItem, IntersectionSide.right),
+          angleBottomDeg(lastItem, IntersectionSide.right) - 360
         ]
         break
       case 6:
         logger.debug('Intersecting Right and bottom.')
         angle = [
-          angleBottomDeg(firstItem)[0],
-          angleRightDeg(lastItem)[1]
+          angleBottomDeg(firstItem, IntersectionSide.left),
+          angleRightDeg(lastItem, IntersectionSide.top)
         ]
         break
       case 7:
         logger.debug('Intersecting Top, Right and bottom.')
         angle = [
-          angleBottomDeg(firstItem)[0],
-          angleTopDeg(lastItem)[1]
+          angleBottomDeg(firstItem, IntersectionSide.left),
+          angleTopDeg(lastItem, IntersectionSide.left)
         ]
         break
       case 8:
         logger.debug('Intersecting only the left side.')
         angle = [
-          angleLeftDeg(firstItem, 180 / items.length)[0],
-          angleLeftDeg(lastItem, 180 / items.length)[1]
+          angleLeftDeg(firstItem, IntersectionSide.top, 180 / items.length),
+          angleLeftDeg(lastItem, IntersectionSide.bottom, 180 / items.length)
         ]
         break
       case 9:
         logger.debug('Intersecting Left and Top.')
         angle = [
-          angleTopDeg(firstItem)[0],
-          angleLeftDeg(lastItem)[1]
+          angleTopDeg(firstItem, IntersectionSide.right),
+          angleLeftDeg(lastItem, IntersectionSide.bottom)
         ]
         break
       case 10:
         logger.debug('Intersecting Left and Right')
         angle = [
-          angleLeftDeg(firstItem)[0] + 360,
-          angleRightDeg(lastItem)[1]
+          angleLeftDeg(firstItem, IntersectionSide.top) + 360,
+          angleRightDeg(lastItem, IntersectionSide.top)
         ]
         break
       case 11:
         logger.debug('Intersecting Top, Right and Left')
         angle = [
-          angleRightDeg(firstItem)[0],
-          angleLeftDeg(lastItem)[1]
+          angleRightDeg(firstItem, IntersectionSide.bottom),
+          angleLeftDeg(lastItem, IntersectionSide.bottom)
         ]
         break
       case 12:
         logger.debug('Intersecting Left and Bottom')
         angle = [
-          angleLeftDeg(firstItem)[0],
-          angleBottomDeg(lastItem)[1] - 360
+          angleLeftDeg(firstItem, IntersectionSide.top),
+          angleBottomDeg(lastItem, IntersectionSide.right) - 360
         ]
         break
       case 13:
         logger.debug('Intersecting Top, Left and Bottom')
         angle = [
-          angleTopDeg(firstItem)[0],
-          angleBottomDeg(lastItem)[1] - 360
+          angleTopDeg(firstItem, IntersectionSide.right),
+          angleBottomDeg(lastItem, IntersectionSide.right) - 360
         ]
         break
       case 14:
         logger.debug('Intersecting Left, Bottom and Right')
         angle = [
-          angleLeftDeg(firstItem)[0] + 360,
-          angleRightDeg(lastItem)[1]
+          angleLeftDeg(firstItem, IntersectionSide.top) + 360,
+          angleRightDeg(lastItem, IntersectionSide.top)
         ]
         break
       case 15:
