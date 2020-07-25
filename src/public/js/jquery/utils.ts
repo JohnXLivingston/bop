@@ -22,7 +22,8 @@ declare global {
      */
     bopFindSelf: (selector: JQuery.Selector) => JQuery,
 
-    isBopWidget: (this: JQuery, name: string) => boolean
+    isBopWidget: (this: JQuery, name: string) => boolean,
+    closestBopWidget: (this: JQuery, name?: string) => JQuery
   }
   
   interface JQueryStatic {
@@ -133,6 +134,10 @@ const isBopWidget = function (this: JQuery, name: string): boolean {
   return this.is(makeAttributeSelector('data-widget', name))
 }
 
+const closestBopWidget = function (this: JQuery, name?: string): JQuery {
+  return this.closest(makeAttributeSelector('data-widget', name))
+}
+
 function makeAttributeSelector (attr: string, value?: string, test?: string): string {
   if (value === undefined && test === undefined) {
     return '[' + attr + ']'
@@ -160,7 +165,8 @@ jQuery.fn.extend({
     return el.filter(selector).add(el.find(selector))
   },
 
-  isBopWidget
+  isBopWidget,
+  closestBopWidget
 })
 
 export {
