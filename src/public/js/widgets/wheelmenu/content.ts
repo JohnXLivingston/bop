@@ -110,18 +110,6 @@ $.widget('bop.bopWheelmenuContent', {
     const items: JQuery[] = []
     content.children().each((i, html) => { items.push($(html)) })
 
-    // To simplify, we will consider each items to have
-    // same width and height (the max value)
-    let maxWidth = 0
-    let maxHeight = 0
-    for (let i = 0; i < items.length; i++) {
-      const item = items[0]
-      maxWidth = Math.max(maxWidth, item.outerWidth() || 0)
-      maxHeight = Math.max(maxHeight, item.outerHeight() || 0)
-    }
-
-    // let search where to place the first item.
-    // Their must be enough space to the right, and over.
     const center = content.position()
     const centerX = center.left
     const centerY = center.top
@@ -136,12 +124,28 @@ $.widget('bop.bopWheelmenuContent', {
     const firstItem = items[0]
     const lastItem = items[items.length - 1]
 
+    // First, we have to find if the circle intersect the
+    // screen boundaries.
+    // To simplify, we will consider each items to have
+    // same width and height (the max value)
+    let maxWidth = 0
+    let maxHeight = 0
+    for (let i = 0; i < items.length; i++) {
+      const item = items[0]
+      maxWidth = Math.max(maxWidth, item.outerWidth() || 0)
+      maxHeight = Math.max(maxHeight, item.outerHeight() || 0)
+    }
     const intersectTop = centerY - radius - (maxHeight / 2) - margin < windowScrollTop ? 1 : 0
     const intersectRight = centerX + radius + (maxWidth / 2) + margin > windowWidth + windowScrollLeft ? 2 : 0
     const intersectBottom = centerY + radius + (maxHeight / 2) + margin > windowHeight + windowScrollTop ? 4 : 0
     const intersectLeft = centerX - radius - (maxWidth / 2) - margin < windowScrollLeft ? 8 : 0
     const intersect = intersectTop + intersectLeft + intersectBottom + intersectRight
 
+    // Not we have to find the rotation to apply to first
+    // and last item in non trivial cases (when there are
+    // intersection with the screen boundaries).
+    // For this, lets define a function computing the angle
+    // depending on the item size and the intersection.
     function computeAngle (item: JQuery, screenSide: IntersectionSide, intersection: IntersectionSide, lowerBound?: number): number {
       let l: number
       let secondaryAngle: boolean
@@ -175,6 +179,7 @@ $.widget('bop.bopWheelmenuContent', {
       }
     }
 
+    // And now we can compute angles for last and first items.
     let angle: [number, number]
     switch (intersect) {
       case 0:
