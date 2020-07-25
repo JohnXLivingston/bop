@@ -28,9 +28,11 @@ $.widget('bop.bopWheelmenu', $.bop.bop, {
     this._super()
     const handler = (ev: JQuery.Event) => {
       ev.preventDefault()
-      const centerX = ev.pageX || 0
-      const centerY = ev.pageY || 0
-      this.open(centerX, centerY)
+      if (ev.pageX !== undefined && ev.pageY !== undefined) {
+        this.open({ x: ev.pageX, y: ev.pageY })
+      } else {
+        this.open()
+      }
       return false
     }
     if (this.options.onClick) {
@@ -44,7 +46,7 @@ $.widget('bop.bopWheelmenu', $.bop.bop, {
       })
     }
   },
-  open: function (x: number, y: number) {
+  open: function (coordinates?: {x: number, y: number}) {
     const widget = $(this.element)
     logger.debug('Calling the wheelmenu handler...')
 
@@ -60,9 +62,55 @@ $.widget('bop.bopWheelmenu', $.bop.bop, {
       content.append(item)
     }
 
-    logger.debug(`The center of the wheelmenu is (${x}, ${y}).`)
-    content.css('left', x + 'px')
-    content.css('top', y + 'px')
+    if (!coordinates) {
+      // Probably an action initiated by the keyboard...
+      logger.debug('No coordinates were provided, fallback on the widget position.')
+      const widget = $(this.element)
+      if (widget.length) {
+        const offset = widget.offset()
+        if (offset) {
+          coordinates = {
+            x: offset.left + ((widget.innerWidth() || 0) / 2),
+            y: offset.top + ((widget.innerHeight() || 0) / 2)
+          }
+        }
+      }
+    }
+    if (!coordinates) {
+      // Fallback on the screen center.
+      logger.debug('The widget seems to have no position, so we cant compute coordinates, fallback on the screen center.')
+      const $window = $(window)
+      coordinates = {
+        x: ($window.scrollLeft() || 0) + (($window.width() || 0) / 2),
+        y: ($window.scrollTop() || 0) + (($window.height() || 0) / 2)
+      }
+    }
+
+    const $window = $(window)
+    const windowWidth = $window.width() || 0
+    const windowHeight = $window.height() || 0
+    const windowScrollLeft = $window.scrollLeft() || 0
+    const windowScrollTop = $window.scrollTop() || 0
+    if (coordinates.x > windowScrollLeft + windowWidth) {
+      logger.debug('The x position is outside the screen (on the right).')
+      coordinates.x = windowScrollLeft + windowWidth
+    }
+    if (coordinates.x < windowScrollLeft) {
+      logger.debug('The x position is outside the screen (on the left).')
+      coordinates.x = windowScrollLeft
+    }
+    if (coordinates.y > windowScrollTop + windowHeight) {
+      logger.debug('The x position is outside the screen (on the bottom).')
+      coordinates.y = windowScrollTop + windowHeight
+    }
+    if (coordinates.y < windowScrollTop) {
+      logger.debug('The x position is outside the screen (on the top).')
+      coordinates.y = windowScrollTop
+    }
+
+    logger.debug(`The center of the wheelmenu is (${coordinates.x}, ${coordinates.y}).`)
+    content.css('left', coordinates.x + 'px')
+    content.css('top', coordinates.y + 'px')
 
     content.bopWheelmenuContent(this.options)
   },
