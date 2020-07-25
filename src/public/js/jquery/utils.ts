@@ -20,7 +20,9 @@ declare global {
      * @param el The selector, or the JQuery element where to search.
      * @param selector the selector to search.
      */
-    bopFindSelf: (selector: JQuery.Selector) => JQuery
+    bopFindSelf: (selector: JQuery.Selector) => JQuery,
+
+    isBopWidget: (this: JQuery, name: string) => boolean
   }
   
   interface JQueryStatic {
@@ -127,6 +129,25 @@ const bopDataAny: BopDataMethod<any> = function (this: JQuery, name: string, val
   return el.attr(name, JSON.stringify(value))
 }
 
+const isBopWidget = function (this: JQuery, name: string): boolean {
+  return this.is(makeAttributeSelector('data-widget', name))
+}
+
+function makeAttributeSelector (attr: string, value?: string, test?: string): string {
+  if (value === undefined && test === undefined) {
+    return '[' + attr + ']'
+  }
+  if (test === undefined) {
+    test = '='
+  }
+  if (value === undefined) {
+    value = ''
+  }
+  let armored = value.replace( /\\/g,'\\\\');
+	armored = armored.replace( /"/g,'\\"');
+	return '[' + attr + test + '"' + armored + '"]';
+}
+
 jQuery.fn.extend({
   bopDataString,
   bopDataBoolean,
@@ -137,7 +158,11 @@ jQuery.fn.extend({
   bopFindSelf: function bopFindSelf (this: JQuery, selector: string): JQuery {
     const el = $(this)
     return el.filter(selector).add(el.find(selector))
-  }
+  },
+
+  isBopWidget
 })
 
-export {}
+export {
+  makeAttributeSelector
+}
