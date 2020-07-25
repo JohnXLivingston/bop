@@ -17,10 +17,6 @@ declare global {
   }
 }
 
-function initCommonWidgets () {
-  parseWidgets()
-}
-
 function parseWidgets (dom?: JQuery): void {
   if (!dom) { dom = $('body') }
   logger.debug('Parsing widgets...')
@@ -56,6 +52,5 @@ function parseWidgets (dom?: JQuery): void {
 }
 
 export {
-  initCommonWidgets,
   parseWidgets
 }
