@@ -38,6 +38,10 @@ $widget-wheelmenu-item-border-color: $border-color-dark;
     &:focus {
       border-width: 2px;
     }
+
+    &.disabled {
+      background-color: $background-color-disabled;
+    }
   }
 }
 

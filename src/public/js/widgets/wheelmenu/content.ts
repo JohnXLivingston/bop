@@ -6,6 +6,8 @@ const logger = getLogger('widget/wheelmenu/content')
 declare global {
   interface JQuery {
     bopWheelmenuContent(options: BopWheelmenuContentOptions): JQuery
+
+    bopWheelmenuContent(methodName: 'close', withParents?: boolean): void
   }
 }
 
@@ -28,6 +30,14 @@ function maxWheelmenuOverlayZIndex (): number | undefined {
   return zindex
 }
 
+function elementCenter (el: JQuery): {x: number, y: number} {
+  const position: JQuery.Coordinates = el.position()
+  return {
+    x: Math.round(position.left + ((el.innerWidth() || 0) / 2)),
+    y: Math.round(position.top + ((el.innerHeight() || 0) / 2))
+  }
+}
+
 enum IntersectionSide {
   top = 0,
   right = 1,
@@ -39,6 +49,7 @@ $.widget('bop.bopWheelmenuContent', {
   options: bopWheelmenuContentDefaultOptions,
   content: $('<div>'),
   overlay: $('<div>'),
+  opener: $('<div>') as JQuery<HTMLElement>,
 
   _create: function () {
     logger.debug('Creating the wheelmenu content...')
@@ -46,6 +57,10 @@ $.widget('bop.bopWheelmenuContent', {
     this.content = content
     const overlay = $('<div class="widget-wheelmenu-overlay"></div>')
     this.overlay = overlay
+
+    if (document.activeElement) {
+      this.opener = $(document.activeElement as HTMLElement)
+    }
 
     const previousZIndex = maxWheelmenuOverlayZIndex()
     if (previousZIndex) {
@@ -57,7 +72,14 @@ $.widget('bop.bopWheelmenuContent', {
     $('body').append(content)
     $('body').append(overlay)
 
+    this._setTabindexes()
     this.positionItems(true)
+
+    // This must be done after the .append and after setting tabindexes:
+    const focusables = content.find(':focusable')
+
+    // fix onclick on disabled elements:
+    focusables.filter('.disabled[onclick]').removeAttr('onclick')
 
     this._on(overlay, {
       click: () => this.close(),
@@ -81,8 +103,8 @@ $.widget('bop.bopWheelmenuContent', {
     })
 
     // Trap focus:
-    const firstFocusable = content.find(':focusable:first')
-    const lastFocusable = content.find(':focusable:last')
+    const firstFocusable = focusables.first()
+    const lastFocusable = focusables.last()
     this._on(firstFocusable, {
       keydown: (ev: JQuery.Event) => {
         if (ev.key === 'Tab' && ev.shiftKey) {
@@ -96,6 +118,102 @@ $.widget('bop.bopWheelmenuContent', {
         if (ev.key === 'Tab' && !ev.shiftKey) {
           firstFocusable.focus()
           ev.preventDefault()
+        }
+      }
+    })
+
+    let lastMoveClockwise: boolean = true
+    this._on(focusables, {
+      click: (ev: JQuery.TriggeredEvent) => {
+        const el = $(ev.currentTarget)
+        if (el.is('.disabled')) {
+          ev.preventDefault()
+          ev.stopImmediatePropagation()
+          return false
+        }
+        if (!el.isBopWidget('bopWheelmenu')) {
+          this.close(true)
+        }
+        return undefined
+      },
+      keyup: (ev: JQuery.TriggeredEvent) => {
+        if (ev.key === 'Enter') {
+          const el = $(ev.currentTarget)
+          ev.preventDefault()
+          if (!el.is('.disabled')) {
+            el.click()
+          }
+          return
+        }
+        if (/^Arrow/.test(ev.key || '')) {
+          const el = $(ev.currentTarget)
+          let previous: JQuery | undefined
+          let next: JQuery | undefined
+          let found: boolean = false
+          focusables.each((i, html) => {
+            const e = $(html)
+            if (found) {
+              if (!next) {
+                next = e
+              }
+              return false
+            }
+            if (el.is(e)) {
+              found = true
+              return undefined
+            }
+            previous = e
+            return undefined
+          })
+          if (!previous) {
+            previous = lastFocusable
+          }
+          if (!next) {
+            next = firstFocusable
+          }
+          const previousCenter = elementCenter(previous)
+          const nextCenter = elementCenter(next)
+          const currentCenter = elementCenter(el)
+          let direction: number
+          let axis: 'x' | 'y'
+          switch (ev.key) {
+            case 'ArrowRight':
+              axis = 'x'
+              direction = 1
+              break
+            case 'ArrowLeft':
+              axis = 'x'
+              direction = -1
+              break
+            case 'ArrowUp':
+              axis = 'y'
+              direction = -1
+              break
+            case 'ArrowDown':
+              axis = 'y'
+              direction = 1
+              break
+            default:
+              return
+          }
+
+          ev.preventDefault()
+
+          if (lastMoveClockwise) {
+            if (direction * (nextCenter[axis] - currentCenter[axis]) >= 0) {
+              next.focus()
+            } else if (direction * (previousCenter[axis] - currentCenter[axis]) >= 0) {
+              previous.focus()
+              lastMoveClockwise = false
+            }
+          } else {
+            if (direction * (previousCenter[axis] - currentCenter[axis]) >= 0) {
+              previous.focus()
+            } else if (direction * (nextCenter[axis] - currentCenter[axis]) >= 0) {
+              next.focus()
+              lastMoveClockwise = true
+            }
+          }
         }
       }
     })
@@ -119,7 +237,7 @@ $.widget('bop.bopWheelmenuContent', {
     })
 
     parseWidgets(content)
-    content.find(':focusable:first').focus()
+    focusables.first().focus()
   },
   isCurrentWheelmenu: function () {
     return +this.overlay.css('z-index') === maxWheelmenuOverlayZIndex()
@@ -325,7 +443,7 @@ $.widget('bop.bopWheelmenuContent', {
       // First, we center the item.
       const width = item.outerWidth() || 0
       const height = item.outerHeight() || 0
-      item.attr('tabindex', i + 1)
+
       item.css('left', 0 - (width / 2))
       item.css('top', 0 - (height / 2))
 
@@ -341,8 +459,26 @@ $.widget('bop.bopWheelmenuContent', {
       item.css(transform)
     }
   },
-  close: function () {
+  _setTabindexes: function () {
+    let firstTabindex = 1
+    $('[tabindex]').each((i, html) => {
+      const idx = $(html).bopDataInteger('tabindex')
+      if (idx > firstTabindex) firstTabindex = idx
+    })
+    logger.debug(`Items tabindex should begin at ${firstTabindex}.`)
+    this.content.children('a, button').each((i, html) => {
+      $(html).attr('tabindex', firstTabindex + i)
+    })
+  },
+  close: function (withParents?: boolean) {
     this.content.remove()
     this.overlay.remove()
+    if (this.opener.length) {
+      if (withParents && this.opener.closestBopWidget('bopWheelmenuContent').length) {
+        this.opener.closestBopWidget('bopWheelmenuContent').bopWheelmenuContent('close', true)
+      } else if (this.opener.is(':focusable')) {
+        this.opener.focus()
+      }
+    }
   }
 })
