@@ -1,3 +1,11 @@
+{% macro nodeMenuItem(node) %}
+  {% set items = [] %}
+  {% set tmp %}<a onclick="alert('yes');">Button 1</a>{% endset %}{% set tmp = items.push(tmp) %}
+  {% set tmp %}<a class="disabled" onclick="alert('yes indeed');">Button 2</a>{% endset %}{% set tmp = items.push(tmp) %}
+  {% if node %}{% set tmp %}<a data-widget="bopWheelmenu" data-widget-wheelmenu-items="{{ nodeMenuItem('') }}">Button 3</a>{% endset %}{% set tmp = items.push(tmp) %}{% endif %}
+  {% set tmp %}<a onclick="alert('yes');">Button 4</a>{% endset %}{% set tmp = items.push(tmp) %}
+  {{ items | dump }}
+{% endmacro %}
 {% macro planningNode(node, planningProperties) %}
   <div class="widget-planning-node"
     data-widget-planning-node-type="{{ node.type }}"
@@ -64,7 +72,10 @@
                 "
               >
                 <div class="widget-planning-item-inner">
-                  <div class="widget-planning-item-part">
+                  <div class="widget-planning-item-part"
+                    data-widget="bopWheelmenu"
+                    data-widget-wheelmenu-items="{{ nodeMenuItem(node) }}"
+                  >
                     <div class="widget-planning-task-txt-wrapper">
                       {{ stubGroup.label }}
                     </div>

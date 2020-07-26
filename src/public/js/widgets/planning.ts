@@ -1,5 +1,6 @@
 import { planningTestSet } from '../../../shared/test'
 import { nunjucksContext, Template } from '../utils/nunjucks'
+import { parseWidgets } from '../widgets/utils'
 
 import { PlanningTree, getPlanningTree } from '../lib/planning'
 
@@ -32,10 +33,11 @@ interface BopPlanning extends JQueryUI.WidgetCommonProperties {
   getTree: () => PlanningTree
 }
 
-$.widget('bop.bopPlanning', {
+$.widget('bop.bopPlanning', $.bop.bop, {
   options: defaultBopPlanningOptions,
 
-  _create: function (this: BopPlanning) {
+  _create: function () {
+    this._super()
     const content = $(this.element)
     const options = this.options
     if (!tpl) {
@@ -45,7 +47,7 @@ $.widget('bop.bopPlanning', {
       nodes: planningTestSet(),
       planningProperties: { nbWeeks: options.nbWeeks }
     })))
-    content.empty().append(widget)
+    parseWidgets(content.empty().append(widget))
 
     this.tree = getPlanningTree(options.display, {
       dom: content
