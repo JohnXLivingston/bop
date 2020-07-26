@@ -36,7 +36,7 @@ interface BopPlanning extends JQueryUI.WidgetCommonProperties {
 $.widget('bop.bopPlanning', $.bop.bop, {
   options: defaultBopPlanningOptions,
 
-  _create: function () {
+  _create: function (this: BopPlanning) {
     this._super()
     const content = $(this.element)
     const options = this.options
