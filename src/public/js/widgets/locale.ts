@@ -8,8 +8,9 @@ declare global {
   }
 }
 
-$.widget('bop.bopLocaleChange', {
+$.widget('bop.bopLocaleChange', $.bop.bop, {
   _create: function () {
+    this._super()
     const content = $(this.element)
     let changeDialog: JQuery | undefined
     const button = content.find('>a')

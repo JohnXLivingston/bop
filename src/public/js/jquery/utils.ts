@@ -11,6 +11,7 @@ declare global {
   interface JQuery {
     bopDataString: BopDataMethod<string>
     bopDataBoolean : BopDataMethod<boolean>
+    bopDataInteger: BopDataMethod<number>
     bopDataObject: BopDataMethod<object>
     bopDataArray: BopDataMethod<Array<any>>
     bopDataAny: BopDataMethod<any>
@@ -20,7 +21,10 @@ declare global {
      * @param el The selector, or the JQuery element where to search.
      * @param selector the selector to search.
      */
-    bopFindSelf: (selector: JQuery.Selector) => JQuery
+    bopFindSelf: (selector: JQuery.Selector) => JQuery,
+
+    isBopWidget: (this: JQuery, name: string) => boolean,
+    closestBopWidget: (this: JQuery, name?: string) => JQuery
   }
   
   interface JQueryStatic {
@@ -47,6 +51,15 @@ const bopDataBoolean: BopDataMethod<boolean> = function (this: JQuery, name: str
     return s && s !== '0' && s !== 'false'
   }
   return el.attr(name, value ? 1 : null)
+}
+
+const bopDataInteger: BopDataMethod<number> = function (this: JQuery, name: string, value?: number): any {
+  const el = $(this)
+  if (arguments.length <= 1) {
+    const i = el.attr(name) || 0
+    return +i | 0
+  }
+  return el.attr(name, +value! | 0)
 }
 
 const bopDataObject: BopDataMethod<object> = function (this: JQuery, name: string, value?: object): any {
@@ -127,9 +140,33 @@ const bopDataAny: BopDataMethod<any> = function (this: JQuery, name: string, val
   return el.attr(name, JSON.stringify(value))
 }
 
+const isBopWidget = function (this: JQuery, name: string): boolean {
+  return this.is(makeAttributeSelector('data-widget', name))
+}
+
+const closestBopWidget = function (this: JQuery, name?: string): JQuery {
+  return this.closest(makeAttributeSelector('data-widget', name))
+}
+
+function makeAttributeSelector (attr: string, value?: string, test?: string): string {
+  if (value === undefined && test === undefined) {
+    return '[' + attr + ']'
+  }
+  if (test === undefined) {
+    test = '='
+  }
+  if (value === undefined) {
+    value = ''
+  }
+  let armored = value.replace( /\\/g,'\\\\');
+	armored = armored.replace( /"/g,'\\"');
+	return '[' + attr + test + '"' + armored + '"]';
+}
+
 jQuery.fn.extend({
   bopDataString,
   bopDataBoolean,
+  bopDataInteger,
   bopDataObject,
   bopDataArray,
   bopDataAny,
@@ -137,7 +174,12 @@ jQuery.fn.extend({
   bopFindSelf: function bopFindSelf (this: JQuery, selector: string): JQuery {
     const el = $(this)
     return el.filter(selector).add(el.find(selector))
-  }
+  },
+
+  isBopWidget,
+  closestBopWidget
 })
 
-export {}
+export {
+  makeAttributeSelector
+}

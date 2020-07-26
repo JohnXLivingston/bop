@@ -7,6 +7,7 @@ import '../scss/main.scss'
 require('./common')
 require('./widgets/locale')
 require('./widgets/sidebar')
+require('./widgets/wheelmenu')
 
 const logger = getLogger('main.ts')
 logger.debug('JS is okay.')
