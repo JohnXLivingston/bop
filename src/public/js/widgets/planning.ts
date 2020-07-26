@@ -26,17 +26,23 @@ const defaultBopPlanningOptions: BopPlanningOptions = {
 
 let tpl: Template
 
-interface BopPlanning extends JQueryUI.WidgetCommonProperties {
+interface BopPlanningAttributes {
   options: BopPlanningOptions,
-  tree: PlanningTree,
+  tree?: PlanningTree
+}
 
-  getTree: () => PlanningTree
+declare global {
+  namespace JQueryUI {
+    interface Widget {
+      <T>(name: 'bop.bopPlanning', base: Function, prototype: T & ThisType<T & WidgetCommonProperties & BopPlanningAttributes>): JQuery;
+    }
+  }
 }
 
 $.widget('bop.bopPlanning', $.bop.bop, {
   options: defaultBopPlanningOptions,
 
-  _create: function (this: BopPlanning) {
+  _create: function () {
     this._super()
     const content = $(this.element)
     const options = this.options
@@ -54,7 +60,10 @@ $.widget('bop.bopPlanning', $.bop.bop, {
     })
   },
 
-  getTree: function (this: BopPlanning): PlanningTree {
+  getTree: function (): PlanningTree {
+    if (!this.tree) {
+      throw new Error('Calling getTree too early')
+    }
     return this.tree
   }
 })
