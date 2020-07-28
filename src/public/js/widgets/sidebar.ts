@@ -1,6 +1,6 @@
 /// <reference path="./sidebar.d.ts" />
 
-require('@dcdeiv/simpler-sidebar/dist/jquery.simpler-sidebar.js')
+require('@ctrlmaniac/simpler-sidebar/lib/jquery.simpler-sidebar.js')
 
 require('../../scss/widgets/sidebar.scss')
 
@@ -16,10 +16,9 @@ $.widget('bop.bopSidebar', $.bop.bop, {
     const content = $(this.element)
     content.removeClass('hidden')
     content.simplerSidebar({
-      selectors: {
-        trigger: content.attr('data-widget-sidebar-open'),
-        quitter: content.attr('data-widget-sidebar-close')
-      },
+      align: 'right',
+      toggler: content.attr('data-widget-sidebar-open'),
+      quitter: content.attr('data-widget-sidebar-close'),
       animation: {
         easing: 'easeOutQuint'
       }
