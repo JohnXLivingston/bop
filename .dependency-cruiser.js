@@ -21,7 +21,7 @@ module.exports = {
       from: { path: '^src/public/js/widgets' },
       to: { path:
         '^src/(shared|public/js/(lib|utils|widgets))/' +
-        '|^node_modules/(@dcdeiv/simpler-sidebar|jquery-ui/ui/widget.js)' +
+        '|^node_modules/(@ctrlmaniac/simpler-sidebar|jquery-ui/ui/widget.js)' +
         '|^src/public/scss/widgets'
       }
     },
