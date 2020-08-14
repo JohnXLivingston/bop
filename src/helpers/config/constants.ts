@@ -9,6 +9,9 @@ const CONSTRAINTS = {
   PROJECT: {
     NAME: { min: 4, max: 120 }
   },
+  RESOURCE: {
+    NAME: { min: 4, max: 120 }
+  },
   TASK: {
     NAME: { min: 0, max: 120 }
   }

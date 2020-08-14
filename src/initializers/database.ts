@@ -6,7 +6,8 @@ import {
   ApplicationModel,
   ProjectModel,
   TaskModel,
-  UserModel
+  UserModel,
+  ResourceModel
 } from '../models'
 
 // Please update this version on each new migration file.
@@ -51,7 +52,8 @@ async function initDatabaseModels () {
     ApplicationModel,
     ProjectModel,
     TaskModel,
-    UserModel
+    UserModel,
+    ResourceModel
   ])
   logger.info('Database %s is ready.', CONFIG.DATABASE.DBNAME)
 }
