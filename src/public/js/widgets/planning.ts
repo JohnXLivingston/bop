@@ -20,7 +20,7 @@ interface BopPlanningOptions {
   nbWeeks?: number
 }
 const defaultBopPlanningOptions: BopPlanningOptions = {
-  display: 'user-task',
+  display: 'resource-task',
   nbWeeks: 2
 }
 
