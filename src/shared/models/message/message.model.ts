@@ -34,6 +34,8 @@ export interface MessageDeletion {
   type: 'message',
   messageType: 'delete',
   // FIXME: a soft deleted object, or an objectId?
+  // NB: I think it should be a soft deleted object,
+  // with an incremented version number.
   object: BopObject,
   /**
    * The user that deleted the object
