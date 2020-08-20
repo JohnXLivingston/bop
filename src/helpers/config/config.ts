@@ -5,70 +5,79 @@ import * as lockfile from 'proper-lockfile'
 import * as fs from 'fs'
 import * as jsYaml from 'js-yaml'
 import { Dialect as SequelizeDialect } from 'sequelize'
-// FIXME: we cant use ../log/logger here (otherwise we will have a circular reference).
+// FIXME: we cant use ../log/logger here
+// (otherwise we will have a circular reference).
 
 const isInvalidPath = require('is-invalid-path')
 
-// TODO: when config change, call some callbacks. Don't forget to change log level in logger.ts
+// TODO: when config change, call some callbacks.
+// Don't forget to change log level in logger.ts
+
+function get<T> (name: string, defaultValue: T): T {
+  if (config.has(name)) {
+    return config.get<T>(name)
+  }
+  return defaultValue
+}
 
 const CONFIG = {
   CLUSTER: {
-    WORKERS: config.has('cluster.workers') ? config.get<number>('cluster.workers') : 0,
-    NOTIFIERS: config.has('cluster.notifiers') ? config.get<number>('cluster.notifiers') : 1
+    WORKERS: get<number>('cluster.workers', 0),
+    NOTIFIERS: get<number>('cluster.notifiers', 1)
   },
   COOKIES: {
-    PREFIX: config.has('cookies.prefix') ? config.get<string>('cookies.prefix') : '',
+    PREFIX: get<string>('cookies.prefix', ''),
     SESSION: {
-      SECRET: config.has('cookies.session.secret') ? config.get<string>('cookies.session.secret') : ''
+      SECRET: get<string>('cookies.session.secret', '')
     }
   },
   DATABASE: {
-    TYPE: config.has('database.type') ? config.get<SequelizeDialect>('database.type') : null,
-    HOSTNAME: config.has('database.hostname') ? config.get<string>('database.hostname') : null,
-    PORT: config.has('database.PORT') ? config.get<number>('database.PORT') : 3306,
-    DBNAME: config.has('database.dbname') ? config.get<string>('database.dbname') : null,
-    USERNAME: config.has('database.username') ? config.get<string>('database.username') : null,
-    PASSWORD: config.has('database.password') ? config.get<string>('database.password') : null,
-    LOG: config.has('database.log') ? config.get<boolean>('database.log') : false,
+    TYPE: get<SequelizeDialect | null>('database.type', null),
+    HOSTNAME: get<string | null>('database.hostname', null),
+    PORT: get<number>('database.PORT', 3306),
+    DBNAME: get<string | null>('database.dbname', null),
+    USERNAME: get<string | null>('database.username', null),
+    PASSWORD: get<string | null>('database.password', null),
+    LOG: get<boolean>('database.log', false),
     POOL: {
-      MAX: config.has('database.pool.max') ? config.get<number>('database.pool.max') : 5
+      MAX: get<number>('database.pool.max', 5)
     }
   },
   LOG: {
-    LEVEL: config.get<string>('log.level'),
+    LEVEL: get<string>('log.level', 'info'),
     CONSOLE: {
-      ENABLED: config.has('log.console.enabled') ? config.get<boolean>('log.console.enabled') : false
+      ENABLED: get<boolean>('log.console.enabled', false)
     },
     SYSLOG: {
-      ENABLED: config.has('log.syslog.enabled') ? config.get<boolean>('log.syslog.enabled') : false,
-      HOST: config.has('log.syslog.host') ? config.get<string>('log.syslog.host') : undefined,
-      PORT: config.has('log.syslog.port') ? config.get<number>('log.syslog.port') : undefined,
-      PROTOCOL: config.has('log.syslog.protocol') ? config.get<string>('log.syslog.protocol') : undefined,
-      PATH: config.has('log.syslog.path') ? config.get<string>('log.syslog.path') : undefined,
-      LOCALHOST: config.has('log.syslog.localhost') ? config.get<string>('log.syslog.localhost') : undefined,
-      TYPE: config.has('log.syslog.type') ? config.get<string>('log.syslog.type') : undefined
+      ENABLED: get<boolean>('log.syslog.enabled', false),
+      HOST: get<string | undefined>('log.syslog.host', undefined),
+      PORT: get<number | undefined>('log.syslog.port', undefined),
+      PROTOCOL: get<string | undefined>('log.syslog.protocol', undefined),
+      PATH: get<string | undefined>('log.syslog.path', undefined),
+      LOCALHOST: get<string | undefined>('log.syslog.localhost', undefined),
+      TYPE: get<string | undefined>('log.syslog.type', undefined)
     },
     FILE: {
-      ENABLED: config.has('log.file.enabled') ? config.get<boolean>('log.file.enabled') : false,
-      PATH: config.has('log.file.path') ? config.get<string>('log.file.path') : undefined
+      ENABLED: get<boolean>('log.file.enabled', false),
+      PATH: get<string | undefined>('log.file.path', undefined)
     }
   },
   REDIS: {
-    HOSTNAME: config.has('redis.hostname') ? config.get<string>('redis.hostname') : null,
-    PORT: config.has('redis.port') ? config.get<number>('redis.port') : null,
-    AUTH: config.has('redis.auth') ? config.get<string>('redis.auth') : null,
-    DB: config.has('redis.db') ? config.get<number>('redis.db') : null,
-    PREFIX: config.has('redis.prefix') ? config.get<string>('redis.prefix') : ''
+    HOSTNAME: get<string | null>('redis.hostname', null),
+    PORT: get<number | null>('redis.port', null),
+    AUTH: get<string | null>('redis.auth', null),
+    DB: get<number | null>('redis.db', null),
+    PREFIX: get<string>('redis.prefix', '')
   },
   SERVER: {
     HOSTNAME: config.get<string>('server.hostname'),
     PORT: config.get<number>('server.port'),
-    HTTPS: config.has('server.https') ? config.get<boolean>('server.https') : false
+    HTTPS: get<boolean>('server.https', false)
   },
   NOTIFIER: {
     HOSTNAME: config.get<string>('notifier.hostname'),
     PORT: config.get<number>('notifier.port'),
-    HTTPS: config.has('notifier.https') ? config.get<boolean>('notifier.https') : false
+    HTTPS: get<boolean>('notifier.https', false)
   }
 }
 
@@ -90,12 +99,15 @@ function checkConfig (): ConfigErrors {
 enum SpecificConstraintType { Enum = 'enum', Filepath = 'filepath' }
 interface SpecificConstraintWithValues {
   type: SpecificConstraintType.Enum,
-  values: string[] // FIXME: this is not correct. We will wait for other constraints than Enum for implementing better.
+  values: string[] // FIXME: this is not correct.
+                  // We will wait for other constraints than Enum
+                  // for implementing better.
 }
 interface SpecificConstraintWithoutValues {
   type: SpecificConstraintType.Filepath
 }
-type SpecificConstraint = SpecificConstraintWithValues | SpecificConstraintWithoutValues
+type SpecificConstraint =
+  SpecificConstraintWithValues | SpecificConstraintWithoutValues
 type Constraint = SpecificConstraint | boolean
 type Required = {[key: string]: Required | Constraint}
 function _recursiveConstraintCheck (configErrors: ConfigErrors, stack: string, c: any, r: boolean) :void;
@@ -114,7 +126,10 @@ function _recursiveConstraintCheck (configErrors: ConfigErrors, stack :any, c: a
       const ctype = r[key].type
       if (ctype === SpecificConstraintType.Enum) {
         if (r[key].values.indexOf(c[key]) < 0) {
-          configErrors.errors.push(`Value for ${stack}.${key} is incorrect. '${c[key]}' is not in [${r[key].values.join(', ')}]`)
+          configErrors.errors.push(
+            `Value for ${stack}.${key} is incorrect. ` +
+            `'${c[key]}' is not in [${r[key].values.join(', ')}]`
+          )
         }
       }
       if (ctype === SpecificConstraintType.Filepath) {
@@ -253,7 +268,8 @@ async function updateConfigKey (): Promise<void> {
   // FIXME: should we test something with checkConfig?
 
   const file = getLocalConfigFilePath()
-  // FIXME: how can we log? console.debug('Calling updateConfigKey with keys "%s", will write it to file "%s".', keys.join(', '), file)
+  // FIXME: how can we log?
+  //        console.debug('Calling updateConfigKey with keys "%s", will write it to file "%s".', keys.join(', '), file)
   // We will use the presence of a local-xxx.json.lock file
   // to ensure there is no 2 processes writing at the same time.
   const releaseLock = await lockfile.lock(file, {
