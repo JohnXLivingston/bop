@@ -46,7 +46,11 @@ function readDir (dir: string): string[] {
 }
 
 async function searchNestedTests (dir: string): Promise<string[]> {
-  const stdout = await asyncExec('rgrep --no-messages -P "\\bdescribe\\(\'(\\w+/)+\\w+\\.ts" ' + path.join('./tests', dir) + ' || echo ""')
+  const stdout = await asyncExec(
+    'rgrep --no-messages -P "\\bdescribe\\(\'(\\w+/)+\\w+\\.ts" ' +
+    path.join('./tests', dir) +
+    ' || echo ""'
+  )
   let lines = stdout.split(/\n/)
   lines = lines.filter(l => /^tests\/(\w+\/)*\w+\.ts:/.test(l))
   lines = lines.map(l => {

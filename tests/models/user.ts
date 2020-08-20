@@ -71,7 +71,8 @@ describe('models/user/user.ts', function () {
       user1 = new UserModel(user1Data)
       await user1.save()
 
-      expect(await user1!.isPasswordMatch('the user1 password... or not?'), 'wrong password before reloading').to.be.false
+      expect(await user1!.isPasswordMatch('the user1 password... or not?'), 'wrong password before reloading')
+        .to.be.false
       expect(await user1!.isPasswordMatch('the user1 password.'), 'password before reloading').to.be.true
 
       expect(user1.id, 'User id').to.be.equal(2)

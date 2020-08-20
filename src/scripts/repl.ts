@@ -19,7 +19,10 @@ const start = async () => {
   const configErrors = checkConfig()
   if (configErrors.warnings.length || configErrors.errors.length) {
     logger.error('There are some config errors. ', configErrors)
-    throw new Error('Config is not ok, cant use the REPL script. Have you configured the application and launched the server at least one time?')
+    throw new Error(
+      'Config is not ok, cant use the REPL script. ' +
+      'Have you configured the application and launched the server at least one time?'
+    )
   }
 
   await initDatabaseModels()

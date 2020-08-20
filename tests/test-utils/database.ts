@@ -164,25 +164,29 @@ function testModelUpdate<T extends Model> ({
       const testName = test.testFunc && typeof test.testFunc === 'function'
         ? test.testName
         : Object.keys(test).join('/')
-      it('Optimistic Locking must prevent saving a deprecated instance (using test #1: ' + testName + ')', async function () {
-        const object1 = await ObjectClass.findByPk(objectId)
-        expect(object1, 'Get the object').to.be.not.null
+      it(
+        'Optimistic Locking must prevent saving a deprecated instance (using test #1: ' + testName + ')',
+        async function () {
+          const object1 = await ObjectClass.findByPk(objectId)
+          expect(object1, 'Get the object').to.be.not.null
 
-        const object2 = await ObjectClass.findByPk(objectId)
-        expect(object2, 'Get the object').to.be.not.null
+          const object2 = await ObjectClass.findByPk(objectId)
+          expect(object2, 'Get the object').to.be.not.null
 
-        const values: UpdateTestValues = test.testFunc && typeof test.testFunc === 'function'
-          ? await test.testFunc()
-          : test as UpdateTestValues
+          const values: UpdateTestValues = test.testFunc && typeof test.testFunc === 'function'
+            ? await test.testFunc()
+            : test as UpdateTestValues
 
-        for (const field in values) {
-          (<any>object1!)[field] = values[field];
-          (<any>object2!)[field] = values[field]
+          for (const field in values) {
+            (<any>object1!)[field] = values[field];
+            (<any>object2!)[field] = values[field]
+          }
+
+          await object1!.save()
+          await expect(object2?.save(), 'Object 2 should not be saved')
+            .to.be.rejectedWith(/Attempting to update a stale model instance/)
         }
-
-        await object1!.save()
-        await expect(object2?.save(), 'Object 2 should not be saved').to.be.rejectedWith(/Attempting to update a stale model instance/)
-      })
+      )
     }
   })
 }
@@ -277,17 +281,20 @@ function testModelConstraint<T extends Model> ({
             await expect(object.save()).to.be.rejectedWith()
           })
 
-          it('Should be able to have a length of ' + test.maxLength + ' and should not be truncated', async function () {
-            const changes: any = {}
-            const s = 'x'.repeat(test.maxLength)
-            changes[test.field] = s
-            let object: T | null = new ObjectClass(Object.assign({}, data, changes))
-            await object.save()
-            expect(object, 'Saving a long value is ok').to.not.be.null
+          it(
+            'Should be able to have a length of ' + test.maxLength + ' and should not be truncated',
+            async function () {
+              const changes: any = {}
+              const s = 'x'.repeat(test.maxLength)
+              changes[test.field] = s
+              let object: T | null = new ObjectClass(Object.assign({}, data, changes))
+              await object.save()
+              expect(object, 'Saving a long value is ok').to.not.be.null
 
-            object = await ObjectClass.findByPk(object.id)
-            expect(object && (object as any)[test.field], 'This value is correct, and not truncated').to.be.equal(s)
-          })
+              object = await ObjectClass.findByPk(object.id)
+              expect(object && (object as any)[test.field], 'This value is correct, and not truncated').to.be.equal(s)
+            }
+          )
         })
       } else if (test.type === 'foreign_key') {
         describe('Field ' + test.field + 'is a foreign key', function () {
@@ -320,12 +327,14 @@ function testModelConstraint<T extends Model> ({
             const changes: any = {}
             changes[test.field] = '2020-01-01 12:30:20'
             let object: T | null = new ObjectClass(Object.assign({}, data, changes))
-            expect(object && (object as any)[test.field], 'The time part should be remove before saving').to.be.equal('2020-01-01')
+            expect(object && (object as any)[test.field], 'The time part should be remove before saving')
+              .to.be.equal('2020-01-01')
             await object.save()
             expect(object.id, 'Saving the object').to.not.be.null
             object = await ObjectClass.findByPk(object.id)
             expect(object, 'Get the object').to.not.be.null
-            expect(object && (object as any)[test.field], 'The time part should be removed after saving').to.be.equal('2020-01-01')
+            expect(object && (object as any)[test.field], 'The time part should be removed after saving')
+              .to.be.equal('2020-01-01')
 
             await object?.destroy()
           })

@@ -75,7 +75,9 @@ describe('helpers/config', function () {
         const v = CONFIG.DATABASE.TYPE
         CONFIG.DATABASE.TYPE = 'postgres'
         const r = checkConfig()
-        expect(r.errors).to.be.an('array').to.include('Value for DATABASE.TYPE is incorrect. \'postgres\' is not in [mysql, mariadb]')
+        expect(r.errors).to.be.an('array').to.include(
+          'Value for DATABASE.TYPE is incorrect. \'postgres\' is not in [mysql, mariadb]'
+        )
         // Restore...
         CONFIG.DATABASE.TYPE = v
       })
@@ -84,7 +86,9 @@ describe('helpers/config', function () {
         const v = CONFIG.LOG.FILE.PATH
         CONFIG.LOG.FILE.PATH = 'x*!x'
         const r = checkConfig()
-        expect(r.errors).to.be.an('array').to.include('Value for LOG.FILE.PATH is incorrect. \'x*!x\' is not a valid path')
+        expect(r.errors).to.be.an('array').to.include(
+          'Value for LOG.FILE.PATH is incorrect. \'x*!x\' is not a valid path'
+        )
         // Restore...
         CONFIG.LOG.FILE.PATH = v
       })

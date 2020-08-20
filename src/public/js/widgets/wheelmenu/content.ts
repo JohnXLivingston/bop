@@ -285,7 +285,12 @@ $.widget('bop.bopWheelmenuContent', $.bop.bop, {
     // intersection with the screen boundaries).
     // For this, lets define a function computing the angle
     // depending on the item size and the intersection.
-    function computeAngle (item: JQuery, screenSide: IntersectionSide, intersection: IntersectionSide, lowerBound?: number): number {
+    function computeAngle (
+      item: JQuery,
+      screenSide: IntersectionSide,
+      intersection: IntersectionSide,
+      lowerBound?: number
+    ): number {
       let l: number
       let secondaryAngle: boolean
       if (screenSide === IntersectionSide.top) {

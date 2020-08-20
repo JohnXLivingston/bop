@@ -129,7 +129,8 @@ async function _authenticate (req: express.Request, res: express.Response, next:
       throw new Error('The user is already logged in, but submited wrong authent infos.')
     }
     res.locals.loginFailed = { login }
-    // server.ts call .use([authenticate, some_required_middleware..., authenticatedOrLogin]), next() will display login page.
+    // server.ts call .use([authenticate, some_required_middleware..., authenticatedOrLogin]),
+    // next() will display login page.
     next()
   } catch (err) {
     next(err)

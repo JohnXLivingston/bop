@@ -78,7 +78,9 @@ $.widget('bop.bopWheelmenu', $.bop.bop, {
     }
     if (!coordinates) {
       // Fallback on the screen center.
-      logger.debug('The widget seems to have no position, so we cant compute coordinates, fallback on the screen center.')
+      logger.debug(
+        'The widget seems to have no position, so we cant compute coordinates, fallback on the screen center.'
+      )
       const $window = $(window)
       coordinates = {
         x: ($window.scrollLeft() || 0) + (($window.width() || 0) / 2),

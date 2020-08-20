@@ -34,7 +34,11 @@ interface BopPlanningAttributes {
 declare global {
   namespace JQueryUI {
     interface Widget {
-      <T>(name: 'bop.bopPlanning', base: Function, prototype: T & ThisType<T & WidgetCommonProperties & BopPlanningAttributes>): JQuery;
+      <T>(
+        name: 'bop.bopPlanning',
+        base: Function,
+        prototype: T & ThisType<T & WidgetCommonProperties & BopPlanningAttributes>
+      ): JQuery
     }
   }
 }

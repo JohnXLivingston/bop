@@ -126,7 +126,9 @@ function newServer () {
 
   app.use(i18n)
   app.use(commonConstants) // It as to be after i18n, because of a bug: https://github.com/mozilla/i18n-abide/issues/89
-  app.post(/.*/, getAuthenticateMiddleware([i18nChangeLocale])) // After i18n and commonConstants, in case we have to display a login form.
+  app.post(/.*/, // After i18n and commonConstants, in case we have to display a login form.
+    getAuthenticateMiddleware([i18nChangeLocale])
+  )
 
   app.use('/', controllers.indexRouter)
 

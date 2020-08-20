@@ -38,7 +38,9 @@ export class UserModel extends Model<UserModel> {
   @IsIn([['password']])
   @Default('password')
   @Column({
-    comment: 'This indicates how the user is authenticated. Will be used in future releases. For now the only value is "password".',
+    comment:
+      'This indicates how the user is authenticated. Will be used in future releases. ' +
+      'For now the only value is "password".',
     type: DataType.STRING(10)
   })
   authenticationType!: string
@@ -77,7 +79,10 @@ export class UserModel extends Model<UserModel> {
 
   async isPasswordMatch (password: string) {
     if (this.authenticationType !== 'password') {
-      logger.debug('Calling isPasswordMatch, but the authenticationType is not password but %s', this.authenticationType)
+      logger.debug(
+        'Calling isPasswordMatch, but the authenticationType is not password but %s',
+        this.authenticationType
+      )
       return false
     }
     if (!this.password) {

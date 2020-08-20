@@ -12,7 +12,10 @@ async function cryptPassword (password: string): Promise<string> {
 }
 
 async function generateRandomPassword (): Promise<string> {
-  return cryptoRandomString({ length: 20, characters: 'abcdefghijklmnopqrstuvwzyzABCDEFGHIJKLMNOPQRSTUVWXYZ?,.;:!%*&-_@' })
+  return cryptoRandomString({
+    length: 20,
+    characters: 'abcdefghijklmnopqrstuvwzyzABCDEFGHIJKLMNOPQRSTUVWXYZ?,.;:!%*&-_@'
+  })
 }
 
 export {

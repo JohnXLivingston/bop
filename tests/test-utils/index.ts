@@ -33,7 +33,11 @@ async function removeFiles () {
 }
 
 async function dropRedis () {
-  await asyncExec(`redis-cli -h "localhost" KEYS "${REDISPREFIX}*" | grep -v empty | xargs --no-run-if-empty redis-cli -h "localhost" DEL`)
+  await asyncExec(
+    `redis-cli -h "localhost" KEYS "${REDISPREFIX}*" ` +
+    '| grep -v empty ' +
+    '| xargs --no-run-if-empty redis-cli -h "localhost" DEL'
+  )
 }
 
 async function flushTests () {

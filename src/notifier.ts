@@ -157,7 +157,11 @@ class Notifier {
 
   private _countSockets (userId: string, sessionId: string) {
     logger.debug('The user %s has %d open sockets on this worker.', userId, this.userSockets[userId].length)
-    logger.debug('The user %s has %d sockets for this session on this worker.', userId, this.sessionSockets[sessionId].length)
+    logger.debug(
+      'The user %s has %d sockets for this session on this worker.',
+      userId,
+      this.sessionSockets[sessionId].length
+    )
   }
 
   private _disconnectSession (sessionID: string): void {

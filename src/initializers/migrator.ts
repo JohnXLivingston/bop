@@ -42,7 +42,9 @@ async function _migrateDatabase (forceSync?: boolean) {
   const rows = await sequelizeTypescript.query<{ migrationVersion: number }>(query, options)
   const currentVersion: number | null = rows?.[0]?.migrationVersion
   if (currentVersion === null) {
-    throw new Error('Database contains some tables, but no application. This is unexpected, please check the database manually.')
+    throw new Error(
+      'Database contains some tables, but no application. This is unexpected, please check the database manually.'
+    )
   }
 
   await initDatabaseModels() // Needed for _seeds and .sync().
