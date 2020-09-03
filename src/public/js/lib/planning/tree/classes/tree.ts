@@ -1,6 +1,9 @@
 import { PlanningNode } from './node'
 import { BopObject } from '../../../../../../shared/models/bop-object.model'
 import { Messages } from '../../../../../../shared/models/message'
+import getLogger from '../../../../utils/logger'
+
+const logger = getLogger('lib/planning/tree/classes/tree')
 
 interface PlanningTreeOptions {
   dom: JQuery
@@ -11,13 +14,14 @@ abstract class PlanningTree extends PlanningNode {
   objects: {[key: string]: BopObject} = {}
 
   constructor (options: PlanningTreeOptions) {
-    super(undefined)
+    super('root', undefined)
     this.tree = this
     this.dom = options.dom
   }
 
   dispatch (messages: Messages) {
     messages = this.removeDeprecatedMessages(messages)
+    this.registerObjects(messages)
     messages = this.removeOutOfScopeMessages(messages)
     super.dispatch(messages)
   }
@@ -39,6 +43,15 @@ abstract class PlanningTree extends PlanningNode {
     })
   }
 
+  private registerObjects (messages: Messages): void {
+    for (let i = 0; i < messages.length; i++) {
+      const message = messages[i]
+      const object = message.object
+      if (!object) { continue }
+      this.objects[object.key] = object
+    }
+  }
+
   /**
    * Removes messages that don't concern this tree.
    * For example, for some trees, we are only concerned by tasks that
@@ -47,7 +60,8 @@ abstract class PlanningTree extends PlanningNode {
    */
   private removeOutOfScopeMessages (messages: Messages): Messages {
     // TODO
-    throw new Error('Not implemented yet')
+    logger.error('Not implemented yet')
+    return messages
   }
 }
 

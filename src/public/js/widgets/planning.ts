@@ -6,6 +6,10 @@ import { PlanningTree, getPlanningTree } from '../lib/planning'
 
 import '../../scss/widgets/planning.scss'
 
+import getLogger from '../utils/logger'
+
+const logger = getLogger('widget/planning')
+
 declare global {
   interface JQuery {
     bopPlanning(): JQuery,
@@ -69,6 +73,28 @@ $.widget('bop.bopPlanning', $.bop.bop, {
       throw new Error('Calling getTree too early')
     }
     return this.tree
+  },
+
+  createTestData: function (): void {
+    $.ajax('/api/v1/planning/test-data', {
+      method: 'POST'
+    }).then(
+      () => logger.info('Test data correctly created.'),
+      () => logger.error('Failed creating test data.')
+    )
+  },
+
+  requestData: function (): void {
+    // TODO: error handling.
+    // TODO: waiting indicator, and clean this code.
+    $.ajax('/api/v1/planning/all').then(
+      (data) => {
+        this.getTree().dispatch(data)
+      },
+      () => {
+        logger.error('Failed retrieving data.')
+      }
+    )
   }
 })
 
