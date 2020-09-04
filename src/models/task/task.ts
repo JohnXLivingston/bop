@@ -3,7 +3,9 @@ import {
   BelongsTo,
   Column,
   DataType,
+  DefaultScope,
   ForeignKey,
+  HasMany,
   IsDate,
   IsInt,
   Length,
@@ -11,15 +13,24 @@ import {
   Table
 } from 'sequelize-typescript'
 import { ProjectModel } from '../project'
-import { Task } from '../../shared/models/task'
+import { Task, TaskAllocation, TaskPart } from '../../shared/models/task'
 import { CONSTRAINTS } from '../../helpers/config'
+import { ResourceModel } from '../resource'
 
+@DefaultScope(() => ({
+  include: [{
+    model: TaskAllocationModel,
+    as: 'allocations',
+    order: [['order', 'ASC']],
+    separate: true
+  }]
+}))
 @Table({
   tableName: 'task',
   timestamps: true,
   version: true
 })
-export class TaskModel extends Model<TaskModel> {
+class TaskModel extends Model<TaskModel> {
   @ForeignKey(() => ProjectModel)
   projectId!: number
 
@@ -40,7 +51,7 @@ export class TaskModel extends Model<TaskModel> {
   @AllowNull(false)
   @IsDate
   @Column({
-    comment: 'The start date for this task.',
+    comment: 'The start date for this task. Included.',
     type: DataType.DATEONLY
   })
   start!: string
@@ -48,7 +59,7 @@ export class TaskModel extends Model<TaskModel> {
   @AllowNull(false)
   @IsDate
   @Column({
-    comment: 'The ending date for this task.',
+    comment: 'The ending date for this task. Excluded.',
     type: DataType.DATEONLY
   })
   end!: string
@@ -61,7 +72,21 @@ export class TaskModel extends Model<TaskModel> {
   })
   work!: number
 
+  @HasMany(() => TaskAllocationModel, {
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE'
+  })
+  allocations?: TaskAllocationModel[]
+
   toFormattedJSON (): Task {
+    if (!this.allocations) {
+      throw new Error('You cant call task.toFormattedJSON if allocations are not loaded.')
+    }
+    const allocationsJSON: TaskAllocation[] = []
+    for (let i = 0; i < this.allocations.length; i++) {
+      const allocation = this.allocations[i]
+      allocationsJSON.push(allocation.toFormattedJSON())
+    }
     const json: Task = {
       id: this.id,
       type: 'task',
@@ -71,8 +96,154 @@ export class TaskModel extends Model<TaskModel> {
       projectId: this.projectId,
       start: this.start,
       end: this.end,
-      work: this.work
+      work: this.work,
+      allocations: allocationsJSON
     }
     return json
   }
+}
+
+@DefaultScope(() => ({
+  include: [{
+    model: TaskPartModel,
+    as: 'parts',
+    order: [['start', 'ASC']],
+    separate: true
+  }]
+}))
+@Table({
+  tableName: 'taskallocation',
+  timestamps: false,
+  version: false
+})
+class TaskAllocationModel extends Model<TaskAllocationModel> {
+  @ForeignKey(() => TaskModel)
+  taskId!: number
+
+  @AllowNull(false)
+  @Column({
+    comment: 'The allocation position on the task.',
+    type: DataType.INTEGER.UNSIGNED
+  })
+  order!: number
+
+  @AllowNull(true)
+  @ForeignKey(() => ResourceModel)
+  @Column({
+    comment: 'An optional allocated resource.'
+  })
+  resourceId?:number
+
+  @AllowNull(false)
+  @IsDate
+  @Column({
+    comment: 'The start date for this allocation. Included.',
+    type: DataType.DATEONLY
+  })
+  start!: string
+
+  @AllowNull(false)
+  @IsDate
+  @Column({
+    comment: 'The ending date for this allocation. Excluded.',
+    type: DataType.DATEONLY
+  })
+  end!: string
+
+  @AllowNull(false)
+  @IsInt
+  @Column({
+    comment: 'Working time in minutes for this line.',
+    type: DataType.INTEGER
+  })
+  work!: number
+
+  @HasMany(() => TaskPartModel, {
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE'
+  })
+  parts?: TaskPartModel[]
+
+  toFormattedJSON (): TaskAllocation {
+    if (!this.parts) {
+      throw new Error('You cant call taskallocation.toFormattedJSON if allocation parts are not loaded.')
+    }
+
+    return {
+      id: this.id,
+      type: 'taskallocation',
+      start: this.start,
+      end: this.end,
+      order: this.order,
+      work: this.work,
+      resourceId: this.resourceId,
+      parts: TaskPartModel.toFormattedJSON(this.parts)
+    }
+  }
+}
+
+@Table({
+  tableName: 'taskpart',
+  timestamps: false,
+  version: false
+})
+class TaskPartModel extends Model<TaskPartModel> {
+  @ForeignKey(() => TaskModel)
+  taskId!: number
+
+  @ForeignKey(() => TaskAllocationModel)
+  allocationId!: number
+
+  @AllowNull(false)
+  @IsDate
+  @Column({
+    comment: 'The starting date of this part. It ends at the next part ' +
+              '(with same assigned resource).',
+    type: DataType.DATEONLY
+  })
+  start!: string
+
+  @AllowNull(false)
+  @Column({
+    comment: 'The work load in minutes per day',
+    type: DataType.INTEGER
+  })
+  load!: number
+
+  @AllowNull(false)
+  @Column({
+    comment: 'Indicates if this part should be automatically merged ' +
+              'with adjacent parts. It meens that it is not a requested ' +
+              'division (ex: week-ends).',
+    type: DataType.BOOLEAN
+  })
+  autoMerge!: boolean
+
+  static toFormattedJSON (parts: TaskPartModel[]): TaskPart[] {
+    const result: TaskPart[] = []
+    for (let i = 0; i < parts.length; i++) {
+      const part = parts[i]
+      const nextPart = parts[i + 1]
+      if (nextPart && nextPart.start <= part.start) {
+        throw new Error('It seems that task parts are not correctly sorted.')
+      }
+      result.push({
+        id: part.id,
+        type: 'taskpart',
+        start: part.start,
+        end: nextPart ? nextPart.start : '9999-12-31',
+        load: part.load,
+        autoMerge: part.autoMerge
+      })
+    }
+    return result
+  }
+
+  // TODO: unique index for task+allocation+start?
+}
+
+export {
+  TaskModel,
+  TaskAllocationModel,
+  TaskPartModel
 }

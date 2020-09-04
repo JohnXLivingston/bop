@@ -5,7 +5,11 @@ import * as chai from 'chai'
 import { flushTests, flushTestsAndInitDB } from '../test-utils'
 import * as dbTest from '../test-utils/database'
 
-import { TaskModel, ProjectModel } from '../../src/models'
+import {
+  ProjectModel,
+  ResourceModel,
+  TaskModel
+} from '../../src/models'
 import { CONSTRAINTS } from '../../src/helpers/config/constants'
 
 const expect = chai.expect
@@ -14,6 +18,8 @@ chai.use(require('chai-as-promised'))
 describe('models/task/task.ts', function () {
   let project1: ProjectModel
   let project2: ProjectModel
+  let resource1: ResourceModel
+  let resource2: ResourceModel
   const task1Id = 1
   const task1Data = {
     name: 'My first task',
@@ -31,7 +37,20 @@ describe('models/task/task.ts', function () {
     project2 = new ProjectModel({
       name: 'Project 2'
     })
-    await Promise.all([project1.save(), project2.save()])
+    resource1 = new ResourceModel({
+      name: 'Resource 1',
+      resourceType: 'person'
+    })
+    resource2 = new ResourceModel({
+      name: 'Resource 2',
+      resourceType: 'person'
+    })
+    await Promise.all([
+      project1.save(),
+      project2.save(),
+      resource1.save(),
+      resource2.save()
+    ])
     task1Data.projectId = project1.id
   })
   after(flushTests)
@@ -97,6 +116,9 @@ describe('models/task/task.ts', function () {
     ]
   })
 
+  it('Test taskallocation table.')
+  it('Test taskpart table.')
+
   describe('Task methods', function () {
     describe('toFormattedJSON', function () {
       it('Should work', async function () {
@@ -105,10 +127,78 @@ describe('models/task/task.ts', function () {
           projectId: project2.id,
           start: '2021-01-01',
           end: '2021-01-31',
-          work: 14 * 20 * 60
+          work: 14 * 20 * 60,
+          allocations: [
+            // allocations are not is the correct order here
+            {
+              // allocation2
+              resourceId: resource2.id,
+              order: 2,
+              start: '2021-01-01',
+              end: '2021-01-31',
+              work: 14 * 20 * 60 / 2,
+              parts: [
+                {
+                  // allocation2part1
+                  start: '2021-01-01',
+                  load: 60,
+                  autoMerge: true
+                },
+                {
+                  // allocation2part2
+                  start: '2021-01-31',
+                  load: 0,
+                  autoMerge: true
+                }
+              ]
+            },
+            {
+              // allocation1
+              resourceId: resource1.id,
+              order: 1,
+              start: '2021-01-01',
+              end: '2021-01-15',
+              work: 14 * 20 * 60 / 2,
+              parts: [
+                // parts are not is the correct order here
+                {
+                  // allocation1part2
+                  start: '2021-01-15',
+                  load: 0,
+                  autoMerge: true
+                },
+                {
+                  // allocation1part1
+                  start: '2021-01-01',
+                  load: 120,
+                  autoMerge: true
+                }
+              ]
+            }
+          ]
+        }, {
+          // TODO: use a transaction?
+          include: [{
+            association: 'allocations',
+            include: [{
+              association: 'parts'
+            }]
+          }]
         })
         await task.save()
-        const taskId = task?.id
+        const taskId = task.id
+        const allocation1 = task.allocations ? task.allocations[1] : null
+        const allocation2 = task.allocations ? task.allocations[0] : null
+        const allocation1Id = allocation1?.id
+        const allocation2Id = allocation2?.id
+        const allocation1part1 = allocation1?.parts ? allocation1.parts[1] : null
+        const allocation1part2 = allocation1?.parts ? allocation1.parts[0] : null
+        const allocation2part1 = allocation2?.parts ? allocation2.parts[0] : null
+        const allocation2part2 = allocation2?.parts ? allocation2.parts[1] : null
+        const allocation1part1Id = allocation1part1?.id
+        const allocation1part2Id = allocation1part2?.id
+        const allocation2part1Id = allocation2part1?.id
+        const allocation2part2Id = allocation2part2?.id
         expect(taskId, 'Should have an id').to.not.be.null
         task = await TaskModel.findByPk(taskId)
         expect(task, 'Should be able to retrieve the task').to.not.be.null
@@ -121,7 +211,63 @@ describe('models/task/task.ts', function () {
           projectId: project2.id,
           start: '2021-01-01',
           end: '2021-01-31',
-          work: 14 * 20 * 60
+          work: 14 * 20 * 60,
+          allocations: [
+            {
+              id: allocation1Id,
+              resourceId: resource1.id,
+              type: 'taskallocation',
+              order: 1,
+              start: '2021-01-01',
+              end: '2021-01-15',
+              work: 14 * 20 * 60 / 2,
+              parts: [
+                {
+                  id: allocation1part1Id,
+                  type: 'taskpart',
+                  start: '2021-01-01',
+                  end: '2021-01-15',
+                  load: 120,
+                  autoMerge: true
+                },
+                {
+                  id: allocation1part2Id,
+                  type: 'taskpart',
+                  start: '2021-01-15',
+                  end: '9999-12-31',
+                  load: 0,
+                  autoMerge: true
+                }
+              ]
+            },
+            {
+              id: allocation2Id,
+              resourceId: resource2.id,
+              type: 'taskallocation',
+              order: 2,
+              start: '2021-01-01',
+              end: '2021-01-31',
+              work: 14 * 20 * 60 / 2,
+              parts: [
+                {
+                  id: allocation2part1Id,
+                  type: 'taskpart',
+                  start: '2021-01-01',
+                  end: '2021-01-31',
+                  load: 60,
+                  autoMerge: true
+                },
+                {
+                  id: allocation2part2Id,
+                  type: 'taskpart',
+                  start: '2021-01-31',
+                  end: '9999-12-31',
+                  load: 0,
+                  autoMerge: true
+                }
+              ]
+            }
+          ]
         })
       })
     })

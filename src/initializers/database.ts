@@ -6,6 +6,8 @@ import {
   ApplicationModel,
   ProjectModel,
   TaskModel,
+  TaskAllocationModel,
+  TaskPartModel,
   UserModel,
   ResourceModel
 } from '../models'
@@ -52,6 +54,8 @@ async function initDatabaseModels () {
     ApplicationModel,
     ProjectModel,
     TaskModel,
+    TaskAllocationModel,
+    TaskPartModel,
     UserModel,
     ResourceModel
   ])
