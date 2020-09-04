@@ -61,7 +61,7 @@ module.exports = {
     {
       comment: 'Controllers can only include low level code or middlewares.',
       from: { path: '^src/controllers/' },
-      to: { path: '^src/(controllers|helpers|middlewares)/|^node_modules/' }
+      to: { path: '^src/(controllers|helpers|middlewares|models)/|^node_modules/' }
     },
     {
       comment: 'Middlewares can include most of backend code.',
