@@ -20,9 +20,16 @@ interface TestArgs<T extends Model> {
 }
 
 interface TestArgsCreationAndDeletion<T extends Model> extends TestArgs<T> {
-  data: any,
+  data: any | Function,
   mandatoryFields?: string[],
   expectedObjectId?: number
+}
+
+function resolveData (data: any): any {
+  if (typeof data === 'function') {
+    return data()
+  }
+  return data
 }
 
 function testModelCreationAndDeletion<T extends Model> ({
@@ -37,7 +44,8 @@ function testModelCreationAndDeletion<T extends Model> ({
     let object: T | null
     let objectId: number
     it('Should be able to create a ' + name, async function () {
-      object = new ObjectClass(data)
+      const resolvedData = resolveData(data)
+      object = new ObjectClass(resolvedData)
       await object.save()
 
       expect(object.id, 'Id not null').to.be.not.null
@@ -51,7 +59,7 @@ function testModelCreationAndDeletion<T extends Model> ({
 
       object = await ObjectClass.findByPk(objectId)
       expect(object, 'Not null').to.be.not.null
-      expect(object, 'Include initial datas').to.deep.include(data)
+      expect(object, 'Include initial datas').to.deep.include(resolvedData)
       if (optimisticLocking) {
         expect(object?.version, 'Opimistic Locking').to.be.equal(0)
       }
@@ -67,7 +75,8 @@ function testModelCreationAndDeletion<T extends Model> ({
       for (let i = 0; i < mandatoryFields.length; i++) {
         const field = mandatoryFields[i]
         it(`Should not create a ${name} with missing mandatory field "${field}"`, async function () {
-          const project = new ObjectClass(omit(data, field))
+          const resolvedData = resolveData(data)
+          const project = new ObjectClass(omit(resolvedData, field))
           await expect(project.save()).to.be.rejectedWith(new RegExp(`\\.${field} cannot be null`))
         })
       }
@@ -83,11 +92,11 @@ function testModelCreationAndDeletion<T extends Model> ({
   })
 }
 
-type UpdateTestValues = {[key: string]: string | number}
+type UpdateTestValues = {[key: string]: string | number | boolean | null }
 type UpdateTestDynamic = { testName: string, testFunc: () => UpdateTestValues | Promise<UpdateTestValues> }
 type UpdateTest = UpdateTestValues | UpdateTestDynamic
 interface TestArgsUpdate<T extends Model> extends TestArgs<T> {
-  data: any,
+  data: any | Function,
   updateTests: UpdateTest[]
 }
 
@@ -102,7 +111,8 @@ function testModelUpdate<T extends Model> ({
     let objectId: number
     let version: number | undefined
     before(async () => {
-      const object = new ObjectClass(data)
+      const resolvedData = resolveData(data)
+      const object = new ObjectClass(resolvedData)
       await object.save()
       objectId = object.id
       if (optimisticLocking) {
@@ -208,7 +218,7 @@ interface ConstraintTestTooLong {
   maxLength: number,
 }
 interface ConstraintTestForeignKey {
-  type: 'foreign_key',
+  type: 'foreign_key' | 'nullable_foreign_key',
   field: string
 }
 interface ConstraintTestDateOnly {
@@ -216,7 +226,11 @@ interface ConstraintTestDateOnly {
   field: string
 }
 interface ConstraintTestInteger {
-  type: 'integer',
+  type: 'integer' | 'unsigned_integer',
+  field: string
+}
+interface ConstraintTestBoolean {
+  type: 'boolean',
   field: string
 }
 type ConstraintTest = ConstraintTestUnique
@@ -225,9 +239,10 @@ type ConstraintTest = ConstraintTestUnique
   | ConstraintTestForeignKey
   | ConstraintTestDateOnly
   | ConstraintTestInteger
+  | ConstraintTestBoolean
 interface TestArgsConstraint<T extends Model> extends TestArgs<T> {
   constraintTests: ConstraintTest[],
-  data: any
+  data: any | Function
 }
 
 function testModelConstraint<T extends Model> ({
@@ -242,10 +257,11 @@ function testModelConstraint<T extends Model> ({
       if (test.type === 'unique') {
         describe('Key ' + test.name + ' is unique', function () {
           it('Should be unique', async function () {
+            const resolvedData = resolveData(data)
             const object1 = new ObjectClass(Object.assign({}, test.data1))
             await object1.save()
             expect(object1.id, 'Object 1 should be ok').to.be.not.null
-            const object2 = new ObjectClass(Object.assign({}, data, test.data2))
+            const object2 = new ObjectClass(Object.assign({}, resolvedData, test.data2))
             await expect(object2.save(), 'Object 2 should not be ok').to.be.rejectedWith()
           })
         })
@@ -253,18 +269,20 @@ function testModelConstraint<T extends Model> ({
         describe('Field ' + test.field + ' should correctly handle the min length limit', function () {
           if (test.minLength > 0) {
             it('Should not be shorter than ' + test.minLength, async function () {
+              const resolvedData = resolveData(data)
               const changes: any = {}
               changes[test.field] = 'x'.repeat(test.minLength - 1)
-              const object = new ObjectClass(Object.assign({}, data, changes))
+              const object = new ObjectClass(Object.assign({}, resolvedData, changes))
               await expect(object.save()).to.be.rejectedWith()
             })
           }
 
           it('Should be able to have a length of ' + test.minLength, async function () {
+            const resolvedData = resolveData(data)
             const changes: any = {}
             const s = 'x'.repeat(test.minLength)
             changes[test.field] = s
-            let object: T | null = new ObjectClass(Object.assign({}, data, changes))
+            let object: T | null = new ObjectClass(Object.assign({}, resolvedData, changes))
             await object.save()
             expect(object.id, 'Saving a short value is ok').to.not.be.null
 
@@ -275,44 +293,71 @@ function testModelConstraint<T extends Model> ({
       } else if (test.type === 'too_long') {
         describe('Field ' + test.field + ' should correctly handle the max length limit', function () {
           it('Should not be longer than ' + test.maxLength, async function () {
+            const resolvedData = resolveData(data)
             const changes: any = {}
             changes[test.field] = 'x'.repeat(test.maxLength + 1)
-            const object = new ObjectClass(Object.assign({}, data, changes))
+            const object = new ObjectClass(Object.assign({}, resolvedData, changes))
             await expect(object.save()).to.be.rejectedWith()
           })
 
           it(
             'Should be able to have a length of ' + test.maxLength + ' and should not be truncated',
             async function () {
+              const resolvedData = resolveData(data)
               const changes: any = {}
               const s = 'x'.repeat(test.maxLength)
               changes[test.field] = s
-              let object: T | null = new ObjectClass(Object.assign({}, data, changes))
+              let object: T | null = new ObjectClass(Object.assign({}, resolvedData, changes))
               await object.save()
-              expect(object, 'Saving a long value is ok').to.not.be.null
+              expect(object?.id, 'Saving a long value is ok').to.not.be.null
 
               object = await ObjectClass.findByPk(object.id)
               expect(object && (object as any)[test.field], 'This value is correct, and not truncated').to.be.equal(s)
             }
           )
         })
-      } else if (test.type === 'foreign_key') {
-        describe('Field ' + test.field + 'is a foreign key', function () {
+      } else if (test.type === 'foreign_key' || test.type === 'nullable_foreign_key') {
+        describe('Field ' + test.field + ' is a ' + test.type, function () {
           it('Should not accept unknown values', async function () {
+            const resolvedData = resolveData(data)
             const changes: any = {}
             changes[test.field] = 13241458215 // this is a random id that should not exist in database.
-            const object = new ObjectClass(Object.assign({}, data, changes))
+            const object = new ObjectClass(Object.assign({}, resolvedData, changes))
             await expect(object.save()).to.be.rejectedWith()
           })
+
+          if (test.type === 'nullable_foreign_key') {
+            it('Should accept null values', async function () {
+              const resolvedData = resolveData(data)
+              const changes: any = {}
+              changes[test.field] = null
+              let object: T | null = new ObjectClass(Object.assign({}, resolvedData, changes))
+
+              await object.save()
+              expect(object?.id, 'Saving a null value is ok').to.not.be.null
+
+              object = await ObjectClass.findByPk(object?.id)
+              expect(object && (object as any)[test.field], 'The null value is correctly saved.').to.be.equal(null)
+            })
+          // } else {
+          //   it('Should not accept null values', async function () {
+          //     const resolvedData = resolveData(data)
+          //     const changes: any = {}
+          //     changes[test.field] = null
+          //     const object = new ObjectClass(Object.assign({}, resolvedData, changes))
+          //     await expect(object.save()).to.be.rejectedWith()
+          //   })
+          }
 
           it('TODO: Test remote object retrieval')
         })
       } else if (test.type === 'dateonly') {
         describe('Field ' + test.field + ' is a dateonly field', function () {
           it('Should not accept something that is not a date', async function () {
+            const resolvedData = resolveData(data)
             const changes: any = {}
             changes[test.field] = 'this is not a date'
-            const object = new ObjectClass(Object.assign({}, data, changes))
+            const object = new ObjectClass(Object.assign({}, resolvedData, changes))
             await expect(object.save()).to.be.rejectedWith()
           })
 
@@ -324,9 +369,10 @@ function testModelConstraint<T extends Model> ({
           })
 
           it('Should truncate time part', async function () {
+            const resolvedData = resolveData(data)
             const changes: any = {}
             changes[test.field] = '2020-01-01 12:30:20'
-            let object: T | null = new ObjectClass(Object.assign({}, data, changes))
+            let object: T | null = new ObjectClass(Object.assign({}, resolvedData, changes))
             expect(object && (object as any)[test.field], 'The time part should be remove before saving')
               .to.be.equal('2020-01-01')
             await object.save()
@@ -339,19 +385,41 @@ function testModelConstraint<T extends Model> ({
             await object?.destroy()
           })
         })
-      } else if (test.type === 'integer') {
-        describe('Field ' + test.field + ' is a integer field', function () {
+      } else if (test.type === 'integer' || test.type === 'unsigned_integer') {
+        describe('Field ' + test.field + ' is a ' + test.type + ' field', function () {
           it('Should not accept something that is not a number', async function () {
+            const resolvedData = resolveData(data)
             const changes: any = {}
             changes[test.field] = 'this is not an integer'
-            const object = new ObjectClass(Object.assign({}, data, changes))
+            const object = new ObjectClass(Object.assign({}, resolvedData, changes))
             await expect(object.save()).to.be.rejectedWith()
           })
 
           it('Should not accept a number that is not an integer', async function () {
+            const resolvedData = resolveData(data)
             const changes: any = {}
             changes[test.field] = 13.12
-            const object = new ObjectClass(Object.assign({}, data, changes))
+            const object = new ObjectClass(Object.assign({}, resolvedData, changes))
+            await expect(object.save()).to.be.rejectedWith()
+          })
+
+          if (test.type === 'unsigned_integer') {
+            it('Should not accept a negative number', async function () {
+              const resolvedData = resolveData(data)
+              const changes: any = {}
+              changes[test.field] = -1
+              const object = new ObjectClass(Object.assign({}, resolvedData, changes))
+              await expect(object.save()).to.be.rejectedWith()
+            })
+          }
+        })
+      } else if (test.type === 'boolean') {
+        describe('Field ' + test.field + ' is a boolean field', function () {
+          it('Should not accept something that is not a boolean', async function () {
+            const resolvedData = resolveData(data)
+            const changes: any = {}
+            changes[test.field] = 'this is not a boolean'
+            const object = new ObjectClass(Object.assign({}, resolvedData, changes))
             await expect(object.save()).to.be.rejectedWith()
           })
         })

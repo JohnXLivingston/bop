@@ -8,7 +8,9 @@ import * as dbTest from '../test-utils/database'
 import {
   ProjectModel,
   ResourceModel,
-  TaskModel
+  TaskModel,
+  TaskAllocationModel,
+  TaskPartModel
 } from '../../src/models'
 import { CONSTRAINTS } from '../../src/helpers/config/constants'
 
@@ -55,69 +57,228 @@ describe('models/task/task.ts', function () {
   })
   after(flushTests)
 
-  dbTest.testModelCreationAndDeletion<TaskModel>({
-    name: 'Task',
-    ObjectClass: TaskModel,
-    data: task1Data,
-    mandatoryFields: ['name', 'projectId', 'start', 'end', 'work'],
-    expectedObjectId: task1Id,
-    optimisticLocking: true
+  describe('task table', function () {
+    dbTest.testModelCreationAndDeletion<TaskModel>({
+      name: 'Task',
+      ObjectClass: TaskModel,
+      data: task1Data,
+      mandatoryFields: ['name', 'projectId', 'start', 'end', 'work'],
+      expectedObjectId: task1Id,
+      optimisticLocking: true
+    })
+
+    dbTest.testModelUpdate<TaskModel>({
+      name: 'Task',
+      ObjectClass: TaskModel,
+      data: task1Data,
+      optimisticLocking: true,
+      updateTests: [
+        { name: 'Anoter name' },
+        { start: '2020-06-01', end: '2020-06-30', work: 7 * 19 * 60 },
+        { testName: 'projectId', testFunc: () => { return { projectId: project2.id } } }
+      ]
+    })
+
+    dbTest.testModelConstraint<TaskModel>({
+      name: 'Task',
+      ObjectClass: TaskModel,
+      data: {
+        name: 'My second task',
+        projectId: 1,
+        start: '2020-01-01',
+        end: '2020-01-31',
+        work: 7 * 20 * 60
+      },
+      constraintTests: [
+        {
+          type: 'foreign_key',
+          field: 'projectId'
+        },
+        {
+          type: 'too_short',
+          field: 'name',
+          minLength: CONSTRAINTS.TASK.NAME.min
+        },
+        {
+          type: 'too_long',
+          field: 'name',
+          maxLength: CONSTRAINTS.TASK.NAME.max
+        },
+        {
+          type: 'dateonly',
+          field: 'start'
+        },
+        {
+          type: 'dateonly',
+          field: 'end'
+        },
+        {
+          type: 'integer',
+          field: 'work'
+        }
+      ]
+    })
   })
 
-  dbTest.testModelUpdate<TaskModel>({
-    name: 'Task',
-    ObjectClass: TaskModel,
-    data: task1Data,
-    optimisticLocking: true,
-    updateTests: [
-      { name: 'Anoter name' },
-      { start: '2020-06-01', end: '2020-06-30', work: 7 * 19 * 60 },
-      { testName: 'projectId', testFunc: () => { return { projectId: project2.id } } }
-    ]
-  })
-
-  dbTest.testModelConstraint<TaskModel>({
-    name: 'Task',
-    ObjectClass: TaskModel,
-    data: {
-      name: 'My second task',
-      projectId: 1,
-      start: '2020-01-01',
-      end: '2020-01-31',
-      work: 7 * 20 * 60
-    },
-    constraintTests: [
-      {
-        type: 'foreign_key',
-        field: 'projectId'
-      },
-      {
-        type: 'too_short',
-        field: 'name',
-        minLength: CONSTRAINTS.TASK.NAME.min
-      },
-      {
-        type: 'too_long',
-        field: 'name',
-        maxLength: CONSTRAINTS.TASK.NAME.max
-      },
-      {
-        type: 'dateonly',
-        field: 'start'
-      },
-      {
-        type: 'dateonly',
-        field: 'end'
-      },
-      {
-        type: 'integer',
-        field: 'work'
+  describe('taskallocation table', function () {
+    let task: TaskModel
+    before(async function () {
+      task = new TaskModel(task1Data)
+      await task.save()
+    })
+    // taskallocation1Data must be a function, because resource1 will only be
+    // instanciated in «it» calls.
+    const taskallocation1Data = () => {
+      if (!resource1.id) {
+        throw new Error('Test incorrect, missing resource id')
       }
-    ]
+      return {
+        taskId: task.id,
+        order: 1,
+        resourceId: resource1.id,
+        start: '2020-09-01',
+        end: '2020-09-30',
+        work: 8 * 20 * 60
+      }
+    }
+    dbTest.testModelCreationAndDeletion<TaskAllocationModel>({
+      name: 'TaskAllocation',
+      ObjectClass: TaskAllocationModel,
+      data: taskallocation1Data,
+      mandatoryFields: ['order', 'start', 'end', 'work'],
+      optimisticLocking: false
+    })
+
+    dbTest.testModelUpdate<TaskAllocationModel>({
+      name: 'TaskAllocation',
+      ObjectClass: TaskAllocationModel,
+      data: taskallocation1Data,
+      optimisticLocking: false,
+      updateTests: [
+        { order: 2 },
+        { resourceId: null },
+        { start: '2020-06-01', end: '2020-06-30', work: 7 * 19 * 60 }
+      ]
+    })
+
+    dbTest.testModelConstraint<TaskAllocationModel>({
+      name: 'TaskAllocation',
+      ObjectClass: TaskAllocationModel,
+      data: () => {
+        return {
+          taskId: task.id,
+          order: 2,
+          resourceId: resource1.id,
+          start: '2020-09-01',
+          end: '2020-09-30',
+          work: 8 * 20 * 60
+        }
+      },
+      constraintTests: [
+        {
+          type: 'foreign_key',
+          field: 'taskId'
+        },
+        {
+          type: 'nullable_foreign_key',
+          field: 'resourceId'
+        },
+        {
+          type: 'unsigned_integer',
+          field: 'order'
+        },
+        {
+          type: 'dateonly',
+          field: 'start'
+        },
+        {
+          type: 'dateonly',
+          field: 'end'
+        },
+        {
+          type: 'integer',
+          field: 'work'
+        }
+      ]
+    })
   })
 
-  it('Test taskallocation table.')
-  it('Test taskpart table.')
+  describe('Test taskpart table.', function () {
+    let task: TaskModel
+    let allocation: TaskAllocationModel
+    before(async function () {
+      task = new TaskModel(task1Data)
+      await task.save()
+      allocation = new TaskAllocationModel({
+        taskId: task.id,
+        order: 1,
+        resourceId: resource1.id,
+        start: '2020-09-01',
+        end: '2020-09-30',
+        work: 8 * 20 * 60
+      })
+      await allocation.save()
+    })
+    // taskpart1Data must be a function, because resource1 will only be
+    // instanciated in «it» calls.
+    const taskpart1Data = () => {
+      return {
+        allocationId: allocation.id,
+        start: '2020-09-01',
+        load: 8 * 60,
+        autoMerge: true
+      }
+    }
+    dbTest.testModelCreationAndDeletion<TaskPartModel>({
+      name: 'TaskPart',
+      ObjectClass: TaskPartModel,
+      data: taskpart1Data,
+      mandatoryFields: ['start', 'load', 'autoMerge'],
+      optimisticLocking: false
+    })
+
+    dbTest.testModelUpdate<TaskPartModel>({
+      name: 'TaskPart',
+      ObjectClass: TaskPartModel,
+      data: taskpart1Data,
+      optimisticLocking: false,
+      updateTests: [
+        { autoMerge: false },
+        { start: '2020-06-01', load: 7 * 60 }
+      ]
+    })
+
+    dbTest.testModelConstraint<TaskPartModel>({
+      name: 'TaskPart',
+      ObjectClass: TaskPartModel,
+      data: () => {
+        return {
+          allocationId: allocation.id,
+          start: '2020-09-01',
+          load: 8 * 60,
+          autoMerge: true
+        }
+      },
+      constraintTests: [
+        {
+          type: 'foreign_key',
+          field: 'allocationId'
+        },
+        {
+          type: 'dateonly',
+          field: 'start'
+        },
+        {
+          type: 'integer',
+          field: 'load'
+        },
+        {
+          type: 'boolean',
+          field: 'autoMerge'
+        }
+      ]
+    })
+  })
 
   describe('Task methods', function () {
     describe('toFormattedJSON', function () {

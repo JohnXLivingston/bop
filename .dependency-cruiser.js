@@ -111,8 +111,11 @@ module.exports = {
       severity: 'error',
       comment:
         'This dependency is part of a circular relationship. You might want to revise ' +
-        'your solution (i.e. use dependency inversion, make sure the modules have a single responsibility) ',
-      from: {},
+        'your solution (i.e. use dependency inversion, make sure the modules have a single responsibility). ' +
+        'NB: src/models is ignored because is it attended to have circular dependencies.',
+      from: {
+        pathNot: '^src/models/'
+      },
       to: {
         circular: true
       }

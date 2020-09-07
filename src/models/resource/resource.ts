@@ -1,6 +1,7 @@
-import { Model, Table, AllowNull, IsIn, Column, DataType, Length } from 'sequelize-typescript'
+import { Model, Table, AllowNull, IsIn, Column, DataType, Length, HasMany } from 'sequelize-typescript'
 import { CONSTRAINTS } from '../../helpers/config'
 import { Resource } from '../../shared/models/resource'
+import { TaskAllocationModel } from '../task/task'
 
 @Table({
   tableName: 'resource',
@@ -22,6 +23,15 @@ export class ResourceModel extends Model<ResourceModel> {
     type: DataType.STRING(CONSTRAINTS.RESOURCE.NAME.max)
   })
   name!: string
+
+  @HasMany(() => TaskAllocationModel, {
+    foreignKey: {
+      allowNull: true
+    },
+    onUpdate: 'CASCADE',
+    onDelete: 'SET NULL'
+  })
+  taskAllocations!: TaskAllocationModel[]
 
   toFormattedJSON (): Resource {
     return {

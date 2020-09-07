@@ -6,16 +6,18 @@ import {
   DefaultScope,
   ForeignKey,
   HasMany,
+  Is,
   IsDate,
   IsInt,
   Length,
+  Min,
   Model,
   Table
 } from 'sequelize-typescript'
 import { ProjectModel } from '../project'
 import { Task, TaskAllocation, TaskPart } from '../../shared/models/task'
 import { CONSTRAINTS } from '../../helpers/config'
-import { ResourceModel } from '../resource'
+import { ResourceModel } from '../resource/resource'
 
 @DefaultScope(() => ({
   include: [{
@@ -118,21 +120,24 @@ class TaskModel extends Model<TaskModel> {
 })
 class TaskAllocationModel extends Model<TaskAllocationModel> {
   @ForeignKey(() => TaskModel)
+  @Column
   taskId!: number
 
   @AllowNull(false)
+  @IsInt
+  @Min(0)
   @Column({
     comment: 'The allocation position on the task.',
     type: DataType.INTEGER.UNSIGNED
   })
   order!: number
 
-  @AllowNull(true)
   @ForeignKey(() => ResourceModel)
+  @AllowNull(true)
   @Column({
     comment: 'An optional allocated resource.'
   })
-  resourceId?:number
+  resourceId?: number
 
   @AllowNull(false)
   @IsDate
@@ -188,10 +193,8 @@ class TaskAllocationModel extends Model<TaskAllocationModel> {
   version: false
 })
 class TaskPartModel extends Model<TaskPartModel> {
-  @ForeignKey(() => TaskModel)
-  taskId!: number
-
   @ForeignKey(() => TaskAllocationModel)
+  @Column
   allocationId!: number
 
   @AllowNull(false)
@@ -204,13 +207,19 @@ class TaskPartModel extends Model<TaskPartModel> {
   start!: string
 
   @AllowNull(false)
+  @IsInt
   @Column({
-    comment: 'The work load in minutes per day',
+    comment: 'The work load in minutes per day.',
     type: DataType.INTEGER
   })
   load!: number
 
   @AllowNull(false)
+  @Is('Boolean', (value) => {
+    if (typeof value !== 'boolean') {
+      throw new Error(`"${value}" is not a boolean.`)
+    }
+  })
   @Column({
     comment: 'Indicates if this part should be automatically merged ' +
               'with adjacent parts. It meens that it is not a requested ' +
