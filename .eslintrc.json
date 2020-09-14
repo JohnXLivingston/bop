@@ -26,7 +26,7 @@
     ],
     "ignorePatterns": ["node_modules/", "dist/", "webpack.config.js", "jquery"],
     "rules": {
-        "@typescript-eslint/no-unused-vars": "warn",
+        "@typescript-eslint/no-unused-vars": [2, {"argsIgnorePattern": "^_"}],
         "@typescript-eslint/no-floating-promises": "error",
         "@typescript-eslint/no-misused-promises": "error",
         "max-len": [
