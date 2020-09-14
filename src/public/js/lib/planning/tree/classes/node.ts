@@ -1,5 +1,5 @@
 import { PlanningTree } from './tree'
-import { Message, Messages } from '../../../../../../shared/models/message'
+import { MessageObject } from '../../../../../../shared/objects/message/message.object'
 import { BopObject } from '../../../../../../shared/models/bop-object.model'
 import getLogger from '../../../../utils/logger'
 
@@ -26,7 +26,7 @@ abstract class PlanningNode {
     return this.tree.objects[key] || null
   }
 
-  dispatch (messages: Messages) {
+  dispatch (messages: MessageObject[]) {
     // Creating missing childs...
     this.createMissingChilds(messages)
     // TODO: remove/disable deprecated childs
@@ -34,7 +34,7 @@ abstract class PlanningNode {
     logger.error('Not implemented yet')
   }
 
-  createMissingChilds (messages: Messages): void {
+  createMissingChilds (messages: MessageObject[]): void {
     for (let i = 0; i < messages.length; i++) {
       const message = messages[i]
       if (message.messageType === 'delete') { continue }
@@ -65,7 +65,7 @@ abstract class PlanningNode {
     }
   }
 
-  abstract childKeyClassForMessage (message: Message): NodeKeyClass | null
+  abstract childKeyClassForMessage (message: MessageObject): NodeKeyClass | null
 
   destroy (): void {
     // TODO: remove node from DOM.

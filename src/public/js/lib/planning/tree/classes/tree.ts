@@ -1,6 +1,7 @@
 import { PlanningNode } from './node'
 import { BopObject } from '../../../../../../shared/models/bop-object.model'
 import { Messages } from '../../../../../../shared/models/message'
+import { MessageObject } from '../../../../../../shared/objects/message/message.object'
 import getLogger from '../../../../utils/logger'
 
 const logger = getLogger('lib/planning/tree/classes/tree')
@@ -19,11 +20,11 @@ abstract class PlanningTree extends PlanningNode {
     this.dom = options.dom
   }
 
-  dispatch (messages: Messages) {
+  process (messages: Messages) {
     messages = this.removeDeprecatedMessages(messages)
     this.registerObjects(messages)
     messages = this.removeOutOfScopeMessages(messages)
-    super.dispatch(messages)
+    this.dispatch(MessageObject.fromFormattedJSON(messages))
   }
 
   /**

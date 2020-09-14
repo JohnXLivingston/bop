@@ -1,9 +1,11 @@
 import { PlanningTree } from '../classes/tree'
 import { NodeKeyClass, PlanningNode } from '../classes/node'
-import { Message } from '../../../../../../shared/models/message'
+import { MessageObject } from '../../../../../../shared/objects/message/message.object'
+import { TaskObject } from '../../../../../../shared/objects/task/task.object'
 
 class PlanningTreeResourceTask extends PlanningTree {
-  childKeyClassForMessage (message: Message): NodeKeyClass | null {
+  childKeyClassForMessage (message: MessageObject): NodeKeyClass | null {
+    // TODO: have a child for unallocated tasks.
     if (message.object?.type !== 'resource') { return null }
     return {
       key: message.object.key,
@@ -13,10 +15,10 @@ class PlanningTreeResourceTask extends PlanningTree {
 }
 
 class NodeResource extends PlanningNode {
-  childKeyClassForMessage (message: Message): NodeKeyClass | null {
+  childKeyClassForMessage (message: MessageObject): NodeKeyClass | null {
     if (message.object?.type !== 'task') { return null }
-    const task = message.object
-    // TODO: check if this resource is assigned to the task.
+    const task: TaskObject = message.object as TaskObject
+    if (!task.isResourceAllocated(this.key)) { return null }
     return {
       key: task.key,
       Class: NodeResourceTask
@@ -25,7 +27,7 @@ class NodeResource extends PlanningNode {
 }
 
 class NodeResourceTask extends PlanningNode {
-  childKeyClassForMessage (message: Message): NodeKeyClass | null {
+  childKeyClassForMessage (_message: MessageObject): NodeKeyClass | null {
     return null
   }
 }

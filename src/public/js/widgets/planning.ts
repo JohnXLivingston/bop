@@ -89,7 +89,7 @@ $.widget('bop.bopPlanning', $.bop.bop, {
     // TODO: waiting indicator, and clean this code.
     $.ajax('/api/v1/planning/all').then(
       (data) => {
-        this.getTree().dispatch(data)
+        this.getTree().process(data)
       },
       () => {
         logger.error('Failed retrieving data.')

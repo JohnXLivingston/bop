@@ -4,7 +4,9 @@ import {
   ProjectModel,
   UserModel,
   ResourceModel,
-  TaskModel
+  TaskModel,
+  TaskAllocationModel,
+  TaskPartModel
 } from '../../../../models'
 import { Messages } from '../../../../shared/models/message'
 
@@ -42,7 +44,7 @@ planningRouter.get('/all', asyncHandler(async (req: express.Request, res: expres
 planningRouter.post('/test-data', asyncHandler(async (req: express.Request, res: express.Response) => {
   logger.error('This entry point is temporary for developing purpose. Must be removed.')
 
-  await ResourceModel.findOrCreate({
+  const [resource1] = await ResourceModel.findOrCreate({
     where: {
       name: 'Resource A'
     },
@@ -50,7 +52,7 @@ planningRouter.post('/test-data', asyncHandler(async (req: express.Request, res:
       resourceType: 'person'
     }
   })
-  await ResourceModel.findOrCreate({
+  const [resource2] = await ResourceModel.findOrCreate({
     where: {
       name: 'Resource B'
     },
@@ -66,7 +68,7 @@ planningRouter.post('/test-data', asyncHandler(async (req: express.Request, res:
     defaults: {}
   })
 
-  await TaskModel.findOrCreate({
+  const [task1] = await TaskModel.findOrCreate({
     where: {
       name: 'Task 1',
       projectId: project1.id
@@ -77,7 +79,40 @@ planningRouter.post('/test-data', asyncHandler(async (req: express.Request, res:
       work: 4 * 60 * 7
     }
   })
-  await TaskModel.findOrCreate({
+  const [task1allocation1] = await TaskAllocationModel.findOrCreate({
+    where: {
+      taskId: task1.id,
+      resourceId: resource1.id
+    },
+    defaults: {
+      order: 1,
+      start: '2020-09-01',
+      end: '2020-09-04',
+      work: 4 * 60 * 7
+    }
+  })
+  await TaskPartModel.findOrCreate({
+    where: {
+      allocationId: task1allocation1.id,
+      start: '2020-09-01'
+    },
+    defaults: {
+      load: 4 * 60,
+      autoMerge: true
+    }
+  })
+  await TaskPartModel.findOrCreate({
+    where: {
+      allocationId: task1allocation1.id,
+      start: '2020-09-04'
+    },
+    defaults: {
+      load: 0,
+      autoMerge: true
+    }
+  })
+
+  const [task2] = await TaskModel.findOrCreate({
     where: {
       name: 'Task 2',
       projectId: project1.id
@@ -86,6 +121,38 @@ planningRouter.post('/test-data', asyncHandler(async (req: express.Request, res:
       start: '2020-09-01',
       end: '2020-09-03',
       work: 3 * 60 * 7
+    }
+  })
+  const [task2allocation1] = await TaskAllocationModel.findOrCreate({
+    where: {
+      taskId: task2.id,
+      resourceId: resource2.id
+    },
+    defaults: {
+      order: 1,
+      start: '2020-09-01',
+      end: '2020-09-03',
+      work: 3 * 60 * 7
+    }
+  })
+  await TaskPartModel.findOrCreate({
+    where: {
+      allocationId: task2allocation1.id,
+      start: '2020-09-01'
+    },
+    defaults: {
+      load: 3 * 60,
+      autoMerge: true
+    }
+  })
+  await TaskPartModel.findOrCreate({
+    where: {
+      allocationId: task2allocation1.id,
+      start: '2020-09-03'
+    },
+    defaults: {
+      load: 0,
+      autoMerge: true
     }
   })
 

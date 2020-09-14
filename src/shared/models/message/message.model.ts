@@ -1,5 +1,4 @@
 import { BopObject } from '../bop-object.model'
-import { User } from '../user'
 
 /**
  * A newly created object.
@@ -9,9 +8,9 @@ export interface MessageCreation {
   messageType: 'create',
   object: BopObject,
   /**
-   * The user that created the object
+   * The userId from the user that created the object
    */
-  user?: User
+  userId?: number
 }
 
 /**
@@ -22,9 +21,9 @@ export interface MessageUpdate {
   messageType: 'update',
   object: BopObject,
   /**
-   * The user that modified the object
+   * The userId from the user that modified the object
    */
-  user?: User
+  userId?: number
 }
 
 /**
@@ -38,9 +37,9 @@ export interface MessageDeletion {
   // with an incremented version number.
   object: BopObject,
   /**
-   * The user that deleted the object
+   * The userId from the user that deleted the object
    */
-  user?: User
+  userId?: number
 }
 
 /**
