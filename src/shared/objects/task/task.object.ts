@@ -67,6 +67,11 @@ export class TaskObject {
     } else {
       resourceId = resource
     }
+    if (resourceId === 0) {
+      // id=0 means 'unsaved'. If you call this method with an unsaved resource,
+      // it is probably a bug.
+      throw new Error('You can\'t call isResourceAllocated with the value 0.')
+    }
 
     for (let i = 0; i < this.allocations.length; i++) {
       if (this.allocations[i].resourceId === resourceId) {

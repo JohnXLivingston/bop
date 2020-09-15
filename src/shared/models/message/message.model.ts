@@ -52,6 +52,13 @@ export interface MessageRetrieved {
   object: BopObject
 }
 
-export type Message = MessageCreation | MessageUpdate | MessageDeletion | MessageRetrieved
+/**
+ * Message for an action that can be done by a user.
+ */
+export type MessageAction = MessageCreation | MessageUpdate | MessageDeletion
+/**
+ * All types of message.
+ */
+export type Message = MessageAction | MessageRetrieved
 
 export type Messages = Message[]
