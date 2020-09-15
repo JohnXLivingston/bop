@@ -20,7 +20,14 @@ export class TaskAllocationObject {
     this.work = allocation.work
     this.parts = []
     for (let i = 0; i < allocation.parts.length; i++) {
-      this.parts.push(new TaskPartObject(allocation.parts[i]))
+      const part = allocation.parts[i]
+      const nextPart = allocation.parts[i + 1]
+      if (nextPart) {
+        if (nextPart.start <= part.start) {
+          throw new Error('It seems that task parts are not correctly sorted.')
+        }
+      }
+      this.parts.push(new TaskPartObject(part, nextPart?.start))
     }
   }
 

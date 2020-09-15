@@ -28,7 +28,6 @@ export class ProjectModel extends Model<ProjectModel> {
     const json: Project = {
       id: this.id,
       type: 'project',
-      key: 'project/' + this.id,
       name: this.name,
       version: this.version
     }

@@ -72,7 +72,6 @@ describe('models/resource/resource.ts', function () {
         expect(resource?.toFormattedJSON()).to.be.deep.equal({
           id: resourceId,
           type: 'resource',
-          key: 'resource/' + resourceId,
           version: 0,
           name: resource1Data.name,
           resourceType: resource1Data.resourceType

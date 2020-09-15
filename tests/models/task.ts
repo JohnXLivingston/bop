@@ -366,7 +366,6 @@ describe('models/task/task.ts', function () {
         expect(task?.toFormattedJSON(), 'Calling toFormattedJSON').to.be.deep.equal({
           id: taskId,
           type: 'task',
-          key: 'task/' + taskId,
           version: 0,
           name: 'This is a task',
           projectId: project2.id,
@@ -387,7 +386,6 @@ describe('models/task/task.ts', function () {
                   id: allocation1part1Id,
                   type: 'taskpart',
                   start: '2021-01-01',
-                  end: '2021-01-15',
                   load: 120,
                   autoMerge: true
                 },
@@ -395,7 +393,6 @@ describe('models/task/task.ts', function () {
                   id: allocation1part2Id,
                   type: 'taskpart',
                   start: '2021-01-15',
-                  end: '9999-12-31',
                   load: 0,
                   autoMerge: true
                 }
@@ -414,7 +411,6 @@ describe('models/task/task.ts', function () {
                   id: allocation2part1Id,
                   type: 'taskpart',
                   start: '2021-01-01',
-                  end: '2021-01-31',
                   load: 60,
                   autoMerge: true
                 },
@@ -422,7 +418,6 @@ describe('models/task/task.ts', function () {
                   id: allocation2part2Id,
                   type: 'taskpart',
                   start: '2021-01-31',
-                  end: '9999-12-31',
                   load: 0,
                   autoMerge: true
                 }

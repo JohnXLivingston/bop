@@ -21,7 +21,9 @@ describe('Tests environment', function () {
       generateMissingTests('shared', n => {
         // For now, it seems there is no point for testing shared models.
         // It contains only interfaces.
-        return /^shared\/models\//.test(n)
+        if (/^shared\/models\//.test(n)) { return true }
+        if (n === 'shared/objects/base.object.ts') { return true }
+        return false
       })
     })
 

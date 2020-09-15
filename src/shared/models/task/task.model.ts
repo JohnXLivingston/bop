@@ -1,7 +1,6 @@
 export interface Task {
   id: number,
   type: 'task',
-  key: string,
   version: number,
   name: string,
   projectId: number,
@@ -26,7 +25,6 @@ export interface TaskPart {
   id: number,
   type: 'taskpart',
   start: string,
-  end: string,
   load: number,
   autoMerge: boolean
 }

@@ -8,31 +8,25 @@ export class TaskPartObject {
   load: number
   autoMerge: boolean
 
-  constructor (part: TaskPart) {
+  constructor (part: TaskPart, end: string | null) {
     this.id = part.id
     this.start = part.start
-    this.end = part.end
+    this.end = end || '9999-12-31'
     this.load = part.load
     this.autoMerge = part.autoMerge
   }
 
-  static toFormattedJSON (parts: TaskPartObject[]): TaskPart[] {
-    const result: TaskPart[] = []
-    for (let i = 0; i < parts.length; i++) {
-      const part = parts[i]
-      const nextPart = parts[i + 1]
-      if (nextPart && nextPart.start <= part.start) {
-        throw new Error('It seems that task parts are not correctly sorted.')
-      }
-      result.push({
-        id: part.id,
-        type: 'taskpart',
-        start: part.start,
-        end: nextPart ? nextPart.start : '9999-12-31',
-        load: part.load,
-        autoMerge: part.autoMerge
-      })
+  toFormattedJSON (): TaskPart {
+    return {
+      id: this.id,
+      type: 'taskpart',
+      start: this.start,
+      load: this.load,
+      autoMerge: this.autoMerge
     }
-    return result
+  }
+
+  static toFormattedJSON (parts: TaskPartObject[]): TaskPart[] {
+    return parts.map(p => p.toFormattedJSON())
   }
 }

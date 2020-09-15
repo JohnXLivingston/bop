@@ -1,15 +1,12 @@
+import { BaseObject } from '../base.object'
 import { Project } from '../../models/project'
 
-export class ProjectObject {
-  readonly id: number
-  readonly type: string = 'project'
-  key: string
+export class ProjectObject extends BaseObject {
   name: string
   version: number
 
   constructor (project: Project) {
-    this.id = project.id
-    this.key = project.key
+    super('project', project.id)
     this.name = project.name
     this.version = project.version
   }
@@ -18,7 +15,6 @@ export class ProjectObject {
     return {
       id: this.id,
       type: 'project',
-      key: this.key,
       name: this.name,
       version: this.version
     }

@@ -6,7 +6,6 @@ import { User } from '../../src/shared/models/user'
 const user1: User = {
   type: 'user',
   id: 0,
-  key: 'user/0',
   username: 'User A.',
   version: 1
 }
@@ -14,7 +13,6 @@ const user1: User = {
 const project1: Project = {
   type: 'project',
   id: 0,
-  key: 'project/0',
   name: 'Project A',
   version: 1
 }
@@ -22,7 +20,6 @@ const project1: Project = {
 const resource1: Resource = {
   type: 'resource',
   id: 0,
-  key: 'resource/0',
   name: 'Resouce 1',
   resourceType: 'person',
   version: 1
@@ -32,7 +29,6 @@ const task1allocation1part1: TaskPart = {
   type: 'taskpart',
   id: 0,
   start: '2021-01-01',
-  end: '2021-01-31',
   load: 60,
   autoMerge: true
 }
@@ -40,7 +36,6 @@ const task1allocation1part2: TaskPart = {
   type: 'taskpart',
   id: 0,
   start: '2021-01-31',
-  end: '9999-12-31',
   load: 0,
   autoMerge: true
 }
@@ -48,7 +43,6 @@ const task1allocation2part1: TaskPart = {
   type: 'taskpart',
   id: 0,
   start: '2021-01-01',
-  end: '2021-01-15',
   load: 120,
   autoMerge: true
 }
@@ -56,7 +50,6 @@ const task1allocation2part2: TaskPart = {
   type: 'taskpart',
   id: 0,
   start: '2021-01-15',
-  end: '9999-12-31',
   load: 0,
   autoMerge: true
 }
@@ -91,7 +84,6 @@ const task1allocation2: TaskAllocation = {
 const task1: Task = {
   type: 'task',
   id: 0,
-  key: 'task/0',
   start: '2020-09-01',
   end: '2020-09-31',
   name: 'Task 1',
@@ -107,7 +99,6 @@ const task1: Task = {
 const taskWithUnallocatedLines: Task = {
   type: 'task',
   id: 0,
-  key: 'task/0',
   start: '2020-09-01',
   end: '2020-09-31',
   name: 'Task 1',
@@ -127,7 +118,6 @@ const taskWithUnallocatedLines: Task = {
           type: 'taskpart',
           id: 0,
           start: '2021-01-01',
-          end: '2021-01-15',
           load: 120,
           autoMerge: true
         },
@@ -135,7 +125,6 @@ const taskWithUnallocatedLines: Task = {
           type: 'taskpart',
           id: 0,
           start: '2021-01-15',
-          end: '9999-12-31',
           load: 0,
           autoMerge: true
         }
@@ -154,7 +143,6 @@ const taskWithUnallocatedLines: Task = {
           type: 'taskpart',
           id: 0,
           start: '2021-01-01',
-          end: '2021-01-15',
           load: 120,
           autoMerge: true
         },
@@ -162,7 +150,6 @@ const taskWithUnallocatedLines: Task = {
           type: 'taskpart',
           id: 0,
           start: '2021-01-15',
-          end: '9999-12-31',
           load: 0,
           autoMerge: true
         }

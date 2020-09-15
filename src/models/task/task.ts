@@ -92,7 +92,6 @@ class TaskModel extends Model<TaskModel> {
     const json: Task = {
       id: this.id,
       type: 'task',
-      key: 'task/' + this.id,
       version: this.version,
       name: this.name,
       projectId: this.projectId,
@@ -228,24 +227,18 @@ class TaskPartModel extends Model<TaskPartModel> {
   })
   autoMerge!: boolean
 
-  static toFormattedJSON (parts: TaskPartModel[]): TaskPart[] {
-    const result: TaskPart[] = []
-    for (let i = 0; i < parts.length; i++) {
-      const part = parts[i]
-      const nextPart = parts[i + 1]
-      if (nextPart && nextPart.start <= part.start) {
-        throw new Error('It seems that task parts are not correctly sorted.')
-      }
-      result.push({
-        id: part.id,
-        type: 'taskpart',
-        start: part.start,
-        end: nextPart ? nextPart.start : '9999-12-31',
-        load: part.load,
-        autoMerge: part.autoMerge
-      })
+  toFormattedJSON (): TaskPart {
+    return {
+      id: this.id,
+      type: 'taskpart',
+      start: this.start,
+      load: this.load,
+      autoMerge: this.autoMerge
     }
-    return result
+  }
+
+  static toFormattedJSON (parts: TaskPartModel[]): TaskPart[] {
+    return parts.map(p => p.toFormattedJSON())
   }
 
   // TODO: unique index for task+allocation+start?

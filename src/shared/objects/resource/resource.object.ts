@@ -1,16 +1,13 @@
+import { BaseObject } from '../base.object'
 import { Resource } from '../../models/resource'
 
-export class ResourceObject {
-  readonly id: number
-  readonly type: string = 'resource'
-  readonly key: string
+export class ResourceObject extends BaseObject {
   version: number
   name: string
   resourceType: string
 
   constructor (resource: Resource) {
-    this.id = resource.id
-    this.key = resource.key
+    super('resource', resource.id)
     this.version = resource.version
     this.name = resource.name
     this.resourceType = resource.resourceType
@@ -20,7 +17,6 @@ export class ResourceObject {
     return {
       id: this.id,
       type: 'resource',
-      key: this.key,
       version: this.version,
       name: this.name,
       resourceType: this.resourceType

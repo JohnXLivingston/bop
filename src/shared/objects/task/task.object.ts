@@ -1,11 +1,9 @@
+import { BaseObject } from '../base.object'
 import { Task, TaskAllocation } from '../../models/task'
 import { ResourceObject } from '../resource/resource.object'
 import { TaskAllocationObject } from './task.allocation.object'
 
-export class TaskObject {
-  readonly id: number
-  readonly type: string = 'task'
-  readonly key: string
+export class TaskObject extends BaseObject {
   version: number
   name: string
   readonly projectId: number
@@ -15,8 +13,7 @@ export class TaskObject {
   allocations: TaskAllocationObject[]
 
   constructor (task: Task) {
-    this.id = task.id
-    this.key = task.key
+    super('task', task.id)
     this.version = task.version
     this.name = task.name
     this.projectId = task.projectId
@@ -41,7 +38,6 @@ export class TaskObject {
     const json: Task = {
       id: this.id,
       type: 'task',
-      key: 'task/' + this.id,
       version: this.version,
       name: this.name,
       projectId: this.projectId,

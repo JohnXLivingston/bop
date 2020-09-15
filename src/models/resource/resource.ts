@@ -37,7 +37,6 @@ export class ResourceModel extends Model<ResourceModel> {
     return {
       id: this.id,
       type: 'resource',
-      key: 'resource/' + this.id,
       version: this.version,
       name: this.name,
       resourceType: this.resourceType

@@ -19,6 +19,12 @@ describe('shared/objects/task/task.allocation.object.ts', function () {
       expect(taskallocation, 'instanceOf').to.be.instanceOf(TaskAllocationObject)
       expect(taskallocation.id, 'project.id').to.be.equal(0)
     })
+
+    it('should fail if parts are not in a correct order.', function () {
+      const data = { ...task1allocation1 }
+      data.parts = [...data.parts].reverse()
+      expect(() => new TaskAllocationObject(data)).to.be.throw()
+    })
   })
 
   describe('toFormattedJSON', function () {

@@ -35,7 +35,6 @@ describe('models/user/user.ts', function () {
         expect(user!.toFormattedJSON()).to.be.deep.equal({
           id: 1,
           type: 'user',
-          key: 'user/1',
           version: 0,
           username: 'Administrator'
         })
