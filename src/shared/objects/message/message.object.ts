@@ -3,11 +3,12 @@ import { ProjectObject } from '../project/project.object'
 import { ResourceObject } from '../resource/resource.object'
 import { TaskObject } from '../task/task.object'
 import { UserObject } from '../user/user.object'
+import { BopObject } from '../bop.object'
 
 export class MessageObject {
   readonly type: string = 'message'
   readonly messageType: 'update' | 'create' | 'delete' | 'retrieved'
-  object: UserObject | ProjectObject | TaskObject | ResourceObject
+  object: BopObject
   userId?: number
 
   constructor (message: Message) {
@@ -32,8 +33,8 @@ export class MessageObject {
     }
   }
 
-  static fromFormattedJSON (messages: Message[]): MessageObject[] {
-    const result: MessageObject[] = []
+  static fromFormattedJSON (messages: Message[]): MessagesObject {
+    const result: MessagesObject = []
     for (let i = 0; i < messages.length; i++) {
       result.push(new MessageObject(messages[i]))
     }
@@ -53,7 +54,7 @@ export class MessageObject {
     return r as MessageAction
   }
 
-  static toFormattedJSON (messages: MessageObject[]): Message[] {
+  static toFormattedJSON (messages: MessagesObject): Message[] {
     const result: Message[] = []
     for (let i = 0; i < messages.length; i++) {
       result.push(messages[i].toFormattedJSON())
@@ -61,3 +62,5 @@ export class MessageObject {
     return result
   }
 }
+
+export type MessagesObject = MessageObject[]

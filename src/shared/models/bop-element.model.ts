@@ -3,4 +3,4 @@ import { Task } from './task'
 import { User } from './user'
 import { Resource } from './resource'
 
-export type BopObject = Project | Task | User | Resource
+export type BopElement = Project | Task | User | Resource

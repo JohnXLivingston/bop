@@ -1,7 +1,6 @@
 import { PlanningNode } from './node'
-import { BopObject } from '../../../../../../shared/models/bop-object.model'
 import { Messages } from '../../../../../../shared/models/message'
-import { MessageObject } from '../../../../../../shared/objects/message/message.object'
+import { BopObject, MessageObject, MessagesObject } from '../../../../../../shared/objects'
 import getLogger from '../../../../utils/logger'
 
 const logger = getLogger('lib/planning/tree/classes/tree')
@@ -21,10 +20,11 @@ abstract class PlanningTree extends PlanningNode {
   }
 
   process (messages: Messages) {
-    messages = this.removeDeprecatedMessages(messages)
-    this.registerObjects(messages)
-    messages = this.removeOutOfScopeMessages(messages)
-    this.dispatch(MessageObject.fromFormattedJSON(messages))
+    let messagesObject = MessageObject.fromFormattedJSON(messages)
+    messagesObject = this.removeDeprecatedMessages(messagesObject)
+    this.registerObjects(messagesObject)
+    messagesObject = this.removeOutOfScopeMessages(messagesObject)
+    this.dispatch(messagesObject)
   }
 
   /**
@@ -33,8 +33,8 @@ abstract class PlanningTree extends PlanningNode {
    * Also removes versions that are already known.
    * @param messages messages to filter
    */
-  private removeDeprecatedMessages (messages: Messages): Messages {
-    return messages.filter((message) => {
+  private removeDeprecatedMessages (messagesObject: MessagesObject): MessagesObject {
+    return messagesObject.filter((message) => {
       const object = message.object
       if (!object) { return true }
       if (!('version' in object)) { return true }
@@ -44,9 +44,9 @@ abstract class PlanningTree extends PlanningNode {
     })
   }
 
-  private registerObjects (messages: Messages): void {
-    for (let i = 0; i < messages.length; i++) {
-      const message = messages[i]
+  private registerObjects (messagesObject: MessagesObject): void {
+    for (let i = 0; i < messagesObject.length; i++) {
+      const message = messagesObject[i]
       const object = message.object
       if (!object) { continue }
       this.objects[object.key] = object
@@ -59,10 +59,10 @@ abstract class PlanningTree extends PlanningNode {
    * are inside the planning boundaries.
    * @param messages messages to filter
    */
-  private removeOutOfScopeMessages (messages: Messages): Messages {
+  private removeOutOfScopeMessages (messagesObject: MessagesObject): MessagesObject {
     // TODO
     logger.error('Not implemented yet')
-    return messages
+    return messagesObject
   }
 }
 

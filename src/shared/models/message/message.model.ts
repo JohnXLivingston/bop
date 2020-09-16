@@ -1,4 +1,4 @@
-import { BopObject } from '../bop-object.model'
+import { BopElement } from '../bop-element.model'
 
 /**
  * A newly created object.
@@ -6,7 +6,7 @@ import { BopObject } from '../bop-object.model'
 export interface MessageCreation {
   type: 'message',
   messageType: 'create',
-  object: BopObject,
+  object: BopElement,
   /**
    * The userId from the user that created the object
    */
@@ -19,7 +19,7 @@ export interface MessageCreation {
 export interface MessageUpdate {
   type: 'message',
   messageType: 'update',
-  object: BopObject,
+  object: BopElement,
   /**
    * The userId from the user that modified the object
    */
@@ -35,7 +35,7 @@ export interface MessageDeletion {
   // FIXME: a soft deleted object, or an objectId?
   // NB: I think it should be a soft deleted object,
   // with an incremented version number.
-  object: BopObject,
+  object: BopElement,
   /**
    * The userId from the user that deleted the object
    */
@@ -49,7 +49,7 @@ export interface MessageDeletion {
 export interface MessageRetrieved {
   type: 'message',
   messageType: 'retrieved',
-  object: BopObject
+  object: BopElement
 }
 
 /**

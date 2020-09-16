@@ -23,6 +23,8 @@ describe('Tests environment', function () {
         // It contains only interfaces.
         if (/^shared\/models\//.test(n)) { return true }
         if (n === 'shared/objects/base.object.ts') { return true }
+        if (n === 'shared/objects/bop.object.ts') { return true }
+        if (n === 'shared/objects/index.ts') { return true }
         return false
       })
     })
