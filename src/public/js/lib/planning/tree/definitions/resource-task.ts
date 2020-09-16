@@ -1,5 +1,6 @@
 import { PlanningTree } from '../classes/tree'
-import { NodeKeyClass, PlanningNode } from '../classes/node'
+import { NodeKeyClass } from '../classes/node'
+import { PlanningNodeObject } from '../classes/node-object'
 import { MessageObject } from '../../../../../../shared/objects/message/message.object'
 import { TaskObject } from '../../../../../../shared/objects/task/task.object'
 
@@ -14,7 +15,7 @@ class PlanningTreeResourceTask extends PlanningTree {
   }
 }
 
-class NodeResource extends PlanningNode {
+class NodeResource extends PlanningNodeObject {
   childKeyClassForMessage (message: MessageObject): NodeKeyClass | null {
     if (message.object?.type !== 'task') { return null }
     const task: TaskObject = message.object as TaskObject
@@ -26,7 +27,7 @@ class NodeResource extends PlanningNode {
   }
 }
 
-class NodeResourceTask extends PlanningNode {
+class NodeResourceTask extends PlanningNodeObject {
   childKeyClassForMessage (_message: MessageObject): NodeKeyClass | null {
     return null
   }

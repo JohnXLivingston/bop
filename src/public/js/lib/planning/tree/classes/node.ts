@@ -1,5 +1,7 @@
 import { PlanningTree } from './tree'
 import { BopObject, MessageObject, MessagesObject } from '../../../../../../shared/objects'
+import { NodeRenderVars } from '../../../../../../shared/templates/planning/types'
+import { Template } from '../../../../utils/nunjucks'
 import getLogger from '../../../../utils/logger'
 
 const logger = getLogger('lib/planning/tree/classes/node')
@@ -9,8 +11,13 @@ abstract class PlanningNode {
   path: string
   key: string
   parent?: PlanningNode
-  childsByKey: { [key: string]: PlanningNode }
-  childsSorted: PlanningNode[]
+  protected childsByKey: { [key: string]: PlanningNode }
+  protected childsSorted: PlanningNode[]
+
+  private _needRender: boolean = true
+  private _needDomInsert: boolean = true
+  protected template?: Template
+  protected dom?: JQuery
 
   constructor (key: string, parent?: PlanningNode) {
     this.key = key
@@ -21,18 +28,29 @@ abstract class PlanningNode {
     this.childsSorted = []
   }
 
+  get needRender () {
+    return this._needRender
+  }
+
+  get needDomInsert () {
+    return this._needDomInsert
+  }
+
+  getChilds (): PlanningNode[] {
+    return [...this.childsSorted]
+  }
+
   object (key: string): BopObject | null {
     return this.tree.objects[key] || null
   }
 
   dispatch (messages: MessagesObject) {
-    // Creating missing childs...
+    logger.debug('Creating missing childs...')
     this.createMissingChilds(messages)
+    logger.debug('Removing deprecated childs...')
     this.removeDeprecatedChilds(messages)
+    logger.debug('Updating childs...')
     this.updateChilds(messages)
-    // TODO: remove/disable deprecated childs
-    // TODO: update nodes.
-    logger.error('Not implemented yet')
   }
 
   createMissingChilds (messages: MessagesObject): void {
@@ -75,6 +93,25 @@ abstract class PlanningNode {
   }
 
   abstract childKeyClassForMessage (message: MessageObject): NodeKeyClass | null
+
+  render (): void {
+    if (!this._needRender) {
+      return
+    }
+    this._needRender = false
+    if (!this.template) {
+      return
+    }
+    logger.debug('Rendering the node ' + this.key)
+    this._needDomInsert = true
+    this.dom = this.tree.renderTemplate(this.template, this.renderVars())
+  }
+
+  renderVars (): NodeRenderVars {
+    return {
+      planningProperties: this.tree.planningProperties
+    }
+  }
 
   destroy (): void {
     // TODO: remove node from DOM.

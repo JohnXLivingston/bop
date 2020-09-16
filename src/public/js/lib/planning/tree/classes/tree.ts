@@ -1,22 +1,32 @@
 import { PlanningNode } from './node'
 import { Messages } from '../../../../../../shared/models/message'
 import { BopObject, MessageObject, MessagesObject } from '../../../../../../shared/objects'
+import { PlanningProperties } from '../../../../../../shared/templates/planning/types'
+import { nunjucksContext, Template } from '../../../../utils/nunjucks'
+import { parseWidgets } from '../../../../widgets/utils'
 import getLogger from '../../../../utils/logger'
 
 const logger = getLogger('lib/planning/tree/classes/tree')
 
 interface PlanningTreeOptions {
-  dom: JQuery
+  widget: JQuery,
+  planningProperties: PlanningProperties
 }
 
 abstract class PlanningTree extends PlanningNode {
-  private readonly dom: JQuery
+  private readonly widget: JQuery
+  private readonly _planningProperties: PlanningProperties
   objects: {[key: string]: BopObject} = {}
 
   constructor (options: PlanningTreeOptions) {
     super('root', undefined)
     this.tree = this
-    this.dom = options.dom
+    this.widget = options.widget
+    this._planningProperties = options.planningProperties
+  }
+
+  get planningProperties (): PlanningProperties {
+    return this._planningProperties
   }
 
   process (messages: Messages) {
@@ -25,6 +35,26 @@ abstract class PlanningTree extends PlanningNode {
     this.registerObjects(messagesObject)
     messagesObject = this.removeOutOfScopeMessages(messagesObject)
     this.dispatch(messagesObject)
+
+    // Now we are going to run through nodes breadth first.
+    // Note: the tree is cycleless, so there are no risk for infinite loop
+    const queue: PlanningNode[] = [this]
+    let i = 0
+    while (i < queue.length) {
+      const node = queue[i++]
+      if (node.needRender) {
+        node.render()
+      }
+      // if (node.needDomInsert && node.parent) {
+      //   node.parent.insertChild(node)
+      // }
+      const childs = node.getChilds()
+      for (let i = 0; i < childs.length; i++) {
+        queue.push(childs[i])
+      }
+    }
+
+    parseWidgets(this.widget)
   }
 
   /**
@@ -63,6 +93,16 @@ abstract class PlanningTree extends PlanningNode {
     // TODO
     logger.error('Not implemented yet')
     return messagesObject
+  }
+
+  renderTemplate (template: Template, vars: any): JQuery {
+    const html = $.trim(template.render(nunjucksContext({
+      ...vars,
+      planningProperties: this._planningProperties
+    })))
+    const div = document.createElement('div')
+    div.innerHTML = html
+    return $(div).children().detach()
   }
 }
 
