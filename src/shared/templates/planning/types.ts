@@ -7,13 +7,15 @@ interface PlanningProperties {
   nbWeeks: number
 }
 
-interface NodeRenderVars {
-  node?: {
+interface NodeRenderVarsPartial {
+  planningProperties: PlanningProperties
+}
+interface NodeRenderVars extends NodeRenderVarsPartial {
+  node: {
     type: 'summary' | 'object',
     color?: NodeColor,
-    object?: BopObject
-  },
-  planningProperties: PlanningProperties
+    object: BopObject
+  }
 }
 
 export {
@@ -22,5 +24,7 @@ export {
   // eslint-disable-next-line no-undef
   NodeColor,
   // eslint-disable-next-line no-undef
-  NodeRenderVars
+  NodeRenderVars,
+  // eslint-disable-next-line no-undef
+  NodeRenderVarsPartial
 }

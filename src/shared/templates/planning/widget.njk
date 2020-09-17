@@ -1,4 +1,3 @@
-{%- import './render.njk' as render -%}
 <div class="widget-planning">
   <div class="widget-planning-container">
     <div class="widget-planning-header">
@@ -26,9 +25,6 @@
       </div>
     </div>
     <div class="widget-planning-content">
-      {% for node in nodes %}
-        {{ render.planningNode(node, planningProperties) }}
-      {% endfor %}
     </div>
   </div>
 </div>

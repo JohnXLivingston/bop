@@ -1,4 +1,4 @@
-import { planningTestSet } from '../../../shared/test'
+import { PlanningProperties } from '../../../shared/templates/planning/types'
 import { nunjucksContext, Template } from '../utils/nunjucks'
 import { parseWidgets } from '../utils/widgets'
 
@@ -57,9 +57,9 @@ $.widget('bop.bopPlanning', $.bop.bop, {
     if (!tpl) {
       tpl = require('../../../shared/templates/planning/widget.njk')
     }
+    const planningProperties: PlanningProperties = { nbWeeks: options.nbWeeks! }
     const widget = $(tpl.render(nunjucksContext({
-      nodes: planningTestSet(),
-      planningProperties: { nbWeeks: options.nbWeeks }
+      planningProperties
     })))
     parseWidgets(content.empty().append(widget))
 

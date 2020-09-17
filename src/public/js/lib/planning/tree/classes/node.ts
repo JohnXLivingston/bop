@@ -1,6 +1,6 @@
 import { PlanningTree } from './tree'
 import { BopObject, MessageObject, MessagesObject } from '../../../../../../shared/objects'
-import { NodeRenderVars } from '../../../../../../shared/templates/planning/types'
+import { NodeRenderVars, NodeRenderVarsPartial } from '../../../../../../shared/templates/planning/types'
 import { Template } from '../../../../utils/nunjucks'
 import getLogger from '../../../../utils/logger'
 
@@ -102,15 +102,55 @@ abstract class PlanningNode {
     if (!this.template) {
       return
     }
-    logger.debug('Rendering the node ' + this.key)
+    const vars = this.renderVars()
+    if (!vars) {
+      throw new Error(`The node ${this.path} tries to render, but has no renderVars.`)
+    }
+    logger.debug(`Rendering the node ${this.path}.`)
     this._needDomInsert = true
-    this.dom = this.tree.renderTemplate(this.template, this.renderVars())
+    this.dom = this.tree.renderTemplate(this.template, vars)
   }
 
-  renderVars (): NodeRenderVars {
+  renderVars (): NodeRenderVars | null {
+    return null
+  }
+
+  commonRenderVars (): NodeRenderVarsPartial {
     return {
       planningProperties: this.tree.planningProperties
     }
+  }
+
+  insertIntoDom (): void {
+    if (!this._needDomInsert) {
+      return
+    }
+    this._needDomInsert = false
+    if (!this.parent) {
+      return
+    }
+    if (!this.dom) {
+      throw new Error('Trying to insert a node before his dom is computed.')
+    }
+    logger.debug(`Inserting the node ${this.path} in the dom.`)
+    const parent = this.parent
+    const container = parent.childsDomContainer()
+    if (!container) {
+      throw new Error('Trying to insert a node in a parent without childsDomContainer.')
+    }
+    // FIXME: insert in right place.
+    container.after(this.dom)
+  }
+
+  childsDomContainer (): JQuery | null {
+    if (!this.dom) {
+      return null
+    }
+    const dom = this.dom.find('>.widget-planning-node-childs')
+    if (!dom.length) {
+      return null
+    }
+    return dom
   }
 
   destroy (): void {

@@ -45,9 +45,9 @@ abstract class PlanningTree extends PlanningNode {
       if (node.needRender) {
         node.render()
       }
-      // if (node.needDomInsert && node.parent) {
-      //   node.parent.insertChild(node)
-      // }
+      if (node.needDomInsert && node.parent) {
+        node.insertIntoDom()
+      }
       const childs = node.getChilds()
       for (let i = 0; i < childs.length; i++) {
         queue.push(childs[i])
@@ -55,6 +55,10 @@ abstract class PlanningTree extends PlanningNode {
     }
 
     parseWidgets(this.widget)
+  }
+
+  childsDomContainer () {
+    return this.widget.find('.widget-planning-content')
   }
 
   /**

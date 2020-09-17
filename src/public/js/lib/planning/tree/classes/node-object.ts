@@ -4,23 +4,22 @@ import { NodeRenderVars } from '../../../../../../shared/templates/planning/type
 export abstract class PlanningNodeObject extends PlanningNode {
   constructor (key: string, parent?: PlanningNode) {
     super(key, parent)
-    this.template = require('../../../../../../shared/templates/planning/render-object.njk')
+    this.template = require('../../../../../../shared/templates/planning/render.njk')
   }
 
   renderVars (): NodeRenderVars {
-    const vars = super.renderVars()
+    const commonVars = super.commonRenderVars()
     const object = this.tree.object(this.key)
     if (!object) {
       throw new Error('Can\'t find the object ' + this.key)
     }
-    if (!vars.node) {
-      vars.node = {
-        type: 'object'
+    const vars: NodeRenderVars = {
+      ...commonVars,
+      node: {
+        type: 'object',
+        object: object
       }
-    } else {
-      vars.node.type = 'object'
     }
-    vars.node.object = object
     return vars
   }
 }

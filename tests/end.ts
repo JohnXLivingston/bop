@@ -25,6 +25,7 @@ describe('Tests environment', function () {
         if (n === 'shared/objects/base.object.ts') { return true }
         if (n === 'shared/objects/bop.object.ts') { return true }
         if (n === 'shared/objects/index.ts') { return true }
+        if (n === 'shared/templates/planning/types.ts') { return true }
         return false
       })
     })
