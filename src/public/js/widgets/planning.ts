@@ -1,6 +1,6 @@
 import { planningTestSet } from '../../../shared/test'
 import { nunjucksContext, Template } from '../utils/nunjucks'
-import { parseWidgets } from '../widgets/utils'
+import { parseWidgets } from '../utils/widgets'
 
 import { PlanningTree, getPlanningTree } from '../lib/planning'
 

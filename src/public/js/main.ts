@@ -1,7 +1,7 @@
 import getLogger from './utils/logger'
 import { notifications } from './lib/notifications'
 import { testFunction } from '../../shared/test'
-import { parseWidgets } from './widgets/utils'
+import { parseWidgets } from './utils/widgets'
 import '../scss/main.scss'
 
 require('./common')

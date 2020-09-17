@@ -1,4 +1,4 @@
-import { parseWidgets } from './widgets/utils'
+import { parseWidgets } from './utils/widgets'
 
 require('./common')
 require('../scss/login.scss')

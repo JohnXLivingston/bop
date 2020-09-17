@@ -3,7 +3,7 @@ import { Messages } from '../../../../../../shared/models/message'
 import { BopObject, MessageObject, MessagesObject } from '../../../../../../shared/objects'
 import { PlanningProperties } from '../../../../../../shared/templates/planning/types'
 import { nunjucksContext, Template } from '../../../../utils/nunjucks'
-import { parseWidgets } from '../../../../widgets/utils'
+import { parseWidgets } from '../../../../utils/widgets'
 import getLogger from '../../../../utils/logger'
 
 const logger = getLogger('lib/planning/tree/classes/tree')

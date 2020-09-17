@@ -1,4 +1,4 @@
-import { parseWidgets } from '../utils'
+import { parseWidgets } from '../../utils/widgets'
 import getLogger from '../../utils/logger'
 
 const logger = getLogger('widget/wheelmenu/content')
