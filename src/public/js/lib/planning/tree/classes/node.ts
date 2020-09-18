@@ -107,8 +107,26 @@ abstract class PlanningNode {
       throw new Error(`The node ${this.path} tries to render, but has no renderVars.`)
     }
     logger.debug(`Rendering the node ${this.path}.`)
-    this._needDomInsert = true
-    this.dom = this.tree.renderTemplate(this.template, vars)
+    const dom = this.tree.renderTemplate(this.template, vars)
+    if (!this.dom) {
+      this._needDomInsert = true
+      this.dom = dom
+    } else {
+      logger.debug(`The node ${this.path} had already a dom, updating smartly without loosing childs content.`)
+      const newAttributes: {[key: string]: true} = {}
+      for (let i = 0; i < dom[0].attributes.length; i++) {
+        const attribute = dom[0].attributes[i]
+        newAttributes[attribute.name] = true
+        this.dom.attr(attribute.name, dom.attr(attribute.name) || '')
+      }
+      for (let i = 0; i < this.dom[0].attributes.length; i++) {
+        const attribute = this.dom[0].attributes[i]
+        if (!(attribute.name in newAttributes)) {
+          this.dom.removeAttr(attribute.name)
+        }
+      }
+      this.dom.find('>.widget-planning-node-content').replaceWith(dom.find('>.widget-planning-node-content'))
+    }
   }
 
   renderVars (): NodeRenderVars | null {

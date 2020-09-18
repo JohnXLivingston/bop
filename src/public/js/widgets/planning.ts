@@ -66,6 +66,8 @@ $.widget('bop.bopPlanning', $.bop.bop, {
     this.tree = getPlanningTree(options.display, {
       widget: content
     })
+
+    this.requestData()
   },
 
   getTree: function (): PlanningTree {

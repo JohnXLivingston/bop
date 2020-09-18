@@ -262,7 +262,7 @@ $widget-planning-colors:
   top: 0;
   width: 100%;
 
-  [data-widget-planning-node-type='task'] &:not(.widget-planning-item-part-off) {
+  [data-widget-planning-node-object-type='task'] &:not(.widget-planning-item-part-off) {
     border-radius: 8px;
   }
 }

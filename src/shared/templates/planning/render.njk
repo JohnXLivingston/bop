@@ -8,13 +8,16 @@
 {% endmacro %}
 <div class="widget-planning-node"
   data-widget-planning-node-type="{{ node.type }}"
+  {% if node.object %}
+    data-widget-planning-node-object-type="{{ node.object.type }}"
+  {% endif %}
   {% if node.color %}
     data-widget-planning-color="{{ node.color }}"
   {% endif %}
 >
   <div class="widget-planning-node-content">
     <div class="widget-planning-label">
-      {{ node.name }}
+      {{ node.object.name }}
     </div>
     <div class="widget-planning-calendar">
       <div class="widget-planning-weeks">
@@ -48,7 +51,7 @@
             </div>
           {% endfor %}
         </div>
-      {% elif node.type === 'task' %}
+      {% elif node.type === 'object' and object.type === 'task' %}
         <div class="widget-planning-line">
           {% for stubGroup in node.stubGroups %}
             {% if stubGroup.previousEnd and stubGroup.previousEnd <= 0 %}
@@ -110,10 +113,5 @@
     </div>
   </div>
   <div class="widget-planning-node-childs">
-    {% if node.childs %}
-      {% for child in node.childs %}
-        {{ planningNode(child, planningProperties) }}
-      {% endfor %}
-    {% endif %}
   </div>
 </div>
