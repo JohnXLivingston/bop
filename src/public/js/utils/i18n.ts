@@ -1,3 +1,6 @@
+import i18next from 'i18next'
+import HttpApi from 'i18next-http-backend'
+
 declare global {
   interface Window {
     // eslint-disable-next-line camelcase
@@ -36,7 +39,21 @@ const format = (fmt: any, obj: any, named: any): string => {
 window.gettext = gettext
 window.format = format
 
+async function initI18n () {
+  await i18next.use(HttpApi).init({
+    backend: {
+      loadPath: '/i18n/{{lng}}/{{ns}}.json'
+    },
+    debug: false,
+    defaultNS: 'common',
+    fallbackLng: 'en',
+    lng: $('body').attr('lang') || 'en'
+  })
+}
+
 export {
   gettext,
-  format
+  format,
+  i18next,
+  initI18n
 }

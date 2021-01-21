@@ -1,4 +1,4 @@
-import { gettext } from '../utils/i18n'
+import { i18next as i18n } from '../utils/i18n'
 
 require('../../scss/widgets/locale.scss')
 
@@ -18,13 +18,13 @@ $.widget('bop.bopLocaleChange', $.bop.bop, {
       if (!changeDialog) {
         changeDialog = content.find('>div')
         changeDialog.dialog({
-          closeText: gettext('Close'),
+          closeText: i18n.t('action.close'),
           draggable: false,
           height: 'auto',
           maxHeight: 600,
           modal: true,
           resizable: true,
-          title: gettext('Change your locale'),
+          title: i18n.t('action.changeLocale'),
           width: 380
         })
       }

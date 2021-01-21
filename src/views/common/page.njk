@@ -16,11 +16,11 @@
         <nav>
           <a href="/index" {% if currentPage === 'index' %}class="selected"{% endif %}>
             <span class="icon-home"></span>
-            <span>{{ gettext('Home') }}</span>
+            <span>{{ i18n.t('title.home') }}</span>
           </a>
           <a href="/planning" {% if currentPage === 'planning' %}class="selected"{% endif %}>
             <span class="icon-planning"></span>
-            <span>{{ gettext('Planning') }}</span>
+            <span>{{ i18n.t('title.planning') }}</span>
           </a>
         </nav>
       </div>
@@ -54,7 +54,7 @@
             </li>
             {% endif %}
             <li>
-              <a href="/logout">{{ gettext('Logout') }}</a>
+              <a href="/logout">{{ i18n.t('action.logout') }}</a>
             </li>
           </ul>
         </div>

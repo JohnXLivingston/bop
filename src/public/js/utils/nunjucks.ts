@@ -1,10 +1,9 @@
-import { gettext, format } from './i18n'
+import { i18next } from './i18n'
 import { getContext } from './context'
 
 function nunjucksContext (context: any): object {
   const r = Object.assign({}, {
-    gettext,
-    format,
+    i18n: i18next,
     context: getContext()
   }, context)
   return r

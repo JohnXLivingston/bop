@@ -9,19 +9,19 @@
   </head>
   <body>
     <div class="login-content">
-      <h1>{{ gettext('Sign in to BOP') }}</h1>
+      <h1>{{ i18n.t('title.signIn') }}</h1>
   
       <section>
         <form action="" method="POST" class="login-form">
-          <input type="text" name="login" placeholder="{{ gettext('Login') }}" required value="{{ login }}">
-          <input type="password" name="password" placeholder="{{ gettext('Password') }}" required>
+          <input type="text" name="login" placeholder="{{ i18n.t('field.login') }}" required value="{{ login }}">
+          <input type="password" name="password" placeholder="{{ i18n.t('field.password') }}" required>
           {% if loginFailed %}
             <div class="error">
-              {{ gettext('Login failed.') }}
+              {{ i18n.t('message.login_failed.') }}
             </div>
           {% endif %}
           <input type="hidden" name="loginForm" value="1">
-          <input type="submit" value="{{ gettext('Sign in') }}">
+          <input type="submit" value="{{ i18n.t('action.signIn') }}">
         </form>
       </section>
   

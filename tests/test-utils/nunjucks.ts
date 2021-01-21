@@ -1,7 +1,7 @@
 import { spawn } from 'child_process'
 import * as nunjucks from 'nunjucks'
 import * as path from 'path'
-// import { isProduction, webpackManifest, webUrl, notifierUrl } from '../../src/helpers/config'
+import { isProduction, webpackManifest, webUrl, notifierUrl } from '../../src/helpers/config'
 
 const backendEnv = nunjucks.configure(path.join(__dirname, '../../src/views'), {
   autoescape: true
@@ -11,54 +11,45 @@ const frontendEnv = nunjucks.configure(path.join(__dirname, '../../src/shared/te
   autoescape: true
 })
 
+const i18next = require('i18next')
+
 async function testNunjucksTemplate (name: string, context: any): Promise<string> {
   let env = backendEnv
   let args = ['htmlhint', 'stdin']
+  const i18n = i18next.createInstance()
+  await i18n.init({
+    debug: false,
+    defaultNS: 'common',
+    lng: 'cimode'
+  })
   const m = name.match(/(?:^|\/)shared\/templates\/(.*)$/)
   if (m) {
     name = m[1]
     env = frontendEnv
     args = ['htmlhint', '--config', '.htmlhintrc_njk', 'stdin']
 
-    // FIXME: find a better way...
     context = Object.assign({}, {
-      gettext: (t:string) => t,
-      format: (fmt: any, obj: any, named: any): string => {
-        if (!fmt) return ''
-        if (!fmt.replace) {
-          return fmt
-        }
-        if (named) {
-          return fmt.replace(/%\(\w+\)s/g, (match: any) => String(obj[match.slice(2, -2)]))
-        } else {
-          return fmt.replace(/%s/g, () => String(obj.shift()))
-        }
-      }
+      i18n
     }, context)
   } else {
-    // FIXME: backend template test is not ready yet:
-    // gettext, format are missing.
-    // There are probably other things that are not working.
-    throw new Error('Not implemented yet.')
     // FIXME: find a way to load correct data (see res.locals in middlewares)
-    // context = Object.assign({}, {
-    //   webpackManifest,
-    //   isProduction,
-    //   gettext,
-    //   format,
-    //   context: {
-    //     webBaseUrl: webUrl(),
-    //     notifierBaseUrl: notifierUrl(),
-    //     user: {
-    //       id: 1
-    //     }
-    //   },
-    //   changeLocaleInformations: [{
-    //     locale: 'fr_FR',
-    //     language: 'fr-FR',
-    //     url: webUrl() + '_locale=' + encodeURIComponent('fr_FR') + '&'
-    //   }]
-    // }, context)
+    context = Object.assign({}, {
+      webpackManifest,
+      isProduction,
+      i18n,
+      context: {
+        webBaseUrl: webUrl(),
+        notifierBaseUrl: notifierUrl(),
+        user: {
+          id: 1
+        }
+      },
+      changeLocaleInformations: [{
+        locale: 'fr_FR',
+        language: 'fr-FR',
+        url: webUrl() + '_locale=' + encodeURIComponent('fr_FR') + '&'
+      }]
+    }, context)
   }
   const html = env.render(name, context)
 
