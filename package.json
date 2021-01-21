@@ -92,7 +92,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.8.7",
-    "@babel/preset-env": "^7.8.7",
+    "@babel/preset-env": "^7.12.11",
     "@babel/preset-typescript": "^7.8.3",
     "@ctrlmaniac/simpler-sidebar": "^2.4.1",
     "@types/bcrypt": "^3.0.0",
