@@ -44,6 +44,7 @@ async function initI18n () {
     backend: {
       allowMultiLoading: false, // TODO: enable multiloading
       loadPath: '/i18n/{{lng}}/{{ns}}.json'
+      // FIXME: addPath to log errors
     },
     debug: false,
     defaultNS: 'common',

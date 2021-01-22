@@ -4,8 +4,13 @@ import * as express from 'express'
 // import { logger } from '../helpers/log'
 const i18next = require('i18next')
 const i18nextMiddlewhare = require('i18next-http-middleware')
+const i18nextFsBackend = require('i18next-fs-backend')
 
-i18next.use(i18nextMiddlewhare.LanguageDetector).init({
+i18next.use(i18nextMiddlewhare.LanguageDetector).use(i18nextFsBackend).init({
+  backend: {
+    loadPath: 'dist/i18n/{{lng}}/{{ns}}.json'
+    // FIXME: addPath to log errors
+  },
   debug: false,
   defaultNS: 'common',
   fallbackLng: 'en',
