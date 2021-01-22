@@ -1,0 +1,21 @@
+{
+  "action": {
+    "changeLocale": "Change your locale",
+    "close": "Close",
+    "logout": "Logout",
+    "signIn": "Sign in"
+  },
+  "currentLocale": "Current locale:",
+  "field": {
+    "login": "Login",
+    "password": "Password"
+  },
+  "message": {
+    "login_failed": "Login failed."
+  },
+  "title": {
+    "home": "Home",
+    "planning": "Planning",
+    "signIn": "Sign in to BOP"
+  }
+}

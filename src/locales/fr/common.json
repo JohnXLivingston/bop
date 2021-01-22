@@ -1,0 +1,21 @@
+{
+  "action": {
+    "changeLocale": "Changez de langue",
+    "close": "Fermer",
+    "logout": "Déconnexion",
+    "signIn": "Se connecter"
+  },
+  "currentLocale": "Langue courante :",
+  "field": {
+    "login": "Identifiant",
+    "password": "Mot de passe"
+  },
+  "message": {
+    "login_failed": "Échec de l'authentification."
+  },
+  "title": {
+    "home": "Accueil",
+    "planning": "Panification",
+    "signIn": "Connectez-vous à BOP"
+  }
+}
