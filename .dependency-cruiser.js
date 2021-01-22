@@ -41,7 +41,7 @@ module.exports = {
     },
     {
       from: { path: '^src/public/js/utils'},
-      to: { path: '^node_modules/(js-logger)/' }
+      to: { path: '^node_modules/(js-logger|i18next|i18next-http-backend)/' }
     },
     {
       from: { path: '^src/public/js/jquery' },
