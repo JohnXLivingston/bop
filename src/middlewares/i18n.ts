@@ -8,7 +8,8 @@ const i18nextMiddlewhare = require('i18next-http-middleware')
 i18next.use(i18nextMiddlewhare.LanguageDetector).init({
   debug: false,
   defaultNS: 'common',
-  fallbackLng: 'en'
+  fallbackLng: 'en',
+  ns: 'common'
 })
 
 // // Tips: languages is like xx-XX and locale xx_XX.

@@ -42,12 +42,14 @@ window.format = format
 async function initI18n () {
   await i18next.use(HttpApi).init({
     backend: {
+      allowMultiLoading: false, // TODO: enable multiloading
       loadPath: '/i18n/{{lng}}/{{ns}}.json'
     },
     debug: false,
     defaultNS: 'common',
     fallbackLng: 'en',
-    lng: $('body').attr('lang') || 'en'
+    lng: $('body').attr('lang') || 'en',
+    ns: 'common'
   })
 }
 
