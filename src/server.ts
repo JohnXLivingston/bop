@@ -24,7 +24,8 @@ import {
   commonConstants,
   logRequest,
   getSessionMiddleware,
-  i18n,
+  initI18n,
+  i18nMiddleware,
   i18nChangeLocale
 } from './middlewares'
 
@@ -77,7 +78,7 @@ async function init () {
   } else {
     const port = CONFIG.SERVER.PORT
     logger.info(`Server ${process.pid} starting at http://localhost:${port}`)
-    const server = newServer()
+    const server = await newServer()
     server.listen(port)
     logger.debug(`Server ${process.pid} listening on port ${port}`)
     testFunction()
@@ -99,9 +100,11 @@ init().catch((err) => {
 /**
  * newServer creates the express app and the http server.
  */
-function newServer () {
+async function newServer () {
   const app = express()
   const server = new Server(app)
+
+  await initI18n()
 
   Redis.initInstance()
 
@@ -124,9 +127,9 @@ function newServer () {
   app.use(express.static(path.join(__dirname, './public')))
   app.use('/i18n', express.static(path.join(__dirname, './i18n')))
 
-  app.use(i18n)
-  app.use(commonConstants) // It as to be after i18n, because of a bug: https://github.com/mozilla/i18n-abide/issues/89
-  app.post(/.*/, // After i18n and commonConstants, in case we have to display a login form.
+  app.use(i18nMiddleware)
+  app.use(commonConstants)
+  app.post(/.*/, // After i18nMiddleware and commonConstants, in case we have to display a login form.
     getAuthenticateMiddleware([i18nChangeLocale])
   )
 

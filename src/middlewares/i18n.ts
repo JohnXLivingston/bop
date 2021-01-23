@@ -1,94 +1,34 @@
 import * as express from 'express'
-// import * as i18nAbide from 'i18n-abide'
-// import { isProduction } from '../helpers/config'
 import { logger } from '../helpers/log'
-const i18next = require('i18next')
-const i18nextMiddlewhare = require('i18next-http-middleware')
+import { i18n } from 'i18next'
+const i18next: i18n = require('i18next')
 const i18nextFsBackend = require('i18next-fs-backend')
+const i18nextMiddlewhare = require('i18next-http-middleware')
 
-i18next.use(i18nextMiddlewhare.LanguageDetector).use(i18nextFsBackend).init({
-  backend: {
-    loadPath: 'dist/i18n/{{lng}}/{{ns}}.json'
-    // FIXME: addPath to log errors
-  },
-  debug: false,
-  defaultNS: 'common',
-  fallbackLng: 'en',
-  ns: 'common',
-  preload: ['en', 'fr'],
-  saveMissing: true,
-  missingKeyHandler: (lng: string, ns: string, key: string, fallbackValue: string) => {
-    logger.error(`Missing localized string: lng=${lng}, ns=${ns}, key=${key}, fallbackValue=${fallbackValue}.`)
-  }
-})
+const supportedLanguages = ['en', 'fr'] // TODO: add ['en-US', 'fr-FR']
 
-// // Tips: languages is like xx-XX and locale xx_XX.
-// const supportedLanguages = ['en-US', 'fr-FR']
-// let debugLang: string | undefined
-// let debugLocale: string | undefined
-// if (!isProduction) {
-//   supportedLanguages.push('it-CH')
-//   debugLang = 'it-CH'
-//   debugLocale = 'it_CH'
-// }
-/**
- * Read the locale from session or cookies and set it in request[headers] for i18n-abide.
- */
-async function _readLocale (req: express.Request, res: express.Response, next: express.NextFunction) {
-  // let locale: string | undefined
-  // if (req.session?.clientLocale) {
-  //   locale = req.session.clientLocale
-  // }
-  // TODO: also read a cookie?
-
-  // if (locale) {
-  //   if (!localeSupported(locale)) {
-  //     logger.debug('The requested locale "%s" is not supported.', locale)
-  //   } else {
-  //     logger.debug('There is a valid locale (%s) in the user session, using it.', locale)
-  //     req.headers['accept-language'] = i18nAbide.normalizeLanguage(i18nAbide.languageFrom(locale))
-  //   }
-  // }
-  return next()
+async function initI18n () {
+  await i18next.use(i18nextMiddlewhare.LanguageDetector).use(i18nextFsBackend).init({
+    backend: {
+      loadPath: 'dist/i18n/{{lng}}/{{ns}}.json'
+    },
+    debug: false,
+    defaultNS: 'common',
+    fallbackLng: 'en',
+    ns: 'common',
+    preload: supportedLanguages,
+    saveMissing: true,
+    missingKeyHandler: (lng: string[], ns: string, key: string, fallbackValue: string) => {
+      logger.error(`Missing localized string: lng=${lng}, ns=${ns}, key=${key}, fallbackValue=${fallbackValue}.`)
+    }
+  })
 }
-/**
- * Initialize i18n-abide.
- */
-// const i18n = [_readLocale, i18nAbide.abide({
-//   supported_languages: supportedLanguages,
-//   default_lang: 'en-US',
-//   debug_lang: debugLang,
-//   translation_directory: 'dist/i18n',
-//   logger: logger
-// })]
-function testToRemove (req: express.Request, res: express.Response, next: express.NextFunction) {
+
+function i18nMiddleware (req: express.Request, res: express.Response, next: express.NextFunction) {
   res.locals.i18n = i18next
   next()
 }
-const i18n = [_readLocale, testToRemove]
 
-// function localeSupported (locale: string): boolean {
-//   if (i18nAbide.getLocales().indexOf(locale) >= 0) {
-//     return true
-//   }
-//   if (debugLocale && debugLocale === locale) {
-//     return true
-//   }
-//   return false
-// }
-
-// const localeInformations = i18nAbide.getLocales().sort().map(locale => {
-//   return {
-//     locale: i18nAbide.normalizeLocale(locale),
-//     language: i18nAbide.normalizeLanguage(i18nAbide.languageFrom(locale))
-//   }
-// })
-// if (debugLocale) {
-//   localeInformations.push({
-//     locale: i18nAbide.normalizeLocale(debugLocale),
-//     language: i18nAbide.normalizeLanguage(debugLang)
-//   })
-// }
 /**
  * Use this middleware if the current route can be called to change the current locale.
  * @param req
@@ -129,10 +69,10 @@ function i18nChangeLocale (req: express.Request, res: express.Response, next: ex
   return next()
 }
 
-// TODO: serve static i18n folder if necessary for front-end localization.
 // FIXME: find a way to conserve local after logout? In a cookie?
 
 export {
-  i18n,
+  initI18n,
+  i18nMiddleware,
   i18nChangeLocale
 }

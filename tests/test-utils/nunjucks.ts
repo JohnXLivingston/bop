@@ -12,15 +12,25 @@ const frontendEnv = nunjucks.configure(path.join(__dirname, '../../src/shared/te
 })
 
 const i18next = require('i18next')
+const i18nextFsBackend = require('i18next-fs-backend')
 
 async function testNunjucksTemplate (name: string, context: any): Promise<string> {
   let env = backendEnv
   let args = ['htmlhint', 'stdin']
   const i18n = i18next.createInstance()
-  await i18n.init({
+  await i18n.use(i18nextFsBackend).init({
+    backend: {
+      loadPath: 'src/locales/{{lng}}/{{ns}}.json'
+    },
     debug: false,
     defaultNS: 'common',
-    lng: 'cimode'
+    fallbackLng: 'en',
+    ns: 'common',
+    lng: 'en', // or 'cimode'?
+    saveMissing: true,
+    missingKeyHandler: (lng: string[], ns: string, key: string, fallbackValue: string) => {
+      throw new Error(`Missing localized string: lng=${lng}, ns=${ns}, key=${key}, fallbackValue=${fallbackValue}.`)
+    }
   })
   const m = name.match(/(?:^|\/)shared\/templates\/(.*)$/)
   if (m) {
