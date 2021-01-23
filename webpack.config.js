@@ -5,6 +5,7 @@ const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const path = require('path')
 const webpack = require('webpack')
 
+const PACKAGE = require('./package.json');
 const isProd = process.env.NODE_ENV === 'production'
 
 // Can't print when using dependency-cruiser.
@@ -121,6 +122,9 @@ module.exports = {
     }),
     new MiniCssExtractPlugin({
       filename: 'css/[name].[contenthash].css'
+    }),
+    new webpack.DefinePlugin({
+      BUILD: JSON.stringify(PACKAGE.version + ':' + Date.now())
     }),
     new webpack.ProvidePlugin({
       $: 'jquery',

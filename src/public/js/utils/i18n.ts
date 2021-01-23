@@ -12,7 +12,7 @@ async function initI18n () {
       backend: HttpApi,
       backendOption: {
         allowMultiLoading: true,
-        loadPath: '/i18n?lng={{lng}}&ns={{ns}}'
+        loadPath: '/i18n?lng={{lng}}&ns={{ns}}&version=' + encodeURIComponent(BUILD)
       }
     },
     debug: false,

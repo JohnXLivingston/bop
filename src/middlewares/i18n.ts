@@ -29,7 +29,9 @@ function i18nMiddleware () {
 }
 
 function i18nResourcesLoader () {
-  return i18nextMiddleware.getResourcesHandler(i18next)
+  return i18nextMiddleware.getResourcesHandler(i18next, {
+    cache: true
+  })
 }
 
 /**

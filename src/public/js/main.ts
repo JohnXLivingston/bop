@@ -11,7 +11,7 @@ require('./widgets/sidebar')
 require('./widgets/wheelmenu')
 
 const logger = getLogger('main.ts')
-logger.debug('JS is okay.')
+logger.info(`Running BOP build ${BUILD}.`)
 
 const pJquery = new Promise<void>((resolve) => {
   $(() => {
