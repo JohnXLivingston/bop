@@ -4,7 +4,7 @@ import { Server } from 'http'
 import * as sharedSession from 'express-socket.io-session'
 import { Socket } from 'socket.io'
 
-import { CONFIG, checkConfig } from './helpers/config'
+import { CONFIG, checkConfig, webUrl } from './helpers/config'
 import { logger } from './helpers/log'
 import { setSharedLogger } from './shared/utils/logger'
 
@@ -71,8 +71,10 @@ class Notifier {
   }
 
   init (server: Server) : void {
+    const url = webUrl()
     const io = require('socket.io')(server, {
-      cookie: false
+      cookie: false,
+      origins: [url]
     })
 
     const redisClient = Redis.Instance.getClient()
