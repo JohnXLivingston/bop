@@ -1,6 +1,8 @@
 import i18next from 'i18next'
 import HttpApi from 'i18next-http-backend'
+import getLogger from './logger'
 
+const logger = getLogger('i18n')
 declare global {
   interface Window {
     // eslint-disable-next-line camelcase
@@ -50,7 +52,11 @@ async function initI18n () {
     defaultNS: 'common',
     fallbackLng: 'en',
     lng: $('body').attr('lang') || 'en',
-    ns: 'common'
+    ns: 'common',
+    saveMissing: true,
+    missingKeyHandler: (lng: string[], ns: string, key: string, fallbackValue: string) => {
+      logger.error(`Missing localized string: lng=${lng}, ns=${ns}, key=${key}, fallbackValue=${fallbackValue}.`)
+    }
   })
 }
 

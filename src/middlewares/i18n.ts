@@ -1,7 +1,7 @@
 import * as express from 'express'
 // import * as i18nAbide from 'i18n-abide'
 // import { isProduction } from '../helpers/config'
-// import { logger } from '../helpers/log'
+import { logger } from '../helpers/log'
 const i18next = require('i18next')
 const i18nextMiddlewhare = require('i18next-http-middleware')
 const i18nextFsBackend = require('i18next-fs-backend')
@@ -14,7 +14,12 @@ i18next.use(i18nextMiddlewhare.LanguageDetector).use(i18nextFsBackend).init({
   debug: false,
   defaultNS: 'common',
   fallbackLng: 'en',
-  ns: 'common'
+  ns: 'common',
+  preload: ['en', 'fr'],
+  saveMissing: true,
+  missingKeyHandler: (lng: string, ns: string, key: string, fallbackValue: string) => {
+    logger.error(`Missing localized string: lng=${lng}, ns=${ns}, key=${key}, fallbackValue=${fallbackValue}.`)
+  }
 })
 
 // // Tips: languages is like xx-XX and locale xx_XX.
