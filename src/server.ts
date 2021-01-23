@@ -58,7 +58,7 @@ async function init () {
   if (cluster.isMaster) {
     let nbWorkers = CONFIG.CLUSTER.WORKERS
     if (!nbWorkers) {
-      nbWorkers = require('os').cpus().length - CONFIG.CLUSTER.NOTIFIERS
+      nbWorkers = require('os').cpus().length - 1 // -1 because of the notifier thread
     }
     if (nbWorkers <= 0) {
       logger.error('Invalid nbWorkers, fallback on 1.')

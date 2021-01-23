@@ -30,23 +30,9 @@ async function init () {
   await initDatabaseModels()
 
   const port = CONFIG.NOTIFIER.PORT
-  const nbWorkers = CONFIG.CLUSTER.NOTIFIERS
 
-  const sticky = require('socketio-sticky-session')
-
-  const stickyOptions = {
-    num: nbWorkers,
-    proxy: true,
-    header: 'x-forwarded-for',
-    ignoreMissingHeader: true
-  }
-
-  sticky(stickyOptions, newServer).listen(port, () => {
-    if (cluster.isMaster) {
-      logger.info(`Sticky notifier server ${process.pid} started at http://localhost:${port}`)
-    } else {
-      logger.info(`Notifier ${process.pid} started at http://localhost:${port}`)
-    }
+  newServer().listen(port, () => {
+    logger.info(`Notifier ${process.pid} started at http://localhost:${port}`)
   })
 }
 init().catch((err) => {
