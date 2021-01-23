@@ -1,7 +1,6 @@
 cluster:
   # 2 workers in test mode. It should be enough.
   workers: 2
-  notifiers: 2
 
 cookies:
   prefix: 'bop_test'

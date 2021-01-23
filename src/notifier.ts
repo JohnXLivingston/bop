@@ -4,7 +4,7 @@ import { Server } from 'http'
 import * as sharedSession from 'express-socket.io-session'
 import { Socket } from 'socket.io'
 
-import { CONFIG, checkConfig } from './helpers/config'
+import { CONFIG, checkConfig, webUrl } from './helpers/config'
 import { logger } from './helpers/log'
 import { setSharedLogger } from './shared/utils/logger'
 
@@ -30,23 +30,9 @@ async function init () {
   await initDatabaseModels()
 
   const port = CONFIG.NOTIFIER.PORT
-  const nbWorkers = CONFIG.CLUSTER.NOTIFIERS
 
-  const sticky = require('socketio-sticky-session')
-
-  const stickyOptions = {
-    num: nbWorkers,
-    proxy: true,
-    header: 'x-forwarded-for',
-    ignoreMissingHeader: true
-  }
-
-  sticky(stickyOptions, newServer).listen(port, () => {
-    if (cluster.isMaster) {
-      logger.info(`Sticky notifier server ${process.pid} started at http://localhost:${port}`)
-    } else {
-      logger.info(`Notifier ${process.pid} started at http://localhost:${port}`)
-    }
+  newServer().listen(port, () => {
+    logger.info(`Notifier ${process.pid} started at http://localhost:${port}`)
   })
 }
 init().catch((err) => {
@@ -85,8 +71,10 @@ class Notifier {
   }
 
   init (server: Server) : void {
+    const url = webUrl()
     const io = require('socket.io')(server, {
-      cookie: false
+      cookie: false,
+      origins: [url]
     })
 
     const redisClient = Redis.Instance.getClient()

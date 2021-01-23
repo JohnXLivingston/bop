@@ -22,8 +22,7 @@ function get<T> (name: string, defaultValue: T): T {
 
 const CONFIG = {
   CLUSTER: {
-    WORKERS: get<number>('cluster.workers', 0),
-    NOTIFIERS: get<number>('cluster.notifiers', 1)
+    WORKERS: get<number>('cluster.workers', 0)
   },
   COOKIES: {
     PREFIX: get<string>('cookies.prefix', ''),
@@ -148,7 +147,7 @@ function _recursiveConstraintCheck (configErrors: ConfigErrors, stack :any, c: a
 function _checkMissingConfig (configErrors: ConfigErrors) :void {
   const required: Required = {
     CLUSTER: {
-      NOTIFIERS: true
+      WORKERS: true
     },
     COOKIES: {
       SESSION: {
