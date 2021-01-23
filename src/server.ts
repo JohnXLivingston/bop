@@ -26,6 +26,7 @@ import {
   getSessionMiddleware,
   initI18n,
   i18nMiddleware,
+  i18nResourcesLoader,
   i18nChangeLocale
 } from './middlewares'
 
@@ -125,9 +126,9 @@ async function newServer () {
   app.use(logRequest)
 
   app.use(express.static(path.join(__dirname, './public')))
-  app.use('/i18n', express.static(path.join(__dirname, './i18n')))
+  app.use('/i18n', i18nResourcesLoader())
 
-  app.use(i18nMiddleware)
+  app.use(i18nMiddleware())
   app.use(commonConstants)
   app.post(/.*/, // After i18nMiddleware and commonConstants, in case we have to display a login form.
     getAuthenticateMiddleware([i18nChangeLocale])

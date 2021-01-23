@@ -3,12 +3,12 @@ import { logger } from '../helpers/log'
 import { i18n } from 'i18next'
 const i18next: i18n = require('i18next')
 const i18nextFsBackend = require('i18next-fs-backend')
-const i18nextMiddlewhare = require('i18next-http-middleware')
+const i18nextMiddleware = require('i18next-http-middleware')
 
 const supportedLanguages = ['en', 'fr'] // TODO: add ['en-US', 'fr-FR']
 
 async function initI18n () {
-  await i18next.use(i18nextMiddlewhare.LanguageDetector).use(i18nextFsBackend).init({
+  await i18next.use(i18nextMiddleware.LanguageDetector).use(i18nextFsBackend).init({
     backend: {
       loadPath: 'dist/i18n/{{lng}}/{{ns}}.json'
     },
@@ -24,9 +24,12 @@ async function initI18n () {
   })
 }
 
-function i18nMiddleware (req: express.Request, res: express.Response, next: express.NextFunction) {
-  res.locals.i18n = i18next
-  next()
+function i18nMiddleware () {
+  return i18nextMiddleware.handle(i18next)
+}
+
+function i18nResourcesLoader () {
+  return i18nextMiddleware.getResourcesHandler(i18next)
 }
 
 /**
@@ -74,5 +77,6 @@ function i18nChangeLocale (req: express.Request, res: express.Response, next: ex
 export {
   initI18n,
   i18nMiddleware,
+  i18nResourcesLoader,
   i18nChangeLocale
 }
