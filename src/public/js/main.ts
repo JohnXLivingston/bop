@@ -13,7 +13,7 @@ require('./widgets/wheelmenu')
 const logger = getLogger('main.ts')
 logger.debug('JS is okay.')
 
-const pJquery = new Promise((resolve) => {
+const pJquery = new Promise<void>((resolve) => {
   $(() => {
     notifications.connect()
     resolve()
