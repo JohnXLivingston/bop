@@ -119,7 +119,6 @@ async function _authenticate (req: express.Request, res: express.Response, next:
       }
       req.session.userId = user.id
       req.session.login = user.login
-      // TODO: add user locale in req.session.clientLocale
       logger.debug('[auth:_authenticate] User %d successfully logged in.', req.session.userId)
       return res.redirect(req.originalUrl)
     }

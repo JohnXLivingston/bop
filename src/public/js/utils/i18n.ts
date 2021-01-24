@@ -19,8 +19,11 @@ async function initI18n () {
     defaultNS: 'common',
     fallbackLng: 'en',
     lng: lng,
+    load: 'all',
     ns: 'common',
     saveMissing: true,
+    returnNull: false,
+    returnEmptyString: false,
     missingKeyHandler: (lng: string[], ns: string, key: string, fallbackValue: string) => {
       logger.error(`Missing localized string: lng=${lng}, ns=${ns}, key=${key}, fallbackValue=${fallbackValue}.`)
     }

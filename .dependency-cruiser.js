@@ -41,7 +41,7 @@ module.exports = {
     },
     {
       from: { path: '^src/public/js/utils'},
-      to: { path: '^node_modules/(js-logger|i18next|i18next-http-backend)/' }
+      to: { path: '^node_modules/(js-logger|i18next|i18next-http-backend|i18next-multiload-backend-adapter)/' }
     },
     {
       from: { path: '^src/public/js/jquery' },
@@ -66,7 +66,7 @@ module.exports = {
     {
       comment: 'Middlewares can include most of backend code.',
       from: { path: '^src/middlewares/' },
-      to: { path: '^src/(helpers|models|lib|middlewares)/|^node_modules/' }
+      to: { path: '^src/(helpers|models|lib|middlewares)/|^node_modules/|^(path|fs)$' }
     },
     {
       comment: 'Shared code cannot include any backend of frontend code.',

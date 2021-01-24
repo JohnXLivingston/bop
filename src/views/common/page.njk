@@ -63,6 +63,6 @@
     <div class="page-content">
       {% block content %}{% endblock %}
     </div>
-    {{ webpack.bodyScripts(locale, webpackManifest, webpackChunk) }}
+    {{ webpack.bodyScripts(webpackManifest, webpackChunk) }}
   </body>
 </html>

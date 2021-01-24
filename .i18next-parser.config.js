@@ -1,4 +1,25 @@
 const BaseLexer = require('./node_modules/i18next-parser/dist/lexers/base-lexer')
+
+const { join } = require('path')
+const { readdirSync, lstatSync } = require('fs')
+const locales = readdirSync('src/locales').filter((fileName) => {
+  const joinedPath = join('src/locales', fileName)
+  const isDirectory = lstatSync(joinedPath).isDirectory()
+  return isDirectory
+})
+
+class LocalesConfLexec extends BaseLexer {
+  extract(content) {
+    for (let i = 0; i < locales.length; i ++) {
+      const l = locales[i]
+      this.keys.push({
+        key: 'languages.' + l
+      })
+    }
+    return this.keys
+  }
+}
+
 class NunjucksLexer extends BaseLexer { // This class is inspired by original handlebars-lexer.
   constructor(options = {}) {
     super(options)
@@ -126,10 +147,12 @@ class NunjucksLexer extends BaseLexer { // This class is inspired by original ha
       '\\}'
     
     const pattern =
+      '^\\s*' +
       keysPart +
       '(?:\\s*,\\s*' +
       optionsPart +
-      ')?'
+      ')?' +
+      '\\s*$'
 
     this.argumentsRegex = new RegExp(pattern, 'mi')
     return this.argumentsRegex
@@ -172,6 +195,7 @@ module.exports = {
 
   // see below for more details
   lexers: {
+    txt: [LocalesConfLexec],
     html: [NunjucksLexer],
     njk: [NunjucksLexer],
 
@@ -186,7 +210,7 @@ module.exports = {
   lineEnding: 'auto',
   // Control the line ending. See options at https://github.com/ryanve/eol
 
-  locales: ['en', 'fr'],
+  locales: locales,
   // An array of the locales in your applications
 
   namespaceSeparator: ':',
@@ -198,7 +222,10 @@ module.exports = {
   // Supports JSON (.json) and YAML (.yml) file formats
   // Where to write the locale files relative to process.cwd()
 
-  input: ['src/**/*.@(ts|js|tsx|jsx|html|njk)'],
+  input: [
+    'src/locales/locales.txt',
+    'src/**/*.@(ts|js|tsx|jsx|html|njk)'
+  ],
   // An array of globs that describe where to look for source files
   // relative to the location of the configuration file
 
@@ -215,7 +242,7 @@ module.exports = {
   verbose: true,
   // Display info about the parsing including some stats
 
-  failOnWarnings: true,
+  failOnWarnings: false,
   // Exit with an exit code of 1 on warnings
 
   customValueTemplate: null

@@ -1,27 +1,66 @@
 import * as express from 'express'
 import { logger } from '../helpers/log'
 import { i18n } from 'i18next'
+import { readdirSync, lstatSync } from 'fs'
+import { join } from 'path'
 const i18next: i18n = require('i18next')
 const i18nextFsBackend = require('i18next-fs-backend')
 const i18nextMiddleware = require('i18next-http-middleware')
 
-const supportedLanguages = ['en', 'fr'] // TODO: add ['en-US', 'fr-FR']
+let supportedLanguagesInfo: {
+  key: string,
+  label: string
+}[]
 
 async function initI18n () {
+  const supportedLanguages = readdirSync('dist/i18n').filter((fileName) => {
+    const joinedPath = join('dist/i18n', fileName)
+    const isDirectory = lstatSync(joinedPath).isDirectory()
+    return isDirectory
+  })
+  logger.info('Loading supported languages: ' + supportedLanguages.join(', '))
+
   await i18next.use(i18nextMiddleware.LanguageDetector).use(i18nextFsBackend).init({
     backend: {
       loadPath: 'dist/i18n/{{lng}}/{{ns}}.json'
     },
+    detection: {
+      order: ['querystring', /* 'session', 'cookie', */ 'header'],
+      lookupQuerystring: '_locale'
+      // lookupCookie: 'language',
+    },
     debug: false,
     defaultNS: 'common',
     fallbackLng: 'en',
+    load: 'all',
     ns: 'common',
     preload: supportedLanguages,
+    returnNull: false,
+    returnEmptyString: false,
     saveMissing: true,
+    supportedLngs: supportedLanguages,
     missingKeyHandler: (lng: string[], ns: string, key: string, fallbackValue: string) => {
       logger.error(`Missing localized string: lng=${lng}, ns=${ns}, key=${key}, fallbackValue=${fallbackValue}.`)
     }
   })
+
+  supportedLanguagesInfo = []
+  for (let i = 0; i < supportedLanguages.length; i++) {
+    const l = supportedLanguages[i]
+    if (l.indexOf('-') < 0) {
+      // language like 'en': keep only if there is no derivated language.
+      if (supportedLanguages.find(f => f.startsWith(l))) {
+        continue
+      }
+    }
+    const i18nTmp = i18next.cloneInstance({})
+    await i18nTmp.changeLanguage(l)
+    supportedLanguagesInfo.push({
+      key: l,
+      label: i18nTmp.t('languages.' + l)
+    })
+  }
+  supportedLanguagesInfo.sort((a, b) => a.label.localeCompare(b.label))
 }
 
 function i18nMiddleware () {
@@ -59,17 +98,19 @@ function i18nChangeLocale (req: express.Request, res: express.Response, next: ex
   //   return res.redirect(url)
   // }
 
-  // let urlBase = req.originalUrl
-  // if (urlBase[urlBase.length] !== '&') {
-  //   if (urlBase.indexOf('?') >= 0) {
-  //     urlBase += '&'
-  //   } else {
-  //     urlBase += '?'
-  //   }
-  // }
-  // res.locals.changeLocaleInformations = localeInformations.map(info => {
-  //   return Object.assign({}, info, { url: urlBase + '_locale=' + encodeURIComponent(info.locale) + '&' })
-  // })
+  if (supportedLanguagesInfo) {
+    let urlBase = req.originalUrl
+    if (urlBase[urlBase.length] !== '&') {
+      if (urlBase.indexOf('?') >= 0) {
+        urlBase += '&'
+      } else {
+        urlBase += '?'
+      }
+    }
+    res.locals.changeLocaleInformations = supportedLanguagesInfo.map(language => {
+      return Object.assign({}, language, { url: urlBase + '_locale=' + encodeURIComponent(language.key) + '&' })
+    })
+  }
 
   return next()
 }

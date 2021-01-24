@@ -10,6 +10,12 @@
     "login": "Identifiant",
     "password": "Mot de passe"
   },
+  "languages": {
+    "en": "Anglais",
+    "en-US": "Anglais (États-Unis)",
+    "fr": "Français",
+    "fr-FR": "Français (France)"
+  },
   "message": {
     "login_failed": "Échec de l'authentification."
   },

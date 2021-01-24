@@ -2,12 +2,12 @@
   <div data-widget="bopLocaleChange">
     {{ i18n.t('currentLocale') }}
     <a>
-      {{ locale }}
+      {{ i18n.t('languages.' + language) }}
     </a>
     <div class="hidden">
       <ul>
         {% for info in changeLocaleInformations %}
-          <li><a href="{{ info.url }}">{{ info.language }}</a></li>
+          <li><a href="{{ info.url }}">{{ info.label }}</a></li>
         {% endfor %}
       </ul>
     </div>

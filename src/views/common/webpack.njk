@@ -7,8 +7,8 @@
 {% macro headScripts(webpackManifest, name) %}
   <script>{{ webpackManifest.headerScriptTxt(name) | safe }}</script>
 {% endmacro %}
-{% macro bodyScripts(locale, webpackManifest, name) %}
-  {% for url in webpackManifest.scriptUrls(name, locale) %}
+{% macro bodyScripts(webpackManifest, name) %}
+  {% for url in webpackManifest.scriptUrls(name) %}
     <script src="{{ url }}"></script>
   {% endfor %}
 {% endmacro %}

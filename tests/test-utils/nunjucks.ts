@@ -28,6 +28,8 @@ async function testNunjucksTemplate (name: string, context: any): Promise<string
     ns: 'common',
     lng: 'en', // or 'cimode'?
     saveMissing: true,
+    returnNull: false,
+    returnEmptyString: false,
     missingKeyHandler: (lng: string[], ns: string, key: string, fallbackValue: string) => {
       throw new Error(`Missing localized string: lng=${lng}, ns=${ns}, key=${key}, fallbackValue=${fallbackValue}.`)
     }
@@ -55,8 +57,8 @@ async function testNunjucksTemplate (name: string, context: any): Promise<string
         }
       },
       changeLocaleInformations: [{
-        locale: 'fr_FR',
-        language: 'fr-FR',
+        key: 'fr_FR',
+        label: 'fr-FR',
         url: webUrl() + '_locale=' + encodeURIComponent('fr_FR') + '&'
       }]
     }, context)

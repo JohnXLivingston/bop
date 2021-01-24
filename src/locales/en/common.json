@@ -10,6 +10,12 @@
     "login": "Login",
     "password": "Password"
   },
+  "languages": {
+    "en": "English",
+    "en-US": "English (US)",
+    "fr": "French",
+    "fr-FR": "French (France)"
+  },
   "message": {
     "login_failed": "Login failed."
   },

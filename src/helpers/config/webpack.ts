@@ -95,12 +95,8 @@ class WebpackManifest {
     return cssFiles[name].slice()
   }
 
-  scriptUrls (name: string, locale: string) {
+  scriptUrls (name: string) {
     const r = jsFiles[name] ? jsFiles[name].slice() : []
-    if (/^\w+_\w+$/.test(locale)) {
-      // FIXME: i18n files should pass through webpack, to minimize and add an hash in url.
-      r.unshift(`i18n/${locale}/messages.js`)
-    }
     return r
   }
 }

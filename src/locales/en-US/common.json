@@ -1,0 +1,27 @@
+{
+  "action": {
+    "changeLocale": "",
+    "close": "",
+    "logout": "",
+    "signIn": ""
+  },
+  "currentLocale": "",
+  "field": {
+    "login": "",
+    "password": ""
+  },
+  "languages": {
+    "en": "",
+    "en-US": "",
+    "fr": "",
+    "fr-FR": ""
+  },
+  "message": {
+    "login_failed": ""
+  },
+  "title": {
+    "home": "",
+    "planning": "",
+    "signIn": ""
+  }
+}
