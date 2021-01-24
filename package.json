@@ -25,7 +25,6 @@
     "start": "NODE_ENV=production npm-run-all -s build common:start",
     "test": "scripty",
     "test:nolint": "TEST_NOLINTING=1 npm run test",
-    "i18n": "npm-run-all -s build i18n:extract i18n:build",
     "i18n:extract": "npx i18next",
     "i18n:build": "cp-cli src/locales/ dist/i18n/",
     "i18n:watch": "watch 'npm run i18n:build' src/locales/",
