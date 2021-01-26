@@ -1,4 +1,5 @@
 import * as express from 'express'
+import { CONFIG } from '../helpers/config'
 import { logger } from '../helpers/log'
 import { i18n } from 'i18next'
 import { readdirSync, lstatSync } from 'fs'
@@ -25,9 +26,14 @@ async function initI18n () {
       loadPath: 'dist/i18n/{{lng}}/{{ns}}.json'
     },
     detection: {
-      order: ['querystring', /* 'session', 'cookie', */ 'header'],
-      lookupQuerystring: '_locale'
-      // lookupCookie: 'language',
+      order: ['querystring', /* 'session', */ 'cookie', 'header'],
+      lookupQuerystring: '_language',
+      lookupCookie: CONFIG.COOKIES.PREFIX + 'language',
+      caches: ['cookie'],
+      cookieSameSite: 'strict',
+      cookieSecure: true,
+      cookiePath: '/',
+      cookieExpirationDate: new Date(Date.UTC(9999, 11, 31))
     },
     debug: false,
     defaultNS: 'common',
@@ -80,23 +86,12 @@ function i18nResourcesLoader () {
  * @param next
  */
 function i18nChangeLocale (req: express.Request, res: express.Response, next: express.NextFunction) {
-  // if (req.query._locale) {
-  //   const newLocale = i18nAbide.normalizeLocale(req.query._locale)
-  //   logger.debug('Trying to change user\' locale to "%s".', newLocale)
-  //   if (newLocale && localeSupported(newLocale)) {
-  //     if (req.session) {
-  //       logger.debug('Saving locale in session')
-  //       req.session.clientLocale = newLocale
-  //       // TODO: save locale on user.
-  //     }
-  //     // TODO: save locale on cookie?
-  //   } else {
-  //     logger.warn('Error: locale "%s" does not exist.', newLocale)
-  //   }
-  //   const url = req.originalUrl.replace(/(\?|&)_locale=.*(&|$)/g, '')
-  //   logger.debug('Redirecting to: "%s".', url)
-  //   return res.redirect(url)
-  // }
+  if (req.query._language) {
+    // i18next will save the language in cookie/session (see detection.cache)
+    const url = req.originalUrl.replace(/(\?|&)_language=.*(&|$)/g, '')
+    logger.debug('Redirecting to: "%s".', url)
+    return res.redirect(url)
+  }
 
   if (supportedLanguagesInfo) {
     let urlBase = req.originalUrl
@@ -108,14 +103,11 @@ function i18nChangeLocale (req: express.Request, res: express.Response, next: ex
       }
     }
     res.locals.changeLocaleInformations = supportedLanguagesInfo.map(language => {
-      return Object.assign({}, language, { url: urlBase + '_locale=' + encodeURIComponent(language.key) + '&' })
+      return Object.assign({}, language, { url: urlBase + '_language=' + encodeURIComponent(language.key) + '&' })
     })
   }
-
   return next()
 }
-
-// FIXME: find a way to conserve local after logout? In a cookie?
 
 export {
   initI18n,

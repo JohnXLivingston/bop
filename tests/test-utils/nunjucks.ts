@@ -59,7 +59,7 @@ async function testNunjucksTemplate (name: string, context: any): Promise<string
       changeLocaleInformations: [{
         key: 'fr_FR',
         label: 'fr-FR',
-        url: webUrl() + '_locale=' + encodeURIComponent('fr_FR') + '&'
+        url: webUrl() + '_language=' + encodeURIComponent('fr_FR') + '&'
       }]
     }, context)
   }
