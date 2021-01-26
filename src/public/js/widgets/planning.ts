@@ -64,7 +64,8 @@ $.widget('bop.bopPlanning', $.bop.bop, {
     parseWidgets(content.empty().append(widget))
 
     this.tree = getPlanningTree(options.display, {
-      widget: content
+      widget: content,
+      planningProperties
     })
 
     this.requestData()

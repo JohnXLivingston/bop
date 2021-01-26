@@ -8,7 +8,7 @@ import getLogger from '../../../../utils/logger'
 
 const logger = getLogger('lib/planning/tree/classes/tree')
 
-interface PlanningTreeOptions {
+export interface PlanningTreeOptions {
   widget: JQuery,
   planningProperties: PlanningProperties
 }
