@@ -51,7 +51,7 @@
             </div>
           {% endfor %}
         </div>
-      {% elif node.type === 'object' and object.type === 'task' %}
+      {% elif node.type === 'object' and node.object.type === 'task' %}
         <div class="widget-planning-line">
           {% for stubGroup in node.stubGroups %}
             {% if stubGroup.previousEnd and stubGroup.previousEnd <= 0 %}
