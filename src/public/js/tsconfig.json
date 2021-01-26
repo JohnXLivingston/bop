@@ -10,6 +10,10 @@
 		"noImplicitAny": true,
 		"noImplicitReturns": true,
 		"noUnusedLocals": true,
-		"outDir": "../../../dist/public/js"
+		"outDir": "../../../dist/public/js",
+		"baseUrl": ".",
+		"paths": {
+			"shared/*": ["../../shared/*"]
+		}
 	}
 }
