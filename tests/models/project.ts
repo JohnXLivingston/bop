@@ -17,14 +17,15 @@ describe('models/project/project.ts', function () {
 
   const project1Id = 1
   const project1Data = {
-    name: 'My first project'
+    name: 'My first project',
+    color: '1'
   }
 
   dbTest.testModelCreationAndDeletion<ProjectModel>({
     name: 'Project',
     ObjectClass: ProjectModel,
     data: project1Data,
-    mandatoryFields: ['name'],
+    mandatoryFields: ['name', 'color'],
     expectedObjectId: project1Id,
     optimisticLocking: true
   })
@@ -35,7 +36,8 @@ describe('models/project/project.ts', function () {
     ObjectClass: ProjectModel,
     optimisticLocking: true,
     updateTests: [
-      { name: 'Anoter name' }
+      { name: 'Anoter name' },
+      { color: '2' }
     ]
   })
 
@@ -61,6 +63,16 @@ describe('models/project/project.ts', function () {
         type: 'too_long',
         field: 'name',
         maxLength: CONSTRAINTS.PROJECT.NAME.max
+      },
+      {
+        type: 'too_short',
+        field: 'color',
+        minLength: 0
+      },
+      {
+        type: 'too_long',
+        field: 'color',
+        maxLength: 3
       }
     ]
   })
@@ -75,6 +87,7 @@ describe('models/project/project.ts', function () {
         expect(project?.toFormattedJSON()).to.be.deep.equal({
           id: projectId,
           type: 'project',
+          color: '1',
           version: 0,
           name: project1Data.name
         })

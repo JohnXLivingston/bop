@@ -1,6 +1,7 @@
 import {
   AllowNull,
   Column,
+  Default,
   DataType,
   Length,
   Model,
@@ -24,10 +25,19 @@ export class ProjectModel extends Model<ProjectModel> {
   })
   name!: string
 
+  @AllowNull(false)
+  @Length({ min: 1, max: 2 })
+  @Default('1')
+  @Column({
+    type: DataType.STRING(2)
+  })
+  color!: string // FIXME: use BopProjectColor
+
   toFormattedJSON (): Project {
     const json: Project = {
       id: this.id,
       type: 'project',
+      color: this.color as BopProjectColor,
       name: this.name,
       version: this.version
     }

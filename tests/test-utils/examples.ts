@@ -13,6 +13,7 @@ const user1: User = {
 const project1: Project = {
   type: 'project',
   id: 0,
+  color: '1',
   name: 'Project A',
   version: 1
 }

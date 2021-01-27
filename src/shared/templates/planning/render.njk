@@ -1,3 +1,80 @@
+{% macro renderCalendarContent(node) %}
+  <div class="widget-planning-line">
+    {% for item in node.calendarContent.items %}
+      {% if item.type === 'summary' %}
+        <div class="widget-planning-item"
+          {% if item.color %}
+            data-widget-planning-color="{{ item.color }}"
+          {% endif %}
+          style="
+            left: {{ item.left }}px;
+            width: {{ item.width }}px;
+          "
+        >
+          <div class="widget-planning-item-inner">
+            <div class="widget-planning-item-part">
+              <div class="widget-planning-item-txt">{{ item.label }}</div>
+            </div>
+          </div>
+        </div>
+      {% elif item.type === 'taskpart' %}
+        {% if item.previousEnd and item.previousEnd <= 0 %}
+          {# There is something to the left, outis #}
+          <div class="widget-planning-item"
+            style="
+              left: {{ item.previousEnd }}px;
+              width: {{ item.left - item.previousEnd }}px;
+            "
+          >
+            <div class="widget-planning-split">
+              <div class="widget-planning-split-inner"></div>
+            </div>
+          </div>
+        {% endif %}
+        <div class="widget-planning-item"
+          style="
+            left: {{ item.left }}px;
+            width: {{ item.width }}px;
+          "
+        >
+          <div class="widget-planning-item-inner">
+            <div class="widget-planning-item-part"
+              data-widget="bopWheelmenu"
+              data-widget-wheelmenu-items="{{ nodeMenuItem(node) }}"
+            >
+              <div class="widget-planning-task-txt-wrapper">
+                {{ item.label }}
+              </div>
+            </div>
+            {% for stub in item.stubs %}
+              {% if (not stub.on) and (not loop.last) and (stub.width != null) %}
+                <div
+                  class="widget-planning-item-part widget-planning-item-part-off"
+                  style="
+                    left: {{ stub.left - item.left }}px;
+                    width: {{ stub.width }}px;
+                  "
+                ></div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+        {% if item.nextStart and item.nextStart > item.left + item.width %}
+          <div class="widget-planning-item"
+            style="
+                left: {{ item.left + item.width }}px;
+                width: {{ item.nextStart - (item.left + item.width) }}px;
+              "
+          >
+            <div class="widget-planning-split">
+              <div class="widget-planning-split-inner"></div>
+            </div>
+          </div>
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+  </div>
+{% endmacro %}
 {% macro nodeMenuItem(node) %}
   {% set items = [] %}
   {% set tmp %}<a onclick="alert('yes');">Button 1</a>{% endset %}{% set tmp = items.push(tmp) %}
@@ -31,84 +108,8 @@
           </div>
         {% endfor %}
       </div>
-      {% if node.type === 'summary' %}
-        <div class="widget-planning-line">
-          {% for item in node.data %}
-            <div class="widget-planning-item"
-              {% if item.color %}
-                data-widget-planning-color="{{ item.color }}"
-              {% endif %}
-              style="
-                left: {{ item.left }}px;
-                width: {{ item.width }}px;
-              "
-            >
-              <div class="widget-planning-item-inner">
-                <div class="widget-planning-item-part">
-                  <div class="widget-planning-item-txt">{{ item.label }}</div>
-                </div>
-              </div>
-            </div>
-          {% endfor %}
-        </div>
-      {% elif node.type === 'object' and node.object.type === 'task' %}
-        <div class="widget-planning-line">
-          {% for stubGroup in node.stubGroups %}
-            {% if stubGroup.previousEnd and stubGroup.previousEnd <= 0 %}
-              {# There is something to the left, outis #}
-              <div class="widget-planning-item"
-                style="
-                  left: {{ stubGroup.previousEnd }}px;
-                  width: {{ stubGroup.left - stubGroup.previousEnd }}px;
-                "
-              >
-                <div class="widget-planning-split">
-                  <div class="widget-planning-split-inner"></div>
-                </div>
-              </div>
-            {% endif %}
-            <div class="widget-planning-item"
-              style="
-                left: {{ stubGroup.left }}px;
-                width: {{ stubGroup.width }}px;
-              "
-            >
-              <div class="widget-planning-item-inner">
-                <div class="widget-planning-item-part"
-                  data-widget="bopWheelmenu"
-                  data-widget-wheelmenu-items="{{ nodeMenuItem(node) }}"
-                >
-                  <div class="widget-planning-task-txt-wrapper">
-                    {{ stubGroup.label }}
-                  </div>
-                </div>
-                {% for stub in stubGroup.stubs %}
-                  {% if (not stub.on) and (not loop.last) and (stub.width != null) %}
-                    <div
-                      class="widget-planning-item-part widget-planning-item-part-off"
-                      style="
-                        left: {{ stub.left - stubGroup.left }}px;
-                        width: {{ stub.width }}px;
-                      "
-                    ></div>
-                  {% endif %}
-                {% endfor %}
-              </div>
-            </div>
-            {% if stubGroup.nextStart and stubGroup.nextStart > stubGroup.left + stubGroup.width %}
-              <div class="widget-planning-item"
-                style="
-                    left: {{ stubGroup.left + stubGroup.width }}px;
-                    width: {{ stubGroup.nextStart - (stubGroup.left + stubGroup.width) }}px;
-                  "
-              >
-                <div class="widget-planning-split">
-                  <div class="widget-planning-split-inner"></div>
-                </div>
-              </div>
-            {% endif %}
-          {% endfor %}
-        </div>
+      {% if node.calendarContent %}
+        {{ renderCalendarContent(node) }}
       {% endif %}
     </div>
   </div>
