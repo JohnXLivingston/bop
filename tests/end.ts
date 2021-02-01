@@ -10,7 +10,7 @@ const expect = chai.expect
 describe('Tests environment', function () {
   describe('Tests files', function () {
     describe('Every backend module must have a test file', function () {
-      generateMissingTests('helpers')
+      generateMissingTests('helpers', n => !/\/register-ts-path.ts/.test(n))
       generateMissingTests('initializers')
       generateMissingTests('lib')
       generateMissingTests('models')

@@ -4,16 +4,20 @@
 		"module": "commonJS",
 		"sourceMap": true,
 		"moduleResolution": "node", // Tell tsc to look in node_modules for modules
-		"strict": true,
-		"alwaysStrict": true,
 		"forceConsistentCasingInFileNames": true,
-		"noImplicitAny": true,
+		"strict": true,
+		"alwaysStrict": true, // should already be true because of strict:true
+		"noImplicitAny": true, // should already be true because of strict:true
+		"noImplicitThis": true, // should already be true because of strict:true
 		"noImplicitReturns": true,
+		"strictBindCallApply": true, // should already be true because of strict:true
 		"noUnusedLocals": true,
 		"outDir": "../../../dist/public/js",
 		"baseUrl": ".",
 		"paths": {
-			"shared/*": ["../../shared/*"]
+			"bop/shared/*": ["../../shared/*"]
 		}
-	}
+	},
+	"include": ["**/*"],
+	"exclude": []
 }

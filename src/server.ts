@@ -1,3 +1,7 @@
+/* eslint-disable import/first */
+import { registerTSPaths } from './helpers/register-ts-paths'
+registerTSPaths()
+
 import * as path from 'path'
 import { fork } from 'child_process'
 import * as cluster from 'cluster'
