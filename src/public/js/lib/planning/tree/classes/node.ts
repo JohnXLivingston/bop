@@ -1,6 +1,6 @@
 import { PlanningTree } from './tree'
-import { BopObject, MessageObject, MessagesObject } from '../../../../../../shared/objects'
-import { NodeRenderVars, NodeRenderVarsPartial } from '../../../../../../shared/templates/planning/types'
+import { BopObject, MessageObject, MessagesObject } from 'bop/shared/objects'
+import { NodeRenderVars, NodeRenderVarsPartial } from 'bop/shared/templates/planning/types'
 import { Template } from '../../../../utils/nunjucks'
 import getLogger from '../../../../utils/logger'
 

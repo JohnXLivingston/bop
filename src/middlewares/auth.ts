@@ -2,7 +2,7 @@ import * as express from 'express'
 import { logger } from '../helpers/log'
 import { UserModel } from '../models'
 import { Notifier } from '../lib/notifier'
-import { Context } from '../shared/models/context.model'
+import { Context } from 'bop/shared/models/context.model'
 
 /**
  * If the user is authenticated, everything is ok.

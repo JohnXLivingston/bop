@@ -1,5 +1,5 @@
-import { CONFIG } from '../config/config'
-import { isNotifier } from '../config/env'
+import { CONFIG } from 'bop/helpers/config/config'
+import { isNotifier } from 'bop/helpers/config/env'
 import { omit } from 'lodash'
 import * as winston from 'winston'
 import { Syslog } from 'winston-syslog'

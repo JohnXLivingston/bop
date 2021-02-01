@@ -1,3 +1,7 @@
+/* eslint-disable import/first */
+import { registerTSPaths } from './helpers/register-ts-paths'
+registerTSPaths()
+
 import * as cluster from 'cluster'
 import * as express from 'express'
 import { Server } from 'http'

@@ -1,6 +1,6 @@
 import * as bcrypt from 'bcrypt'
 import * as cryptoRandomString from 'crypto-random-string'
-import { BCRYPT_SALT_ROUNDS } from '../config'
+import { BCRYPT_SALT_ROUNDS } from 'bop/helpers/config'
 
 async function comparePassword (password: string, hash: string): Promise<boolean> {
   return bcrypt.compare(password, hash)

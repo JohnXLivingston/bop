@@ -1,10 +1,10 @@
 import { PlanningNode } from './node'
-import type { NodeRenderVars } from 'shared/templates/planning/types'
+import { NodeRenderVars } from 'bop/shared/templates/planning/types'
 
 export abstract class PlanningNodeObject extends PlanningNode {
   constructor (key: string, parent?: PlanningNode) {
     super(key, parent)
-    this.template = require('../../../../../../shared/templates/planning/render.njk')
+    this.template = require('bop/shared/templates/planning/render.njk')
   }
 
   renderVars (): NodeRenderVars {

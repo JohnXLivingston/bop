@@ -15,8 +15,8 @@ import {
   Table
 } from 'sequelize-typescript'
 import { ProjectModel } from '../project'
-import { Task, TaskAllocation, TaskPart } from '../../shared/models/task'
-import { CONSTRAINTS } from '../../helpers/config'
+import { Task, TaskAllocation, TaskPart } from 'bop/shared/models/task'
+import { CONSTRAINTS } from 'bop/helpers/config'
 import { ResourceModel } from '../resource/resource'
 
 @DefaultScope(() => ({

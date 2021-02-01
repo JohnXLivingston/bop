@@ -1,6 +1,6 @@
 import getLogger from './utils/logger'
 import { notifications } from './lib/notifications'
-import { testFunction } from '../../shared/test'
+import { testFunction } from 'bop/shared/test'
 import { parseWidgets } from './utils/widgets'
 import { initI18n } from './utils/i18n'
 import '../scss/main.scss'

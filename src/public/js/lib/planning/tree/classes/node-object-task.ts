@@ -1,5 +1,5 @@
-import type { ProjectObject, TaskObject } from 'shared/objects'
-import type { NodeRenderVars } from 'shared/templates/planning/types'
+import type { ProjectObject, TaskObject } from 'bop/shared/objects'
+import type { NodeRenderVars } from 'bop/shared/templates/planning/types'
 import { PlanningNodeObject } from './node-object'
 
 export abstract class PlanningNodeObjectTask extends PlanningNodeObject {

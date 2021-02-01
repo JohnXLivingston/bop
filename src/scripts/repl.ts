@@ -1,7 +1,11 @@
+/* eslint-disable import/first */
+import { registerTSPaths } from '../helpers/register-ts-paths'
+registerTSPaths()
+
 import * as repl from 'repl'
 import { isProduction, CONFIG, checkConfig } from '../helpers/config'
 import { activateCLIMode, logger } from '../helpers/log'
-import { setSharedLogger } from '../shared/utils/logger'
+import { setSharedLogger } from 'bop/shared/utils/logger'
 import * as models from '../models'
 import { initDatabaseModels, sequelizeTypescript } from '../initializers'
 import { migrate } from '../initializers/migrator'
