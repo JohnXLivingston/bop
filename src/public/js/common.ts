@@ -5,7 +5,7 @@ import 'core-js/stable'
 // polyfill: needed to use transpiled generator functions
 import 'regenerator-runtime/runtime'
 
-import { setSharedLogger } from '../../shared/utils/logger'
+import { setSharedLogger } from 'bop/shared/utils/logger'
 
 setSharedLogger(getLogger('shared'))
 

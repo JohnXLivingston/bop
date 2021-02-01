@@ -4,7 +4,7 @@ registerTSPaths()
 
 import { migrate } from '../initializers/migrator'
 import { activateCLIMode, logger } from '../helpers/log'
-import { setSharedLogger } from 'shared/utils/logger'
+import { setSharedLogger } from 'bop/shared/utils/logger'
 
 activateCLIMode()
 setSharedLogger(logger)

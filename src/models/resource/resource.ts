@@ -1,6 +1,6 @@
 import { Model, Table, AllowNull, IsIn, Column, DataType, Length, HasMany } from 'sequelize-typescript'
 import { CONSTRAINTS } from '../../helpers/config'
-import { Resource } from '../../shared/models/resource'
+import { Resource } from 'bop/shared/models/resource'
 import { TaskAllocationModel } from '../task/task'
 
 @Table({

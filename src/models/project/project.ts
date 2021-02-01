@@ -8,7 +8,7 @@ import {
   Unique
 } from 'sequelize-typescript'
 import { CONSTRAINTS } from '../../helpers/config'
-import { Project } from '../../shared/models/project'
+import { Project } from 'bop/shared/models/project'
 
 @Table({
   tableName: 'project',

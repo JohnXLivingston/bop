@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { logger } from '../../../../helpers/log'
+import { logger } from 'bop/helpers/log'
 import {
   ProjectModel,
   UserModel,
@@ -7,8 +7,8 @@ import {
   TaskModel,
   TaskAllocationModel,
   TaskPartModel
-} from '../../../../models'
-import { Messages } from '../../../../shared/models/message'
+} from 'bop/models'
+import type { Messages } from 'bop/shared/models/message'
 
 const asyncHandler = require('express-async-handler')
 const planningRouter = express.Router()

@@ -1,5 +1,5 @@
-import { Context } from '../../../shared/models/context.model'
-import { logger } from '../../../shared/utils/logger'
+import { Context } from 'bop/shared/models/context.model'
+import { logger } from 'bop/shared/utils/logger'
 
 function getContext ():Context {
   const s = $('html').attr('bop-context')

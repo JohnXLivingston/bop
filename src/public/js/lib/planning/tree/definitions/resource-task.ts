@@ -1,8 +1,8 @@
 import { PlanningTree } from '../classes/tree'
 import { NodeKeyClass } from '../classes/node'
 import { PlanningNodeObject } from '../classes/node-object'
-import { MessageObject } from '../../../../../../shared/objects/message/message.object'
-import { TaskObject } from '../../../../../../shared/objects/task/task.object'
+import { MessageObject } from 'bop/shared/objects/message/message.object'
+import { TaskObject } from 'bop/shared/objects/task/task.object'
 
 class PlanningTreeResourceTask extends PlanningTree {
   childKeyClassForMessage (message: MessageObject): NodeKeyClass | null {

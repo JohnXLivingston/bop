@@ -13,10 +13,10 @@ import {
   Table,
   Unique
 } from 'sequelize-typescript'
-import { CONSTRAINTS } from '../../helpers/config'
-import { comparePassword, cryptPassword } from '../../helpers/crypto'
-import { logger } from '../../helpers/log'
-import { User } from '../../shared/models/user'
+import { CONSTRAINTS } from 'bop/helpers/config'
+import { comparePassword, cryptPassword } from 'bop/helpers/crypto'
+import { logger } from 'bop/helpers/log'
+import { User } from 'bop/shared/models/user'
 // import { throwIfNotValid } from '../utils'
 
 @Table({
