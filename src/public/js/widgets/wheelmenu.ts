@@ -1,7 +1,7 @@
-import getLogger from '../utils/logger'
+import getLogger from 'bop/public/js/utils/logger'
 import { BopWheelmenuContentOptions, bopWheelmenuContentDefaultOptions } from './wheelmenu/content'
 
-require('../../scss/widgets/wheelmenu.scss')
+require('bop/public/scss/widgets/wheelmenu.scss')
 
 const logger = getLogger('widget/wheelmenu')
 

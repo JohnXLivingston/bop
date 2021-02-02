@@ -1,12 +1,12 @@
 import { PlanningProperties } from 'bop/shared/templates/planning/types'
-import { nunjucksContext, Template } from '../utils/nunjucks'
-import { parseWidgets } from '../utils/widgets'
+import { nunjucksContext, Template } from 'bop/public/js/utils/nunjucks'
+import { parseWidgets } from 'bop/public/js/utils/widgets'
 
-import { PlanningTree, getPlanningTree } from '../lib/planning'
+import { PlanningTree, getPlanningTree } from 'bop/public/js/lib/planning'
 
-import '../../scss/widgets/planning.scss'
+import 'bop/public/scss/widgets/planning.scss'
 
-import getLogger from '../utils/logger'
+import getLogger from 'bop/public/js/utils/logger'
 
 const logger = getLogger('widget/planning')
 

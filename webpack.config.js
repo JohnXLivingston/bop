@@ -110,6 +110,7 @@ module.exports = {
   },
   resolve: {
     alias: {
+      'bop/public': path.resolve(__dirname, 'src/public/'),
       'bop/shared': path.resolve(__dirname, 'src/shared/')
     },
     extensions: ['.tsx', '.ts', '.js']

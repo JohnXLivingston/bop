@@ -1,5 +1,5 @@
-import { parseWidgets } from '../../utils/widgets'
-import getLogger from '../../utils/logger'
+import { parseWidgets } from 'bop/public/js/utils/widgets'
+import getLogger from 'bop/public/js/utils/logger'
 
 const logger = getLogger('widget/wheelmenu/content')
 

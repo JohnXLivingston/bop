@@ -2,10 +2,10 @@ import { parseWidgets } from './utils/widgets'
 import { initI18n } from './utils/i18n'
 
 require('./common')
-require('../scss/login.scss')
+require('bop/public/scss/login.scss')
 require('./widgets/locale')
 
-const pJquery = new Promise((resolve) => {
+const pJquery = new Promise<void>((resolve) => {
   $(() => {
     resolve()
   })
