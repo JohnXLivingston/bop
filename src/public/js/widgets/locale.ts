@@ -1,6 +1,6 @@
-import { i18next as i18n } from '../utils/i18n'
+import { i18next as i18n } from 'bop/public/js/utils/i18n'
 
-require('../../scss/widgets/locale.scss')
+require('bop/public/scss/widgets/locale.scss')
 
 declare global {
   interface JQuery {

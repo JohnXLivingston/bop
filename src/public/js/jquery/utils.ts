@@ -1,4 +1,4 @@
-import getLogger from '../utils/logger'
+import getLogger from 'bop/public/js/utils/logger'
 
 const logger = getLogger('jquery/utils')
 

@@ -15,6 +15,7 @@
 		"outDir": "../../../dist/public/js",
 		"baseUrl": ".",
 		"paths": {
+			"bop/public/*": ["../*"],
 			"bop/shared/*": ["../../shared/*"]
 		}
 	},

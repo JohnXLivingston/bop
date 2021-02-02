@@ -1,8 +1,8 @@
 import { PlanningTree } from './tree'
 import { BopObject, MessageObject, MessagesObject } from 'bop/shared/objects'
 import { NodeRenderVars, NodeRenderVarsPartial } from 'bop/shared/templates/planning/types'
-import { Template } from '../../../../utils/nunjucks'
-import getLogger from '../../../../utils/logger'
+import { Template } from 'bop/public/js/utils/nunjucks'
+import getLogger from 'bop/public/js/utils/logger'
 
 const logger = getLogger('lib/planning/tree/classes/node')
 

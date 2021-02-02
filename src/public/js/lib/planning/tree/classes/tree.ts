@@ -2,9 +2,9 @@ import { PlanningNode } from './node'
 import { Messages } from 'bop/shared/models/message'
 import { BopObject, MessageObject, MessagesObject } from 'bop/shared/objects'
 import { PlanningProperties } from 'bop/shared/templates/planning/types'
-import { nunjucksContext, Template } from '../../../../utils/nunjucks'
-import { parseWidgets } from '../../../../utils/widgets'
-import getLogger from '../../../../utils/logger'
+import { nunjucksContext, Template } from 'bop/public/js/utils/nunjucks'
+import { parseWidgets } from 'bop/public/js/utils/widgets'
+import getLogger from 'bop/public/js/utils/logger'
 
 const logger = getLogger('lib/planning/tree/classes/tree')
 

@@ -2,7 +2,7 @@
 
 require('@ctrlmaniac/simpler-sidebar/lib/jquery.simpler-sidebar.js')
 
-require('../../scss/widgets/sidebar.scss')
+require('bop/public/scss/widgets/sidebar.scss')
 
 declare global {
   interface JQuery {

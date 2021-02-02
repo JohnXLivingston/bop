@@ -1,6 +1,6 @@
 import * as io from 'socket.io-client'
-import getLogger from '../utils/logger'
-import { getContext } from '../utils/context'
+import getLogger from 'bop/public/js/utils/logger'
+import { getContext } from 'bop/public/js/utils/context'
 
 const logger = getLogger('lib/notifications.ts')
 const AUTORELOADDELAY = 1000

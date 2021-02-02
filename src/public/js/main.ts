@@ -3,7 +3,7 @@ import { notifications } from './lib/notifications'
 import { testFunction } from 'bop/shared/test'
 import { parseWidgets } from './utils/widgets'
 import { initI18n } from './utils/i18n'
-import '../scss/main.scss'
+import 'bop/public/scss/main.scss'
 
 require('./common')
 require('./widgets/locale')
