@@ -1,5 +1,4 @@
 import { PlanningNode } from './node'
-import { NodeRenderVars } from 'bop/shared/templates/planning/types'
 
 export abstract class PlanningNodeObject extends PlanningNode {
   constructor (key: string, parent?: PlanningNode) {

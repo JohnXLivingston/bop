@@ -17,8 +17,15 @@
 		"paths": {
 			"bop/public/*": ["../*"],
 			"bop/shared/*": ["../../shared/*"]
-		}
+		},
+		"typeRoots": [
+			"../../../node_modules/@types",
+			"../../shared/@types"
+		]
 	},
-	"include": ["**/*"],
+	"include": [
+		"**/*",
+		"../../shared/**/*"
+	],
 	"exclude": []
 }
