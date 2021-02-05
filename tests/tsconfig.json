@@ -5,12 +5,11 @@
 			"path": "../tsconfig.json"
 		}
 	],
-	"compilerOptions": {
-		"typeRoots": [
-			"../node_modules/@types",
-			"../src/shared/@types"
-		]
-	},
+	"compilerOptions": {},
+	"include": [
+		"**/*",
+		"../src/shared/@types/**/*"
+	],
 	"ts-node": {
 		"files": true // so that tests can properly find .d.ts files.
 	}
