@@ -1,4 +1,4 @@
-import { createClient, RedisClient } from 'redis'
+import { ClientOpts, createClient, RedisClient } from 'redis'
 import { CONFIG } from '../helpers/config'
 import { logger } from '../helpers/log'
 
@@ -9,7 +9,7 @@ class Redis {
 
   constructor () {
     const options = Redis.getRedisClientOptions()
-    this.prefix = options.prefix
+    this.prefix = options.prefix || ''
     this.client = createClient(options)
 
     this.client.on('error', error => {
@@ -22,12 +22,12 @@ class Redis {
     }
   }
 
-  static getRedisClientOptions () {
-    const options = Object.assign(
+  static getRedisClientOptions (): ClientOpts {
+    const options: ClientOpts = Object.assign(
       {},
       {
-        host: CONFIG.REDIS.HOSTNAME,
-        port: CONFIG.REDIS.PORT,
+        host: CONFIG.REDIS.HOSTNAME!,
+        port: CONFIG.REDIS.PORT!,
         prefix: CONFIG.REDIS.PREFIX
       },
       (CONFIG.REDIS.DB) ? { db: CONFIG.REDIS.DB } : {},
@@ -36,11 +36,11 @@ class Redis {
     return options
   }
 
-  getClient () {
+  getClient (): RedisClient {
     return this.client
   }
 
-  getPrefix () {
+  getPrefix (): string {
     return this.prefix
   }
 
