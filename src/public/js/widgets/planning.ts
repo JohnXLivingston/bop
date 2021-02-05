@@ -1,4 +1,3 @@
-import { PlanningProperties } from 'bop/shared/templates/planning/types'
 import { nunjucksContext, Template } from 'bop/public/js/utils/nunjucks'
 import { parseWidgets } from 'bop/public/js/utils/widgets'
 

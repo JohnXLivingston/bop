@@ -1,6 +1,5 @@
 import { PlanningNode } from './node'
 import { BopObject, MessageObject, MessagesObject } from 'bop/shared/objects'
-import { PlanningProperties } from 'bop/shared/templates/planning/types'
 import { nunjucksContext, Template } from 'bop/public/js/utils/nunjucks'
 import { parseWidgets } from 'bop/public/js/utils/widgets'
 import getLogger from 'bop/public/js/utils/logger'
