@@ -3,17 +3,17 @@ import getLogger from 'bop/public/js/utils/logger'
 
 const logger = getLogger('widget/wheelmenu/content')
 
+export interface BopWheelmenuContentOptions {
+  margin: number,
+  radius: number
+}
+
 declare global {
   interface JQuery {
     bopWheelmenuContent(options: BopWheelmenuContentOptions): JQuery
 
     bopWheelmenuContent(methodName: 'close', withParents?: boolean): void
   }
-}
-
-export interface BopWheelmenuContentOptions {
-  margin: number,
-  radius: number
 }
 
 export const bopWheelmenuContentDefaultOptions: BopWheelmenuContentOptions = {

@@ -147,7 +147,7 @@ class Notifier {
     })
   }
 
-  private _countSockets (userId: string, sessionId: string) {
+  private _countSockets (userId: number, sessionId: string) {
     logger.debug('The user %s has %d open sockets on this worker.', userId, this.userSockets[userId].length)
     logger.debug(
       'The user %s has %d sockets for this session on this worker.',

@@ -286,12 +286,15 @@ async function updateConfigKey (): Promise<void> {
     }
   }
   content = content.replace(/^\uFEFF/, '')
-  const data = jsYaml.safeLoad(content) || {}
+  const data = jsYaml.load(content) || {}
+  if (typeof data !== 'object') {
+    throw Error('The content is not a valid Yaml config file.')
+  }
 
   for (const key in updates) {
     _injectConfig(data, key.split('.'), updates[key])
   }
-  const yaml = jsYaml.safeDump(data, {
+  const yaml = jsYaml.dump(data, {
     styles: {
       '!!null': 'canonical', // dump null as ~
       '!!int': 'decimal',

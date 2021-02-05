@@ -120,7 +120,7 @@ describe('helpers/config', function () {
 
       it('The file should have the proper content', function () {
         const content = fs.readFileSync('./config/local-test.yaml', 'utf-8').replace(/^\uFEFF/, '')
-        const data = jsYaml.safeLoad(content) || {}
+        const data = jsYaml.load(content) || {}
         expect(data).to.be.an('object').deep.equal({
           test: {
             update: 'test_value_modified',

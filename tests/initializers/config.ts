@@ -29,8 +29,10 @@ describe('Initializers / Config', function () {
       expect(CONFIG.COOKIES.SESSION.SECRET, 'Session secret').to.match(/^[a-zA-Z0-9]+$/)
 
       const content = fs.readFileSync('./config/local-test.yaml', 'utf-8').replace(/^\uFEFF/, '')
-      const data = jsYaml.safeLoad(content) || {}
-      expect(data.cookies?.session?.secret, 'Session secret in config file').to.be.equal(CONFIG.COOKIES.SESSION.SECRET)
+      const data = jsYaml.load(content) || {}
+      expect(data, 'The config file should be an object').to.be.an('object')
+      expect((data as any).cookies?.session?.secret, 'Session secret in config file')
+        .to.be.equal(CONFIG.COOKIES.SESSION.SECRET)
     })
   })
 })

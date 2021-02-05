@@ -3,6 +3,13 @@ import { CONFIG, isProduction } from '../helpers/config'
 import { Redis } from '../lib/redis'
 import { logger } from '../helpers/log'
 
+declare module 'express-session' {
+  interface Session {
+    userId?: number
+    login?: string
+  }
+}
+
 function getSessionMiddleware () {
   logger.debug('Calling getSessionMiddleware...')
   const RedisStore = require('connect-redis')(session)
