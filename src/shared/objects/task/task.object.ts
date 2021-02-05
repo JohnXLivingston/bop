@@ -1,5 +1,4 @@
 import { BaseObject } from '../base.object'
-import { Task, TaskAllocation } from '../../models/task'
 import { ResourceObject } from '../resource/resource.object'
 import { TaskAllocationObject } from './task.allocation.object'
 

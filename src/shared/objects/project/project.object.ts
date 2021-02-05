@@ -1,5 +1,4 @@
 import { BaseObject } from '../base.object'
-import { Project } from '../../models/project'
 
 export class ProjectObject extends BaseObject {
   color: BopProjectColor

@@ -1,9 +1,9 @@
-import { BopElement } from '../bop-element.model'
+/// <reference path="./element.d.ts" />
 
 /**
  * A newly created object.
  */
-export interface MessageCreation {
+declare interface MessageCreation {
   type: 'message',
   messageType: 'create',
   object: BopElement,
@@ -16,7 +16,7 @@ export interface MessageCreation {
 /**
  * An updated object.
  */
-export interface MessageUpdate {
+declare interface MessageUpdate {
   type: 'message',
   messageType: 'update',
   object: BopElement,
@@ -29,7 +29,7 @@ export interface MessageUpdate {
 /**
  * A deleted object.
  */
-export interface MessageDeletion {
+declare interface MessageDeletion {
   type: 'message',
   messageType: 'delete',
   // FIXME: a soft deleted object, or an objectId?
@@ -46,7 +46,7 @@ export interface MessageDeletion {
  * An existing object retrieved by API, or automatically
  * added by the backend.
  */
-export interface MessageRetrieved {
+declare interface MessageRetrieved {
   type: 'message',
   messageType: 'retrieved',
   object: BopElement
@@ -55,10 +55,10 @@ export interface MessageRetrieved {
 /**
  * Message for an action that can be done by a user.
  */
-export type MessageAction = MessageCreation | MessageUpdate | MessageDeletion
+declare type MessageAction = MessageCreation | MessageUpdate | MessageDeletion
 /**
  * All types of message.
  */
-export type Message = MessageAction | MessageRetrieved
+declare type Message = MessageAction | MessageRetrieved
 
-export type Messages = Message[]
+declare type Messages = Message[]

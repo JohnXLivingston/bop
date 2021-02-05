@@ -1,5 +1,4 @@
 import { BaseObject } from '../base.object'
-import { Resource } from '../../models/resource'
 
 export class ResourceObject extends BaseObject {
   version: number

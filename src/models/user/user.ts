@@ -16,8 +16,6 @@ import {
 import { CONSTRAINTS } from 'bop/helpers/config'
 import { comparePassword, cryptPassword } from 'bop/helpers/crypto'
 import { logger } from 'bop/helpers/log'
-import { User } from 'bop/shared/models/user'
-// import { throwIfNotValid } from '../utils'
 
 @Table({
   tableName: 'user',

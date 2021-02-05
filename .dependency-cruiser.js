@@ -100,8 +100,8 @@ module.exports = {
         "dependency-cruiser configuration.",
       from: {
         orphan: true,
-        // Ignoring declaration files, and shared models.
-        pathNot: '(\\.d\\.ts$|\\/shared\\/models\\/.*\\.model\\.ts$)'
+        // Ignoring declaration files
+        pathNot: '(\\.d\\.ts$)'
       },
       to: {}
     },

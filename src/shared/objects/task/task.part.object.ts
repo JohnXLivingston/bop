@@ -1,5 +1,3 @@
-import { TaskPart } from '../../models/task'
-
 export class TaskPartObject {
   readonly id: number
   readonly type: string = 'taskpart'

@@ -1,4 +1,4 @@
-export interface Project {
+declare interface Project {
   id: number,
   type: 'project',
   color: BopProjectColor,

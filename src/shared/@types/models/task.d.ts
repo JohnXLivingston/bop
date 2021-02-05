@@ -1,4 +1,4 @@
-export interface Task {
+declare interface Task {
   id: number,
   type: 'task',
   version: number,
@@ -10,7 +10,7 @@ export interface Task {
   allocations: TaskAllocation[]
 }
 
-export interface TaskAllocation {
+declare interface TaskAllocation {
   id: number,
   type: 'taskallocation',
   resourceId?: number,
@@ -21,7 +21,7 @@ export interface TaskAllocation {
   parts: TaskPart[]
 }
 
-export interface TaskPart {
+declare interface TaskPart {
   id: number,
   type: 'taskpart',
   start: string,

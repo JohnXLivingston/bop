@@ -1,6 +1,5 @@
 import * as express from 'express'
 import { isProduction, webpackManifest, webUrl, notifierUrl } from '../helpers/config'
-import { Context } from 'bop/shared/models/context.model'
 
 /**
  * Injects some constants in res.locals, for use in templates and co.

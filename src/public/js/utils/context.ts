@@ -1,4 +1,3 @@
-import { Context } from 'bop/shared/models/context.model'
 import { logger } from 'bop/shared/utils/logger'
 
 function getContext ():Context {

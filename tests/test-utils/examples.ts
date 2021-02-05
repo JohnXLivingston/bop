@@ -1,8 +1,3 @@
-import { Project } from '../../src/shared/models/project'
-import { Resource } from '../../src/shared/models/resource'
-import { Task, TaskAllocation, TaskPart } from '../../src/shared/models/task'
-import { User } from '../../src/shared/models/user'
-
 const user1: User = {
   type: 'user',
   id: 0,

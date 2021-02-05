@@ -1,4 +1,4 @@
-export interface User {
+declare interface User {
   id: number,
   type: 'user',
   version: number,

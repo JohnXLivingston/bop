@@ -4,7 +4,6 @@ import * as chai from 'chai'
 
 import { flushTests } from '../../test-utils'
 import { user1, project1, resource1, task1 } from '../../test-utils/examples'
-import { Message } from '../../../src/shared/models/message'
 import { MessageObject } from '../../../src/shared/objects/message/message.object'
 import { UserObject } from '../../../src/shared/objects/user/user.object'
 import { ProjectObject } from '../../../src/shared/objects/project/project.object'

@@ -8,7 +8,6 @@ import {
   TaskAllocationModel,
   TaskPartModel
 } from 'bop/models'
-import type { Messages } from 'bop/shared/models/message'
 
 const asyncHandler = require('express-async-handler')
 const planningRouter = express.Router()

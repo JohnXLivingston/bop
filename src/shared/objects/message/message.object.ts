@@ -1,4 +1,3 @@
-import { Message, MessageAction, MessageRetrieved } from '../../models/message'
 import { ProjectObject } from '../project/project.object'
 import { ResourceObject } from '../resource/resource.object'
 import { TaskObject } from '../task/task.object'

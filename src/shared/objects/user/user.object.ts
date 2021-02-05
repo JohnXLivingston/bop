@@ -1,5 +1,4 @@
 import { BaseObject } from '../base.object'
-import { User } from '../../models/user'
 
 export class UserObject extends BaseObject {
   version: number

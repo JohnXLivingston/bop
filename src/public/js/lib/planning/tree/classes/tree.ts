@@ -1,5 +1,4 @@
 import { PlanningNode } from './node'
-import { Messages } from 'bop/shared/models/message'
 import { BopObject, MessageObject, MessagesObject } from 'bop/shared/objects'
 import { PlanningProperties } from 'bop/shared/templates/planning/types'
 import { nunjucksContext, Template } from 'bop/public/js/utils/nunjucks'

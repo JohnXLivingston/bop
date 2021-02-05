@@ -1,4 +1,4 @@
-export interface Resource {
+declare interface Resource {
   id: number,
   type: 'resource',
   version: number,

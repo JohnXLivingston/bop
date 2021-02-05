@@ -1,4 +1,3 @@
-import { TaskAllocation } from '../../models/task'
 import { TaskPartObject } from './task.part.object'
 
 export class TaskAllocationObject {
