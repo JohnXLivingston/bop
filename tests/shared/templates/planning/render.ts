@@ -2,7 +2,6 @@
 import { describe, before, after, it } from 'mocha'
 import * as chai from 'chai'
 import { flushTests, testNunjucksTemplate } from '../../../test-utils'
-import { NodeRenderVars, PlanningProperties } from '../../../../src/shared/templates/planning/types'
 import { TaskObject } from '../../../../src/shared/objects'
 import { task1 } from '../../../test-utils/examples'
 

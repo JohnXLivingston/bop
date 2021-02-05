@@ -8,7 +8,7 @@ import {
   Table,
   Unique
 } from 'sequelize-typescript'
-import { CONSTRAINTS } from '../../helpers/config'
+import { CONSTRAINTS } from 'bop/helpers/config'
 import { Project } from 'bop/shared/models/project'
 
 @Table({
@@ -26,18 +26,18 @@ export class ProjectModel extends Model<ProjectModel> {
   name!: string
 
   @AllowNull(false)
-  @Length({ min: 1, max: 2 })
   @Default('1')
+  @Length({ min: 1, max: 2 })
   @Column({
     type: DataType.STRING(2)
   })
-  color!: string // FIXME: use BopProjectColor
+  color!: BopProjectColor
 
   toFormattedJSON (): Project {
     const json: Project = {
       id: this.id,
       type: 'project',
-      color: this.color as BopProjectColor,
+      color: this.color,
       name: this.name,
       version: this.version
     }

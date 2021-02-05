@@ -19,13 +19,13 @@ describe('Tests environment', function () {
 
     describe('Every shared module must have a test file', function () {
       generateMissingTests('shared', n => {
+        if (/^shared\/@types/.test(n)) { return true }
         // For now, it seems there is no point for testing shared models.
         // It contains only interfaces.
         if (/^shared\/models\//.test(n)) { return true }
         if (n === 'shared/objects/base.object.ts') { return true }
         if (n === 'shared/objects/bop.object.ts') { return true }
         if (n === 'shared/objects/index.ts') { return true }
-        if (n === 'shared/templates/planning/types.ts') { return true }
         return false
       })
     })

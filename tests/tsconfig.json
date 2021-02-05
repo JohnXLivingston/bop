@@ -1,13 +1,17 @@
 {
+	"extends": "@tsconfig/node12/tsconfig.json",
+	"references": [
+		{
+			"path": "../tsconfig.json"
+		}
+	],
 	"compilerOptions": {
-		"target": "es6",
-		"module": "commonjs",
-		"moduleResolution": "node", // Tell tsc to look in node_modules for modules
-		"strict": true,
-		"alwaysStrict": true,
-		"forceConsistentCasingInFileNames": true,
-		"noImplicitAny": true,
-		"noImplicitReturns": true,
-		"noUnusedLocals": true
+		"typeRoots": [
+			"../node_modules/@types",
+			"../src/shared/@types"
+		]
+	},
+	"ts-node": {
+		"files": true // so that tests can properly find .d.ts files.
 	}
 }

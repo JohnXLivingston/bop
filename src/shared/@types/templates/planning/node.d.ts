@@ -1,4 +1,4 @@
-import type { BopObject } from '../../../objects'
+/// <reference path="bop/shared/objects" />
 
 declare interface PlanningProperties {
   nbWeeks: number

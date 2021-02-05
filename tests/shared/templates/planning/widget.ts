@@ -2,7 +2,6 @@
 import { describe, before, after, it } from 'mocha'
 import * as chai from 'chai'
 import { flushTests, testNunjucksTemplate } from '../../../test-utils'
-import { PlanningProperties } from '../../../../src/shared/templates/planning/types'
 
 chai.use(require('chai-match'))
 const expect = chai.expect

@@ -20,14 +20,24 @@
 		"removeComments": true,
 		"sourceMap": true,
 
+		"composite": true,
+		"declaration": true,
+		"tsBuildInfoFile": "./dist/server.tsbuildinfo",
 		"rootDir": "src",
 		"outDir": "dist",
 		"baseUrl": "./src/",
 		"paths": {
 			"*": ["../node_modules/*"],
 			"bop/*": ["*"]
-		}
+		},
+		"typeRoots": [
+			"node_modules/@types",
+			"src/shared/@types"
+		]
 	},
 	"include": ["src/**/*"],
-	"exclude": ["src/public"]
+	"exclude": ["src/public"],
+	"ts-node": {
+		"files": true // so that tests can properly find .d.ts files.
+	}
 }

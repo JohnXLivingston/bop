@@ -16,4 +16,4 @@ set -u
 
 # NB: if you want only to run some tests: you can use:
 # $ NODE_ENV="test" npx mocha --grep models/user
-mocha
+npx mocha
