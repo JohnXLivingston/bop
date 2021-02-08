@@ -9,7 +9,7 @@ import {
   TaskPartModel
 } from 'bop/models'
 
-const asyncHandler = require('express-async-handler')
+import { asyncMiddleware } from 'bop/middlewares/async'
 const planningRouter = express.Router()
 
 function toRetrievedMessages (messages: Messages, objects: {toFormattedJSON(): any}[]): void {
@@ -22,7 +22,7 @@ function toRetrievedMessages (messages: Messages, objects: {toFormattedJSON(): a
   }
 }
 
-planningRouter.get('/all', asyncHandler(async (req: express.Request, res: express.Response) => {
+planningRouter.get('/all', asyncMiddleware(async (req: express.Request, res: express.Response) => {
   logger.error('This entry point is temporary for developing purpose. Must be removed.')
 
   const messages: Messages = []
@@ -40,7 +40,7 @@ planningRouter.get('/all', asyncHandler(async (req: express.Request, res: expres
   res.json(messages)
 }))
 
-planningRouter.post('/test-data', asyncHandler(async (req: express.Request, res: express.Response) => {
+planningRouter.post('/test-data', asyncMiddleware(async (req: express.Request, res: express.Response) => {
   logger.error('This entry point is temporary for developing purpose. Must be removed.')
 
   const [resource1] = await ResourceModel.findOrCreate({
