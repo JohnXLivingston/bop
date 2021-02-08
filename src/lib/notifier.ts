@@ -9,8 +9,8 @@ interface SocketIOEmitterWithCustomRequest extends SocketIOEmitter {
 
 class Notifier {
   private static instance: Notifier
-  private io: SocketIOEmitterWithCustomRequest
-  private ioNamespace: SocketIOEmitterWithCustomRequest
+  private readonly io: SocketIOEmitterWithCustomRequest
+  private readonly ioNamespace: SocketIOEmitterWithCustomRequest
 
   constructor () {
     this.io = require('socket.io-emitter')(Redis.Instance.getClient(), {
@@ -19,9 +19,9 @@ class Notifier {
     this.ioNamespace = this.io.of('/bop')
   }
 
-  initInstance () {}
+  initInstance (): void {}
 
-  private sendCustomRequest (emitter: SocketIOEmitterWithCustomRequest, data: any) {
+  private sendCustomRequest (emitter: SocketIOEmitterWithCustomRequest, data: any): void {
     // Waiting for this PR to be merged: https://github.com/socketio/socket.io-emitter/pull/74/commits
     // Until then...
     if (emitter.customRequest && typeof emitter.customRequest === 'function') {
@@ -49,12 +49,12 @@ class Notifier {
    * When a session is destroyed, please call disconnectSession to be sure to disconnect all user browser tabs.
    * @param sessionID
    */
-  killSession (sessionId: string) :void {
+  killSession (sessionId: string): void {
     logger.debug('We have to kill a session. Sending customRequest.')
     this.sendCustomRequest(this.ioNamespace, 'disconnect:' + sessionId)
   }
 
-  static get Instance () {
+  static get Instance (): Notifier {
     return this.instance || (this.instance = new Notifier())
   }
 }

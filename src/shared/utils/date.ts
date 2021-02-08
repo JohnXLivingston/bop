@@ -11,22 +11,22 @@ function _modulo (a: number, b: number): number {
 
 function _pad4 (v: number): string {
   if (v < 1000) {
-    return '0' + v
+    return '0' + v.toString()
   }
   if (v < 100) {
-    return '00' + v
+    return '00' + v.toString()
   }
   if (v < 10) {
-    return '000' + v
+    return '000' + v.toString()
   }
-  return '' + v
+  return '' + v.toString()
 }
 
 function _pad2 (v: number): string {
   if (v < 10) {
-    return '0' + v
+    return '0' + v.toString()
   }
-  return '' + v
+  return '' + v.toString()
 }
 
 /**

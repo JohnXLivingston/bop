@@ -4,7 +4,7 @@ require('bop/public/scss/widgets/locale.scss')
 
 declare global {
   interface JQuery {
-    bopLocaleChange(): JQuery
+    bopLocaleChange: () => JQuery
   }
 }
 

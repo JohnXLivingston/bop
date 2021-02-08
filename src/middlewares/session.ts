@@ -2,6 +2,7 @@ import * as session from 'express-session'
 import { CONFIG, isProduction } from '../helpers/config'
 import { Redis } from '../lib/redis'
 import { logger } from '../helpers/log'
+import type { RequestHandler } from 'express'
 
 declare module 'express-session' {
   interface Session {
@@ -10,7 +11,7 @@ declare module 'express-session' {
   }
 }
 
-function getSessionMiddleware () {
+function getSessionMiddleware (): RequestHandler {
   logger.debug('Calling getSessionMiddleware...')
   const RedisStore = require('connect-redis')(session)
 

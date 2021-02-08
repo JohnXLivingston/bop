@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable @typescript-eslint/restrict-plus-operands */
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable no-unused-expressions */
 import { describe, it, after, before } from 'mocha'
 import * as chai from 'chai'
@@ -10,18 +13,18 @@ const expect = chai.expect
 chai.use(require('chai-as-promised'))
 
 interface TestArgs<T extends Model> {
-  name: string,
+  name: string
   ObjectClass: {
-    new (...args: any[]): T,
-    findByPk: (...args: any[]) => Promise<T | null>,
+    new (...args: any[]): T
+    findByPk: (...args: any[]) => Promise<T | null>
     destroy: () => Promise<number>
-  },
+  }
   optimisticLocking?: boolean
 }
 
 interface TestArgsCreationAndDeletion<T extends Model> extends TestArgs<T> {
-  data: any | Function,
-  mandatoryFields?: string[],
+  data: any | Function
+  mandatoryFields?: string[]
   expectedObjectId?: number
 }
 
@@ -92,14 +95,15 @@ function testModelCreationAndDeletion<T extends Model> ({
   })
 }
 
-type UpdateTestValues = {[key: string]: string | number | boolean | null }
-type UpdateTestDynamic = { testName: string, testFunc: () => UpdateTestValues | Promise<UpdateTestValues> }
+interface UpdateTestValues {[key: string]: string | number | boolean | null }
+interface UpdateTestDynamic { testName: string, testFunc: () => UpdateTestValues | Promise<UpdateTestValues> }
 type UpdateTest = UpdateTestValues | UpdateTestDynamic
 interface TestArgsUpdate<T extends Model> extends TestArgs<T> {
-  data: any | Function,
+  data: any | Function
   updateTests: UpdateTest[]
 }
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 function testModelUpdate<T extends Model> ({
   name,
   data,
@@ -188,8 +192,8 @@ function testModelUpdate<T extends Model> ({
             : test as UpdateTestValues
 
           for (const field in values) {
-            (<any>object1!)[field] = values[field];
-            (<any>object2!)[field] = values[field]
+            (object1 as any)[field] = values[field];
+            (object2 as any)[field] = values[field]
           }
 
           await object1!.save()
@@ -202,46 +206,46 @@ function testModelUpdate<T extends Model> ({
 }
 
 interface ConstraintTestUnique {
-  type: 'unique',
-  name: string,
-  data1: {[key: string]: any},
+  type: 'unique'
+  name: string
+  data1: {[key: string]: any}
   data2: {[key: string]: any}
 }
 interface ConstraintTestTooShort {
-  type: 'too_short',
-  field: string,
-  minLength: number,
+  type: 'too_short'
+  field: string
+  minLength: number
 }
 interface ConstraintTestTooLong {
-  type: 'too_long',
-  field: string,
-  maxLength: number,
+  type: 'too_long'
+  field: string
+  maxLength: number
 }
 interface ConstraintTestForeignKey {
-  type: 'foreign_key' | 'nullable_foreign_key',
+  type: 'foreign_key' | 'nullable_foreign_key'
   field: string
 }
 interface ConstraintTestDateOnly {
-  type: 'dateonly',
+  type: 'dateonly'
   field: string
 }
 interface ConstraintTestInteger {
-  type: 'integer' | 'unsigned_integer',
+  type: 'integer' | 'unsigned_integer'
   field: string
 }
 interface ConstraintTestBoolean {
-  type: 'boolean',
+  type: 'boolean'
   field: string
 }
-type ConstraintTest = ConstraintTestUnique
-  | ConstraintTestTooShort
-  | ConstraintTestTooLong
-  | ConstraintTestForeignKey
-  | ConstraintTestDateOnly
-  | ConstraintTestInteger
-  | ConstraintTestBoolean
+type ConstraintTest = ConstraintTestUnique |
+ConstraintTestTooShort |
+ConstraintTestTooLong |
+ConstraintTestForeignKey |
+ConstraintTestDateOnly |
+ConstraintTestInteger |
+ConstraintTestBoolean
 interface TestArgsConstraint<T extends Model> extends TestArgs<T> {
-  constraintTests: ConstraintTest[],
+  constraintTests: ConstraintTest[]
   data: any | Function
 }
 

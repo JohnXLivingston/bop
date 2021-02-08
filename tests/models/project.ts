@@ -47,7 +47,7 @@ describe('models/project/project.ts', function () {
     ObjectClass: ProjectModel,
     data: () => {
       return {
-        name: 'My ' + (projectCounter++) + ' project'
+        name: 'My ' + (projectCounter++).toString() + ' project'
       }
     },
     constraintTests: [

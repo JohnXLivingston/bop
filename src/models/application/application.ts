@@ -11,11 +11,11 @@ export class ApplicationModel extends Model<ApplicationModel> {
   @Column
   migrationVersion!: number
 
-  static async countTotal () {
+  static async countTotal (): Promise<number> {
     return ApplicationModel.count()
   }
 
-  static async load () {
+  static async load (): Promise<ApplicationModel | null> {
     return ApplicationModel.findOne()
   }
 }

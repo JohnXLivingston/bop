@@ -6,6 +6,7 @@ require('bop/public/scss/widgets/sidebar.scss')
 
 declare global {
   interface JQuery {
+    // eslint-disable-next-line @typescript-eslint/method-signature-style
     bopSidebar (): JQuery
   }
 }

@@ -7,13 +7,15 @@ const logger = getLogger('widget/wheelmenu')
 
 declare global {
   interface JQuery {
+    // eslint-disable-next-line @typescript-eslint/method-signature-style
     bopWheelmenu(): JQuery
+    // eslint-disable-next-line @typescript-eslint/method-signature-style
     bopWheelmenu(options: BopWheelmenuOptions): JQuery
   }
 }
 
 interface BopWheelmenuOptions extends BopWheelmenuContentOptions {
-  onClick: boolean,
+  onClick: boolean
   onContextMenu: boolean
 }
 
@@ -26,7 +28,7 @@ $.widget('bop.bopWheelmenu', $.bop.bop, {
   options: bopWheelmenuDefaultOptions,
   _create: function () {
     this._super()
-    const handler = (ev: JQuery.Event) => {
+    const handler = (ev: JQuery.Event): boolean | void => {
       ev.preventDefault()
       if (ev.pageX !== undefined && ev.pageY !== undefined) {
         this.open({ x: ev.pageX, y: ev.pageY })
@@ -70,8 +72,8 @@ $.widget('bop.bopWheelmenu', $.bop.bop, {
         const offset = widget.offset()
         if (offset) {
           coordinates = {
-            x: offset.left + ((widget.innerWidth() || 0) / 2),
-            y: offset.top + ((widget.innerHeight() || 0) / 2)
+            x: offset.left + ((widget.innerWidth() ?? 0) / 2),
+            y: offset.top + ((widget.innerHeight() ?? 0) / 2)
           }
         }
       }
@@ -83,16 +85,16 @@ $.widget('bop.bopWheelmenu', $.bop.bop, {
       )
       const $window = $(window)
       coordinates = {
-        x: ($window.scrollLeft() || 0) + (($window.width() || 0) / 2),
-        y: ($window.scrollTop() || 0) + (($window.height() || 0) / 2)
+        x: ($window.scrollLeft() ?? 0) + (($window.width() ?? 0) / 2),
+        y: ($window.scrollTop() ?? 0) + (($window.height() ?? 0) / 2)
       }
     }
 
     const $window = $(window)
-    const windowWidth = $window.width() || 0
-    const windowHeight = $window.height() || 0
-    const windowScrollLeft = $window.scrollLeft() || 0
-    const windowScrollTop = $window.scrollTop() || 0
+    const windowWidth = $window.width() ?? 0
+    const windowHeight = $window.height() ?? 0
+    const windowScrollLeft = $window.scrollLeft() ?? 0
+    const windowScrollTop = $window.scrollTop() ?? 0
     if (coordinates.x > windowScrollLeft + windowWidth) {
       logger.debug('The x position is outside the screen (on the right).')
       coordinates.x = windowScrollLeft + windowWidth
@@ -111,8 +113,8 @@ $.widget('bop.bopWheelmenu', $.bop.bop, {
     }
 
     logger.debug(`The center of the wheelmenu is (${coordinates.x}, ${coordinates.y}).`)
-    content.css('left', coordinates.x + 'px')
-    content.css('top', coordinates.y + 'px')
+    content.css('left', coordinates.x.toString() + 'px')
+    content.css('top', coordinates.y.toString() + 'px')
 
     content.bopWheelmenuContent(this.options)
   },
@@ -123,7 +125,7 @@ $.widget('bop.bopWheelmenu', $.bop.bop, {
       if (variousLength) {
         s = 'x'.repeat(i + 1)
       } else {
-        s = '' + i
+        s = '' + i.toString()
       }
       items.push('<a>' + s + '</a>')
     }

@@ -90,7 +90,7 @@ describe('shared/objects/message/message.object.ts', function () {
     it('should work on all test data', function () {
       for (let i = 0; i < testData.length; i++) {
         const message = new MessageObject(testData[i])
-        expect(message, 'instanceOf #' + i).to.be.instanceOf(MessageObject)
+        expect(message, 'instanceOf #' + i.toString()).to.be.instanceOf(MessageObject)
       }
     })
   })
@@ -107,7 +107,7 @@ describe('shared/objects/message/message.object.ts', function () {
     it('should return an object deeply equal to the original', function () {
       for (let i = 0; i < testData.length; i++) {
         const message = new MessageObject(testData[i])
-        expect(message.toFormattedJSON(), 'test #' + i).to.be.deep.equal(testData[i])
+        expect(message.toFormattedJSON(), 'test #' + i.toString()).to.be.deep.equal(testData[i])
       }
     })
   })

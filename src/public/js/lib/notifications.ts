@@ -12,7 +12,7 @@ class Notifications {
   /**
    * Connect to server.
    */
-  connect () {
+  connect (): void {
     let connectCount = 0
     let reloadTimeout: NodeJS.Timeout | undefined
 
@@ -56,7 +56,7 @@ class Notifications {
    * In other words: each time after the first one the socket is connected (because nodemon restart on watch)
    * @param activate : true to activate this mode.
    */
-  autoReloadDevMode (activate: boolean) :void {
+  autoReloadDevMode (activate: boolean): void {
     this.autoReloadDevModeActivated = activate
   }
 }

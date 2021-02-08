@@ -67,7 +67,7 @@ async function searchNestedTests (dir: string): Promise<string[]> {
 }
 
 interface ExpectedVsReality {
-  libs: string[],
+  libs: string[]
   tests: string[]
 }
 async function expectedVsReality (dir: string): Promise<ExpectedVsReality> {
@@ -83,7 +83,7 @@ async function expectedVsReality (dir: string): Promise<ExpectedVsReality> {
   }
 }
 
-async function missingTests (dir: string, ignore?: (n:string) => boolean): Promise<string[]> {
+async function missingTests (dir: string, ignore?: (n: string) => boolean): Promise<string[]> {
   const vs = await expectedVsReality(dir)
   if (ignore) {
     vs.libs = vs.libs.filter(n => !ignore(n))
@@ -96,13 +96,13 @@ async function missingTests (dir: string, ignore?: (n:string) => boolean): Promi
     lib = lib.replace(/\.(njk|html)$/, '.ts')
 
     let found = false
-    if (vs.tests.indexOf(lib) >= 0) {
+    if (vs.tests.includes(lib)) {
       found = true
     }
     if (!found && lib.endsWith('/index.ts')) {
       // src/helpers/crypto/index.ts can be tested by /tests/helpers/cryto.ts
       const l = lib.replace(/\/index\.ts$/, '.ts')
-      if (vs.tests.indexOf(l) >= 0) {
+      if (vs.tests.includes(l)) {
         found = true
       }
     }
@@ -113,7 +113,7 @@ async function missingTests (dir: string, ignore?: (n:string) => boolean): Promi
   return a
 }
 
-function generateMissingTests (dir: string, ignore?: (n:string) => boolean) {
+function generateMissingTests (dir: string, ignore?: (n: string) => boolean): void {
   it('Every ' + dir + ' must have a test file', async function () {
     const missings = await missingTests(dir, ignore)
     expect(missings, 'Missing tests').to.be.deep.equal([])

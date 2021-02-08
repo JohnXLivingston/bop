@@ -7,7 +7,7 @@ import getLogger from 'bop/public/js/utils/logger'
 const logger = getLogger('lib/planning/tree/classes/tree')
 
 export interface PlanningTreeOptions {
-  widget: JQuery,
+  widget: JQuery
   planningProperties: PlanningProperties
 }
 
@@ -27,7 +27,7 @@ abstract class PlanningTree extends PlanningNode {
     return this._planningProperties
   }
 
-  process (messages: Messages) {
+  process (messages: Messages): void {
     let messagesObject = MessageObject.fromFormattedJSON(messages)
     messagesObject = this.removeDeprecatedMessages(messagesObject)
     this.registerObjects(messagesObject)
@@ -55,7 +55,7 @@ abstract class PlanningTree extends PlanningNode {
     parseWidgets(this.widget)
   }
 
-  childsDomContainer () {
+  childsDomContainer (): JQuery {
     return this.widget.find('.widget-planning-content')
   }
 

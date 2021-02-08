@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable no-unused-expressions */
 import { describe, before, after, it } from 'mocha'
 import * as chai from 'chai'
@@ -128,7 +129,7 @@ describe('models/task/task.ts', function () {
     })
     // taskallocation1Data must be a function, because resource1 will only be
     // instanciated in «it» calls.
-    const taskallocation1Data = () => {
+    const taskallocation1Data = (): any => {
       if (!resource1.id) {
         throw new Error('Test incorrect, missing resource id')
       }
@@ -221,7 +222,7 @@ describe('models/task/task.ts', function () {
     })
     // taskpart1Data must be a function, because resource1 will only be
     // instanciated in «it» calls.
-    const taskpart1Data = () => {
+    const taskpart1Data = (): any => {
       return {
         allocationId: allocation.id,
         start: '2020-09-01',

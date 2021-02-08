@@ -5,8 +5,8 @@ import getLogger from './logger'
 
 const logger = getLogger('i18n')
 
-async function initI18n () {
-  const lng = $('html').attr('lang') || 'en'
+async function initI18n (): Promise<void> {
+  const lng = $('html').attr('lang') ?? 'en'
   await i18next.use(BackendAdapter).init({
     backend: {
       backend: HttpApi,
@@ -25,6 +25,7 @@ async function initI18n () {
     returnNull: false,
     returnEmptyString: false,
     missingKeyHandler: (lng: string[], ns: string, key: string, fallbackValue: string) => {
+      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
       logger.error(`Missing localized string: lng=${lng}, ns=${ns}, key=${key}, fallbackValue=${fallbackValue}.`)
     }
   })

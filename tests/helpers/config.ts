@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable no-unused-expressions */
 import { describe, before, after, it } from 'mocha'
 import * as chai from 'chai'
@@ -120,7 +121,7 @@ describe('helpers/config', function () {
 
       it('The file should have the proper content', function () {
         const content = fs.readFileSync('./config/local-test.yaml', 'utf-8').replace(/^\uFEFF/, '')
-        const data = jsYaml.load(content) || {}
+        const data = jsYaml.load(content) ?? {}
         expect(data).to.be.an('object').deep.equal({
           test: {
             update: 'test_value_modified',

@@ -7,7 +7,7 @@ import { isProduction, webpackManifest, webUrl, notifierUrl } from '../helpers/c
  * @param res
  * @param next
  */
-function commonConstants (req: express.Request, res: express.Response, next: express.NextFunction) {
+function commonConstants (req: express.Request, res: express.Response, next: express.NextFunction): void {
   res.locals.isProduction = isProduction
   res.locals.webpackManifest = webpackManifest
 

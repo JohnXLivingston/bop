@@ -8,7 +8,7 @@ export abstract class PlanningNodeObjectTask extends PlanningNodeObject {
     if (!task) {
       throw new Error('Can\'t find the task ' + this.key)
     }
-    const project = this.tree.object('project/' + task.projectId) as ProjectObject
+    const project = this.tree.object('project/' + task.projectId.toString()) as ProjectObject
     if (!project) {
       throw new Error(`Can't find the project ${task.projectId} for the task ${task.id}.`)
     }

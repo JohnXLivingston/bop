@@ -7,14 +7,14 @@ const filename: string = path.join(__dirname, '../../assets.json')
 const raw: string = isTest ? '{}' : fs.readFileSync(filename, 'utf-8')
 
 interface WebpackAsset {
-  css?: string,
-  js?: string,
-  png?: string[],
-  svg?: string[],
+  css?: string
+  js?: string
+  png?: string[]
+  svg?: string[]
   text?: string
 }
 
-type WebpackAssets = {[key: string]: WebpackAsset}
+interface WebpackAssets {[key: string]: WebpackAsset}
 
 const assets: WebpackAssets = JSON.parse(raw)
 let headerManifestScriptTxt: string
@@ -73,7 +73,7 @@ for (const key in assets) {
 // scripts and inject code, data are not stored
 // on the object, but in variables.
 class WebpackManifest {
-  headerScriptTxt (/* name: string */) {
+  headerScriptTxt (/* name: string */): string {
     // This code will be used in templates.
     // To avoid some code injection, we must always return
     // a clone.
@@ -87,7 +87,7 @@ class WebpackManifest {
     return `<link rel="icon" type="image/svg+xml" href="${faviconSvg}">`
   }
 
-  stylesheetUrls (name: string) {
+  stylesheetUrls (name: string): string[] {
     if (!cssFiles[name]) {
       return []
     }
@@ -95,7 +95,7 @@ class WebpackManifest {
     return cssFiles[name].slice()
   }
 
-  scriptUrls (name: string) {
+  scriptUrls (name: string): string[] {
     const r = jsFiles[name] ? jsFiles[name].slice() : []
     return r
   }

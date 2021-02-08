@@ -81,7 +81,7 @@ const CONFIG = {
 }
 
 interface ConfigErrors {
-  warnings: string[],
+  warnings: string[]
   errors: string[]
 }
 /**
@@ -97,10 +97,10 @@ function checkConfig (): ConfigErrors {
 
 enum SpecificConstraintType { Enum = 'enum', Filepath = 'filepath' }
 interface SpecificConstraintWithValues {
-  type: SpecificConstraintType.Enum,
-  values: string[] // FIXME: this is not correct.
-                  // We will wait for other constraints than Enum
-                  // for implementing better.
+  type: SpecificConstraintType.Enum
+  values: string[] /* FIXME: this is not correct.
+                      We will wait for other constraints than Enum
+                      for implementing better. */
 }
 interface SpecificConstraintWithoutValues {
   type: SpecificConstraintType.Filepath
@@ -108,10 +108,10 @@ interface SpecificConstraintWithoutValues {
 type SpecificConstraint =
   SpecificConstraintWithValues | SpecificConstraintWithoutValues
 type Constraint = SpecificConstraint | boolean
-type Required = {[key: string]: Required | Constraint}
-function _recursiveConstraintCheck (configErrors: ConfigErrors, stack: string, c: any, r: boolean) :void;
-function _recursiveConstraintCheck (configErrors: ConfigErrors, stack: string, c: any, r: Required) :void;
-function _recursiveConstraintCheck (configErrors: ConfigErrors, stack :any, c: any, r: any) :void {
+interface Required {[key: string]: Required | Constraint}
+function _recursiveConstraintCheck (configErrors: ConfigErrors, stack: string, c: any, r: boolean): void
+function _recursiveConstraintCheck (configErrors: ConfigErrors, stack: string, c: any, r: Required): void
+function _recursiveConstraintCheck (configErrors: ConfigErrors, stack: string, c: any, r: any): void {
   for (const key in r) {
     if (r[key] && !c[key]) {
       configErrors.errors.push(`Missing config key ${stack}.${key}.`)
@@ -127,12 +127,14 @@ function _recursiveConstraintCheck (configErrors: ConfigErrors, stack :any, c: a
         if (r[key].values.indexOf(c[key]) < 0) {
           configErrors.errors.push(
             `Value for ${stack}.${key} is incorrect. ` +
+            // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
             `'${c[key]}' is not in [${r[key].values.join(', ')}]`
           )
         }
       }
       if (ctype === SpecificConstraintType.Filepath) {
         if (isInvalidPath(c[key])) {
+          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
           configErrors.errors.push(`Value for ${stack}.${key} is incorrect. '${c[key]}' is not a valid path`)
         }
       }
@@ -144,7 +146,7 @@ function _recursiveConstraintCheck (configErrors: ConfigErrors, stack :any, c: a
   }
 }
 
-function _checkMissingConfig (configErrors: ConfigErrors) :void {
+function _checkMissingConfig (configErrors: ConfigErrors): void {
   const required: Required = {
     CLUSTER: {
       WORKERS: true
@@ -186,7 +188,7 @@ function _checkMissingConfig (configErrors: ConfigErrors) :void {
   _recursiveConstraintCheck(configErrors, '', CONFIG, required)
 }
 
-function _checkCustomConfig (configErrors: ConfigErrors) {
+function _checkCustomConfig (configErrors: ConfigErrors): void {
   // Some manual verifications:
   // - In production mode, server.https should be active.
   if (isProduction && !CONFIG.SERVER.HTTPS) {
@@ -227,7 +229,7 @@ function _checkCustomConfig (configErrors: ConfigErrors) {
 /**
  * Clean certain CONFIG values.
  */
-function _cleanValues () {
+function _cleanValues (): void {
   if (CONFIG.COOKIES.PREFIX == null) { CONFIG.COOKIES.PREFIX = '' }
   if (CONFIG.COOKIES.PREFIX !== '' && CONFIG.COOKIES.PREFIX.substr(-1) !== '-') {
     CONFIG.COOKIES.PREFIX += '.'
@@ -242,7 +244,7 @@ function _cleanValues () {
 /**
  * Returns the 'local' file path. This is were we can write config overloads.
  */
-function getLocalConfigFilePath () {
+function getLocalConfigFilePath (): string {
   const configSources = config.util.getConfigSources()
   if (configSources.length === 0) throw new Error('Invalid config source.')
 
@@ -254,8 +256,8 @@ function getLocalConfigFilePath () {
 }
 
 type ConfigKeyValue = string | number | boolean | null
-async function updateConfigKey (updates: {[key: string]: ConfigKeyValue}): Promise<void>;
-async function updateConfigKey (key: string, value: ConfigKeyValue): Promise<void>;
+async function updateConfigKey (updates: {[key: string]: ConfigKeyValue}): Promise<void>
+async function updateConfigKey (key: string, value: ConfigKeyValue): Promise<void>
 async function updateConfigKey (): Promise<void> {
   let updates: {[key: string]: ConfigKeyValue}
   if (arguments.length === 1) {
@@ -286,7 +288,7 @@ async function updateConfigKey (): Promise<void> {
     }
   }
   content = content.replace(/^\uFEFF/, '')
-  const data = jsYaml.load(content) || {}
+  const data = jsYaml.load(content) ?? {}
   if (typeof data !== 'object') {
     throw Error('The content is not a valid Yaml config file.')
   }
@@ -310,7 +312,7 @@ async function updateConfigKey (): Promise<void> {
   await releaseLock()
 }
 
-function _injectConfig (d: {[key: string]: any}, keys: string[], value: ConfigKeyValue) {
+function _injectConfig (d: {[key: string]: any}, keys: string[], value: ConfigKeyValue): void {
   if (!d) {
     throw new Error('Did not expect to have something falsey here.')
   }
@@ -338,7 +340,7 @@ function webUrl (): string {
   let url = CONFIG.SERVER.HTTPS ? 'https://' : 'http://'
   url += CONFIG.SERVER.HOSTNAME
   if (CONFIG.SERVER.PORT !== (CONFIG.SERVER.HTTPS ? 443 : 80)) {
-    url += ':' + CONFIG.SERVER.PORT
+    url += ':' + CONFIG.SERVER.PORT.toString()
   }
   return url
 }
@@ -350,7 +352,7 @@ function notifierUrl (): string {
   let url = CONFIG.NOTIFIER.HTTPS ? 'https://' : 'http://'
   url += CONFIG.NOTIFIER.HOSTNAME
   if (CONFIG.NOTIFIER.PORT !== (CONFIG.NOTIFIER.HTTPS ? 443 : 80)) {
-    url += ':' + CONFIG.NOTIFIER.PORT
+    url += ':' + CONFIG.NOTIFIER.PORT.toString()
   }
   return url
 }

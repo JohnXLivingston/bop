@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable no-unused-expressions */
 import { describe, before, after, it } from 'mocha'
 import * as chai from 'chai'
@@ -22,17 +24,17 @@ describe('models/user/user.ts', function () {
         expect(user).to.not.to.be.null
       })
       it('Common fields must have correct values.', function () {
-        expect(user!.login, 'login').to.be.equal('admin')
-        expect(user!.authenticationType, 'authentificationType').to.be.equal('password')
-        expect(user!.email).to.be.undefined
-        expect(user!.username, 'username').to.be.equal('Administrator')
+        expect(user.login, 'login').to.be.equal('admin')
+        expect(user.authenticationType, 'authentificationType').to.be.equal('password')
+        expect(user.email).to.be.undefined
+        expect(user.username, 'username').to.be.equal('Administrator')
       })
       it('The admin user has the correct password.', function () {
-        expect(user!.isPasswordMatch('password')).to.be.true
-        expect(user!.isPasswordMatch('not this one')).to.be.false
+        expect(user.isPasswordMatch('password')).to.be.true
+        expect(user.isPasswordMatch('not this one')).to.be.false
       })
       it('The toFormattedJSON method should return the correct value.', function () {
-        expect(user!.toFormattedJSON()).to.be.deep.equal({
+        expect(user.toFormattedJSON()).to.be.deep.equal({
           id: 1,
           type: 'user',
           version: 0,
@@ -59,7 +61,7 @@ describe('models/user/user.ts', function () {
   }
   describe('User creation', function () {
     it('Should not create user with missing mandatory fields', async function () {
-      const failingFunc = async (data: any) => {
+      const failingFunc = async (data: any): Promise<any> => {
         const failingUser = new UserModel(data)
         return failingUser.save()
       }
@@ -70,9 +72,9 @@ describe('models/user/user.ts', function () {
       user1 = new UserModel(user1Data)
       await user1.save()
 
-      expect(await user1!.isPasswordMatch('the user1 password... or not?'), 'wrong password before reloading')
+      expect(await user1.isPasswordMatch('the user1 password... or not?'), 'wrong password before reloading')
         .to.be.false
-      expect(await user1!.isPasswordMatch('the user1 password.'), 'password before reloading').to.be.true
+      expect(await user1.isPasswordMatch('the user1 password.'), 'password before reloading').to.be.true
 
       expect(user1.id, 'User id').to.be.equal(2)
 
@@ -92,12 +94,12 @@ describe('models/user/user.ts', function () {
         email: 'notmike@example.com',
         password: 'second password'
       }
-      user1 = user1!
       for (const key in changeData) {
         (user1 as any)[key] = changeData[key]
       }
-      await user1.save()
-      user1 = await UserModel.findByPk(user1.id)
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      await user1!.save()
+      user1 = await UserModel.findByPk(user1?.id)
       expect(user1, 'user1 not null').to.not.be.null
       expect(user1, 'user1').to.be.deep
         .include(
@@ -122,7 +124,7 @@ describe('models/user/user.ts', function () {
     it('Test Optimistic Locking')
   })
 
-  function failingUser (baseUserData: any, changes: any) {
+  function failingUser (baseUserData: any, changes: any): UserModel {
     return new UserModel(
       Object.assign(
         {},

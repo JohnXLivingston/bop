@@ -50,7 +50,7 @@ describe('shared/utils/date.ts', function () {
     })
     it('should return correct values for each day in a month', function () {
       for (let i = 1; i <= 31; i++) {
-        const date: string = '2020-12-' + (i < 10 ? '0' + i : i)
+        const date: string = '2020-12-' + (i < 10 ? '0' + i.toString() : i.toString())
         expect(dateToDay(date), date).to.be.equal(18597 + i - 1)
       }
     })
@@ -99,7 +99,7 @@ describe('shared/utils/date.ts', function () {
     })
     it('should return correct values for each day in a month', function () {
       for (let i = 1; i <= 31; i++) {
-        const date: string = '2020-12-' + (i < 10 ? '0' + i : i)
+        const date: string = '2020-12-' + (i < 10 ? '0' + i.toString() : i.toString())
         expect(dayToDate(18597 + i - 1), date).to.be.equal(date)
       }
     })
@@ -111,7 +111,7 @@ describe('shared/utils/date.ts', function () {
   describe('dateToDay(dayToDate)', function () {
     it('should return the entry value.', function () {
       for (let i = 18262; i <= 18262 + 2 * 365; i++) {
-        expect(dateToDay(dayToDate(i)), '' + i).to.be.equal(i)
+        expect(dateToDay(dayToDate(i)), '' + i.toString()).to.be.equal(i)
       }
     })
   })

@@ -1,6 +1,6 @@
 declare interface User {
-  id: number,
-  type: 'user',
-  version: number,
+  id: number
+  type: 'user'
+  version: number
   username: string
 }

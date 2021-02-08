@@ -69,13 +69,13 @@ export class UserModel extends Model<UserModel> {
 
   @BeforeCreate
   @BeforeUpdate
-  static async cryptPasswordIfNeeded (instance: UserModel) {
+  static async cryptPasswordIfNeeded (instance: UserModel): Promise<void> {
     if (instance.changed('password') && instance.password) {
       instance.password = await cryptPassword(instance.password)
     }
   }
 
-  async isPasswordMatch (password: string) {
+  async isPasswordMatch (password: string): Promise<boolean> {
     if (this.authenticationType !== 'password') {
       logger.debug(
         'Calling isPasswordMatch, but the authenticationType is not password but %s',
@@ -90,7 +90,7 @@ export class UserModel extends Model<UserModel> {
     return comparePassword(password, this.password)
   }
 
-  static async countTotal () {
+  static async countTotal (): Promise<number> {
     return UserModel.count()
   }
 

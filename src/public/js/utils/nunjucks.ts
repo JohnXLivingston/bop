@@ -10,7 +10,7 @@ function nunjucksContext (context: any): object {
 }
 
 declare class Template {
-  render(context?: object): string;
+  render (context?: object): string;
 }
 
 export {

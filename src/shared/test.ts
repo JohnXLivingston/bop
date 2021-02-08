@@ -2,7 +2,7 @@
 // It will be remove when real code will be ready.
 import { logger } from './utils/logger'
 
-function testFunction () {
+function testFunction (): void {
   logger.debug('yes, the test function works')
 }
 

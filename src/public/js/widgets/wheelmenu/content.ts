@@ -4,14 +4,16 @@ import getLogger from 'bop/public/js/utils/logger'
 const logger = getLogger('widget/wheelmenu/content')
 
 export interface BopWheelmenuContentOptions {
-  margin: number,
+  margin: number
   radius: number
 }
 
 declare global {
   interface JQuery {
+    // eslint-disable-next-line @typescript-eslint/method-signature-style
     bopWheelmenuContent(options: BopWheelmenuContentOptions): JQuery
 
+    // eslint-disable-next-line @typescript-eslint/method-signature-style
     bopWheelmenuContent(methodName: 'close', withParents?: boolean): void
   }
 }
@@ -33,8 +35,8 @@ function maxWheelmenuOverlayZIndex (): number | undefined {
 function elementCenter (el: JQuery): {x: number, y: number} {
   const position: JQuery.Coordinates = el.position()
   return {
-    x: Math.round(position.left + ((el.innerWidth() || 0) / 2)),
-    y: Math.round(position.top + ((el.innerHeight() || 0) / 2))
+    x: Math.round(position.left + ((el.innerWidth() ?? 0) / 2)),
+    y: Math.round(position.top + ((el.innerHeight() ?? 0) / 2))
   }
 }
 
@@ -49,7 +51,7 @@ $.widget('bop.bopWheelmenuContent', $.bop.bop, {
   options: bopWheelmenuContentDefaultOptions,
   content: $('<div>'),
   overlay: $('<div>'),
-  opener: $('<div>') as JQuery<HTMLElement>,
+  opener: $('<div>'),
 
   _create: function () {
     this._super()
@@ -146,7 +148,7 @@ $.widget('bop.bopWheelmenuContent', $.bop.bop, {
           }
           return
         }
-        if (/^Arrow/.test(ev.key || '')) {
+        if (/^Arrow/.test(ev.key ?? '')) {
           const el = $(ev.currentTarget)
           let previous: JQuery | undefined
           let next: JQuery | undefined
@@ -223,12 +225,12 @@ $.widget('bop.bopWheelmenuContent', $.bop.bop, {
       resize: () => this.positionItems(false)
     })
 
-    const itemZIndex = () => {
+    const itemZIndex = (): void => {
       const items = content.children()
       items.css('z-index', '')
       const focused = items.filter(':focus:first')
       if (focused.length) {
-        focused.css('z-index', overlay.css('z-index') + 2)
+        focused.css('z-index', parseInt(overlay.css('z-index'), 10) + 2)
       }
     }
     this._on(content.children(), {
@@ -255,10 +257,10 @@ $.widget('bop.bopWheelmenuContent', $.bop.bop, {
     const radius = this.options.radius
     const margin = this.options.margin
     const $window = $(window)
-    const windowWidth = $window.width() || 0
-    const windowHeight = $window.height() || 0
-    const windowScrollLeft = $window.scrollLeft() || 0
-    const windowScrollTop = $window.scrollTop() || 0
+    const windowWidth = $window.width() ?? 0
+    const windowHeight = $window.height() ?? 0
+    const windowScrollLeft = $window.scrollLeft() ?? 0
+    const windowScrollTop = $window.scrollTop() ?? 0
 
     const firstItem = items[0]
     const lastItem = items[items.length - 1]
@@ -271,8 +273,8 @@ $.widget('bop.bopWheelmenuContent', $.bop.bop, {
     let maxHeight = 0
     for (let i = 0; i < items.length; i++) {
       const item = items[0]
-      maxWidth = Math.max(maxWidth, item.outerWidth() || 0)
-      maxHeight = Math.max(maxHeight, item.outerHeight() || 0)
+      maxWidth = Math.max(maxWidth, item.outerWidth() ?? 0)
+      maxHeight = Math.max(maxHeight, item.outerHeight() ?? 0)
     }
     const intersectTop = centerY - radius - (maxHeight / 2) - margin < windowScrollTop ? 1 : 0
     const intersectRight = centerX + radius + (maxWidth / 2) + margin > windowWidth + windowScrollLeft ? 2 : 0
@@ -294,19 +296,19 @@ $.widget('bop.bopWheelmenuContent', $.bop.bop, {
       let l: number
       let secondaryAngle: boolean
       if (screenSide === IntersectionSide.top) {
-        const height = item.outerHeight() || 0
+        const height = item.outerHeight() ?? 0
         l = centerY - (windowScrollTop + margin + (height / 2))
         secondaryAngle = intersection === IntersectionSide.left
       } else if (screenSide === IntersectionSide.bottom) {
-        const height = item.outerHeight() || 0
+        const height = item.outerHeight() ?? 0
         l = windowHeight + windowScrollTop - margin - (height / 2) - centerY
         secondaryAngle = intersection === IntersectionSide.right
       } else if (screenSide === IntersectionSide.right) {
-        const width = item.outerWidth() || 0
+        const width = item.outerWidth() ?? 0
         l = windowWidth + windowScrollLeft - margin - (width / 2) - centerX
         secondaryAngle = intersection === IntersectionSide.top
       } else if (screenSide === IntersectionSide.left) {
-        const width = item.outerWidth() || 0
+        const width = item.outerWidth() ?? 0
         l = centerX - (windowScrollLeft + margin + (width / 2))
         secondaryAngle = intersection === IntersectionSide.bottom
       } else {
@@ -447,8 +449,8 @@ $.widget('bop.bopWheelmenuContent', $.bop.bop, {
     for (let i = 0; i < items.length; i++) {
       const item = items[i]
       // First, we center the item.
-      const width = item.outerWidth() || 0
-      const height = item.outerHeight() || 0
+      const width = item.outerWidth() ?? 0
+      const height = item.outerHeight() ?? 0
 
       item.css('left', 0 - (width / 2))
       item.css('top', 0 - (height / 2))
@@ -457,7 +459,13 @@ $.widget('bop.bopWheelmenuContent', $.bop.bop, {
       const alpha = Math.round(angle[0] + (i * step))
       // Then, we apply a transform and an animation.
       const transform: any = {
-        transform: 'rotate(' + alpha + 'deg) translateY(-' + radius + 'px) rotate(' + (0 - alpha) + 'deg)'
+        transform: 'rotate(' +
+          alpha.toString() +
+          'deg) translateY(-' +
+          radius.toString() +
+          'px) rotate(' +
+          (0 - alpha).toString() +
+          'deg)'
       }
       if (firstCall) {
         transform.animation = 'wheelmenu-rotation 200ms linear'

@@ -1,6 +1,6 @@
 import { logger } from 'bop/shared/utils/logger'
 
-function getContext ():Context {
+function getContext (): Context {
   const s = $('html').attr('bop-context')
   if (!s || s === '') {
     logger.error('Cant find the context. This is unexpected.')
@@ -9,6 +9,7 @@ function getContext ():Context {
   try {
     return JSON.parse(s)
   } catch (err) {
+    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
     logger.error('Error parsing the context: ' + err)
     throw err
   }

@@ -21,7 +21,7 @@ import { getSessionMiddleware, checkUser } from './middlewares'
 // Shared code (front and back end) will now use logger.
 setSharedLogger(logger)
 
-async function init () {
+async function init (): Promise<void> {
   const configErrors = checkConfig()
   if (configErrors.warnings.length) {
     logger.warn('There are some warnings in config', configErrors.warnings)
@@ -51,7 +51,7 @@ init().catch((err) => {
 /**
  * newServer creates the express app and the http server.
  */
-function newServer () {
+function newServer (): Server {
   const app = express()
   const server = new Server(app)
 
@@ -74,7 +74,7 @@ class Notifier {
     this.sessionSockets = {}
   }
 
-  init (server: Server) : void {
+  init (server: Server): void {
     const url = webUrl()
     const io = require('socket.io')(server, {
       cookie: false,
@@ -147,7 +147,7 @@ class Notifier {
     })
   }
 
-  private _countSockets (userId: number, sessionId: string) {
+  private _countSockets (userId: number, sessionId: string): void {
     logger.debug('The user %s has %d open sockets on this worker.', userId, this.userSockets[userId].length)
     logger.debug(
       'The user %s has %d sockets for this session on this worker.',
@@ -166,7 +166,7 @@ class Notifier {
     }
   }
 
-  static get Instance () {
+  static get Instance (): Notifier {
     return this.instance || (this.instance = new Notifier())
   }
 }

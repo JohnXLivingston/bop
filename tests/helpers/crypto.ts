@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable no-unused-expressions */
 import { describe, before, after, it } from 'mocha'
 import * as chai from 'chai'

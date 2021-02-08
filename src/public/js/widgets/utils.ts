@@ -1,14 +1,16 @@
 /* This is a workaround, because @types/jqueryui does not declare these methods. */
 type JQueryUIHandler = (ev: JQuery.TriggeredEvent) => void | boolean
+// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
 type JQUeryUIHandlers = {[key: string]: JQueryUIHandler}
 interface JQueryUIOn {
   (handlers: JQUeryUIHandlers): void
   <T>(el: JQuery<T>, handlers: JQUeryUIHandlers): void
 }
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace JQueryUI {
     interface WidgetCommonProperties {
-      _on: JQueryUIOn,
+      _on: JQueryUIOn
       _super: Function
     }
   }

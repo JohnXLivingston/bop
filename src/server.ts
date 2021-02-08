@@ -39,7 +39,7 @@ import { testFunction } from './shared/test' // TODO : remove. This is for tempo
 // Shared code (front and back end) will now use logger.
 setSharedLogger(logger)
 
-async function init () {
+async function init (): Promise<void> {
   if (cluster.isMaster) {
     await initConfig()
   }
@@ -105,7 +105,7 @@ init().catch((err) => {
 /**
  * newServer creates the express app and the http server.
  */
-async function newServer () {
+async function newServer (): Promise<Server> {
   const app = express()
   const server = new Server(app)
 
@@ -149,17 +149,18 @@ async function newServer () {
   return server
 }
 
-function newNotifier () {
+function newNotifier (): void {
   const notifierProcess = fork(path.join(__dirname, 'notifier'), undefined, {
     detached: false,
     stdio: 'inherit'
   })
-  const notifierOnUnexpectedExit = (code: any, signal: any) => {
+  const notifierOnUnexpectedExit = (code: any, signal: any): void => {
+    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
     logger.error('Child notifier process terminated with code: ' + code, signal)
     process.exit(1)
   }
   notifierProcess.on('exit', notifierOnUnexpectedExit)
-  const notifierShutdown = () => {
+  const notifierShutdown = (): void => {
     logger.debug('Master is exiting, shutting down the notifier...')
     notifierProcess.removeListener('exit', notifierOnUnexpectedExit)
     notifierProcess.kill('SIGTERM')

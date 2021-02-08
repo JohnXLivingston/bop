@@ -27,11 +27,11 @@ abstract class PlanningNode {
     this.childsSorted = []
   }
 
-  get needRender () {
+  get needRender (): boolean {
     return this._needRender
   }
 
-  get needDomInsert () {
+  get needDomInsert (): boolean {
     return this._needDomInsert
   }
 
@@ -43,7 +43,7 @@ abstract class PlanningNode {
     return this.tree.objects[key] || null
   }
 
-  dispatch (messages: MessagesObject) {
+  dispatch (messages: MessagesObject): void {
     logger.debug('Creating missing childs...')
     this.createMissingChilds(messages)
     logger.debug('Removing deprecated childs...')
@@ -84,6 +84,7 @@ abstract class PlanningNode {
   }
 
   unregisterChild (child: PlanningNode): void {
+    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
     delete this.childsByKey[child.key]
     const sortedIdx = this.childsSorted.indexOf(child)
     if (sortedIdx >= 0) {
@@ -116,7 +117,7 @@ abstract class PlanningNode {
       for (let i = 0; i < dom[0].attributes.length; i++) {
         const attribute = dom[0].attributes[i]
         newAttributes[attribute.name] = true
-        this.dom.attr(attribute.name, dom.attr(attribute.name) || '')
+        this.dom.attr(attribute.name, dom.attr(attribute.name) ?? '')
       }
       for (let i = 0; i < this.dom[0].attributes.length; i++) {
         const attribute = this.dom[0].attributes[i]
@@ -178,9 +179,9 @@ abstract class PlanningNode {
   }
 }
 
-type NodeKeyClass = {
-  key: string,
-  Class: {new(key: string, parent?: PlanningNode): PlanningNode}
+interface NodeKeyClass {
+  key: string
+  Class: new(key: string, parent?: PlanningNode) => PlanningNode
 }
 
 export {

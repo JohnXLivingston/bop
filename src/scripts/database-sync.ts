@@ -9,7 +9,7 @@ import { setSharedLogger } from 'bop/shared/utils/logger'
 activateCLIMode()
 setSharedLogger(logger)
 
-async function go () {
+async function go (): Promise<void> {
   logger.info('Forcing a database update.')
   try {
     await migrate({ forceSync: true })

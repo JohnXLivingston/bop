@@ -4,7 +4,7 @@ import * as httpContext from 'express-http-context'
 
 import { logger } from '../helpers/log'
 
-function logRequest (req: express.Request, res: express.Response, next: express.NextFunction) {
+function logRequest (req: express.Request, res: express.Response, next: express.NextFunction): void {
   let reqId = uuidv1()
   // for better readability, we will reverse the sequences (lasts chars are constant over a process...)
   reqId = reqId.split('-').reverse().join('-')

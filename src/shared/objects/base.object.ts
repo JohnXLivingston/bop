@@ -8,7 +8,7 @@ export abstract class BaseObject {
 
   constructor (type: string, id?: number) {
     this.type = type
-    this.id = id || 0
-    this.key = type + '/' + this.id
+    this.id = id ?? 0
+    this.key = type + '/' + this.id.toString()
   }
 }

@@ -31,6 +31,7 @@ async function testNunjucksTemplate (name: string, context: any): Promise<string
     returnNull: false,
     returnEmptyString: false,
     missingKeyHandler: (lng: string[], ns: string, key: string, fallbackValue: string) => {
+      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
       throw new Error(`Missing localized string: lng=${lng}, ns=${ns}, key=${key}, fallbackValue=${fallbackValue}.`)
     }
   })
@@ -70,7 +71,9 @@ async function testNunjucksTemplate (name: string, context: any): Promise<string
       cwd: path.join(__dirname, '../..')
     })
     let output = ''
+    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
     htmlhint.stdout.on('data', data => { output += data })
+    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
     htmlhint.stderr.on('data', data => { output += data })
     htmlhint.on('close', (code) => {
       if (code !== 0) {

@@ -12,7 +12,7 @@ function parseWidgets (dom?: JQuery): void {
       logger.debug('This widget was already parsed, skipping...')
       return
     }
-    const name: any = widget.attr('data-widget') || ''
+    const name: string = widget.attr('data-widget') ?? ''
     if (!name) {
       logger.error('There is a data-widget with no value.')
       return

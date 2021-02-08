@@ -4,9 +4,9 @@
  * A newly created object.
  */
 declare interface MessageCreation {
-  type: 'message',
-  messageType: 'create',
-  object: BopElement,
+  type: 'message'
+  messageType: 'create'
+  object: BopElement
   /**
    * The userId from the user that created the object
    */
@@ -17,9 +17,9 @@ declare interface MessageCreation {
  * An updated object.
  */
 declare interface MessageUpdate {
-  type: 'message',
-  messageType: 'update',
-  object: BopElement,
+  type: 'message'
+  messageType: 'update'
+  object: BopElement
   /**
    * The userId from the user that modified the object
    */
@@ -30,12 +30,12 @@ declare interface MessageUpdate {
  * A deleted object.
  */
 declare interface MessageDeletion {
-  type: 'message',
-  messageType: 'delete',
+  type: 'message'
+  messageType: 'delete'
   // FIXME: a soft deleted object, or an objectId?
   // NB: I think it should be a soft deleted object,
   // with an incremented version number.
-  object: BopElement,
+  object: BopElement
   /**
    * The userId from the user that deleted the object
    */
@@ -47,8 +47,8 @@ declare interface MessageDeletion {
  * added by the backend.
  */
 declare interface MessageRetrieved {
-  type: 'message',
-  messageType: 'retrieved',
+  type: 'message'
+  messageType: 'retrieved'
   object: BopElement
 }
 

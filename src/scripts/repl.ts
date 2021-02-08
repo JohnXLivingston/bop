@@ -13,10 +13,10 @@ import { migrate } from '../initializers/migrator'
 activateCLIMode()
 setSharedLogger(logger)
 
-const start = async () => {
+const start = async (): Promise<void> => {
   const packageJson = require('./../../package.json')
-  const version = packageJson.version
-  const name = packageJson.name
+  const version: string = packageJson.version
+  const name: string = packageJson.name
 
   // NB: I will not call initConfig here, to avoid any problem.
   // So if you never launched the server, the checkConfig can fail.

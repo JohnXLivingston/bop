@@ -12,7 +12,7 @@ import {
 import { asyncMiddleware } from 'bop/middlewares/async'
 const planningRouter = express.Router()
 
-function toRetrievedMessages (messages: Messages, objects: {toFormattedJSON(): any}[]): void {
+function toRetrievedMessages (messages: Messages, objects: Array<{toFormattedJSON: () => any}>): void {
   for (let i = 0; i < objects.length; i++) {
     messages.push({
       messageType: 'retrieved',

@@ -11,15 +11,18 @@ const logger = getLogger('widget/planning')
 
 declare global {
   interface JQuery {
-    bopPlanning(): JQuery,
-    bopPlanning(options: BopPlanningOptions): JQuery,
+    // eslint-disable-next-line @typescript-eslint/method-signature-style
+    bopPlanning(): JQuery
+    // eslint-disable-next-line @typescript-eslint/method-signature-style
+    bopPlanning(options: BopPlanningOptions): JQuery
 
+    // eslint-disable-next-line @typescript-eslint/method-signature-style
     bopPlanning(methodName: 'getTree'): PlanningTree
   }
 }
 
 interface BopPlanningOptions {
-  display: string,
+  display: string
   nbWeeks?: number
 }
 const defaultBopPlanningOptions: BopPlanningOptions = {
@@ -30,13 +33,15 @@ const defaultBopPlanningOptions: BopPlanningOptions = {
 let tpl: Template
 
 interface BopPlanningAttributes {
-  options: BopPlanningOptions,
+  options: BopPlanningOptions
   tree?: PlanningTree
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace JQueryUI {
     interface Widget {
+      // eslint-disable-next-line @typescript-eslint/prefer-function-type
       <T>(
         name: 'bop.bopPlanning',
         base: Function,
@@ -56,7 +61,7 @@ $.widget('bop.bopPlanning', $.bop.bop, {
     if (!tpl) {
       tpl = require('bop/shared/templates/planning/widget.njk')
     }
-    const planningProperties: PlanningProperties = { nbWeeks: options.nbWeeks! }
+    const planningProperties: PlanningProperties = { nbWeeks: options.nbWeeks ?? 1 }
     const widget = $(tpl.render(nunjucksContext({
       planningProperties
     })))

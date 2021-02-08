@@ -215,6 +215,7 @@ class TaskPartModel extends Model<TaskPartModel> {
   @AllowNull(false)
   @Is('Boolean', (value) => {
     if (typeof value !== 'boolean') {
+      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
       throw new Error(`"${value}" is not a boolean.`)
     }
   })

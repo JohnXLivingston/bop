@@ -5,12 +5,12 @@ import { generateRandomPassword } from '../helpers/crypto'
 import { logger } from '../helpers/log'
 import { ApplicationModel, UserModel } from '../models'
 
-async function migrate (options?: { forceSync?: boolean }) {
+async function migrate (options?: { forceSync?: boolean }): Promise<void> {
   await _migrateDatabase(options?.forceSync)
   await _seeds()
 }
 
-async function _migrateDatabase (forceSync?: boolean) {
+async function _migrateDatabase (forceSync?: boolean): Promise<void> {
   const tables = await sequelizeTypescript.getQueryInterface().showAllTables()
 
   // No tables, we don't need to migrate anything
@@ -67,7 +67,7 @@ async function _migrateDatabase (forceSync?: boolean) {
   throw new Error('Database upgrade: Not Implemented Yet.')
 }
 
-async function _seeds () {
+async function _seeds (): Promise<void> {
   logger.debug('Adding database seeds...')
   if (!await UserModel.countTotal()) {
     logger.info('No user in database. Creating the first user...')

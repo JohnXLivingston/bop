@@ -8,12 +8,12 @@ const i18next: i18n = require('i18next')
 const i18nextFsBackend = require('i18next-fs-backend')
 const i18nextMiddleware = require('i18next-http-middleware')
 
-let supportedLanguagesInfo: {
-  key: string,
+let supportedLanguagesInfo: Array<{
+  key: string
   label: string
-}[]
+}>
 
-async function initI18n () {
+async function initI18n (): Promise<void> {
   const supportedLanguages = readdirSync('dist/i18n').filter((fileName) => {
     const joinedPath = join('dist/i18n', fileName)
     const isDirectory = lstatSync(joinedPath).isDirectory()
@@ -46,14 +46,15 @@ async function initI18n () {
     saveMissing: true,
     supportedLngs: supportedLanguages,
     missingKeyHandler: (lng: string[], ns: string, key: string, fallbackValue: string) => {
-      logger.error(`Missing localized string: lng=${lng}, ns=${ns}, key=${key}, fallbackValue=${fallbackValue}.`)
+      const l = lng.toString()
+      logger.error(`Missing localized string: lng=${l}, ns=${ns}, key=${key}, fallbackValue=${fallbackValue}.`)
     }
   })
 
   supportedLanguagesInfo = []
   for (let i = 0; i < supportedLanguages.length; i++) {
     const l = supportedLanguages[i]
-    if (l.indexOf('-') < 0) {
+    if (!l.includes('-')) {
       // language like 'en': keep only if there is no derivated language.
       if (supportedLanguages.find(f => f.startsWith(l))) {
         continue
@@ -69,11 +70,11 @@ async function initI18n () {
   supportedLanguagesInfo.sort((a, b) => a.label.localeCompare(b.label))
 }
 
-function i18nMiddleware () {
+function i18nMiddleware (): any {
   return i18nextMiddleware.handle(i18next)
 }
 
-function i18nResourcesLoader () {
+function i18nResourcesLoader (): any {
   return i18nextMiddleware.getResourcesHandler(i18next, {
     cache: true
   })
@@ -85,7 +86,7 @@ function i18nResourcesLoader () {
  * @param res
  * @param next
  */
-function i18nChangeLocale (req: express.Request, res: express.Response, next: express.NextFunction) {
+function i18nChangeLocale (req: express.Request, res: express.Response, next: express.NextFunction): void {
   if (req.query._language) {
     // i18next will save the language in cookie/session (see detection.cache)
     const url = req.originalUrl.replace(/(\?|&)_language=.*(&|$)/g, '')
@@ -96,7 +97,7 @@ function i18nChangeLocale (req: express.Request, res: express.Response, next: ex
   if (supportedLanguagesInfo) {
     let urlBase = req.originalUrl
     if (urlBase[urlBase.length] !== '&') {
-      if (urlBase.indexOf('?') >= 0) {
+      if (urlBase.includes('?')) {
         urlBase += '&'
       } else {
         urlBase += '?'

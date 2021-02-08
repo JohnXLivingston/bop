@@ -14,10 +14,10 @@ if (process.env.NODE_ENV !== 'test') {
   throw new Error('We are not in test env.')
 }
 
-function asyncExec (command: string): Promise<string> {
+async function asyncExec (command: string): Promise<string> {
   return new Promise<string>((resolve, reject) => {
     exec(command, (err, stdout, stderr) => {
-      if (err || stderr) return reject(err || new Error(stderr))
+      if (err ?? stderr) return reject(err ?? new Error(stderr))
       return resolve(stdout)
     })
   })
@@ -28,11 +28,11 @@ async function recreateDB (): Promise<void> {
   await asyncExec(`mysql -u${DBUSER} -p${DBPASSWORD} -e "create database ${DBNAME};"`)
 }
 
-async function removeFiles () {
+async function removeFiles (): Promise<void> {
   await asyncExec('rm -f ./config/local-test.yaml ./tests/logs/*')
 }
 
-async function dropRedis () {
+async function dropRedis (): Promise<void> {
   await asyncExec(
     `redis-cli -h "localhost" KEYS "${REDISPREFIX}*" ` +
     '| grep -v empty ' +
@@ -40,7 +40,7 @@ async function dropRedis () {
   )
 }
 
-async function flushTests () {
+async function flushTests (): Promise<void> {
   // TODO : reload CONFIG
   await Promise.all([
     recreateDB(),
@@ -49,7 +49,7 @@ async function flushTests () {
   ])
 }
 
-async function flushTestsAndInitDB () {
+async function flushTestsAndInitDB (): Promise<void> {
   await flushTests()
   // await initDatabaseModels()
   await migrate()

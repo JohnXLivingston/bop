@@ -1,7 +1,7 @@
 declare interface Resource {
-  id: number,
-  type: 'resource',
-  version: number,
-  name: string,
+  id: number
+  type: 'resource'
+  version: number
+  name: string
   resourceType: string
 }

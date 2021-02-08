@@ -9,7 +9,7 @@ export class TaskPartObject {
   constructor (part: TaskPart, end: string | null) {
     this.id = part.id
     this.start = part.start
-    this.end = end || '9999-12-31'
+    this.end = end ?? '9999-12-31'
     this.load = part.load
     this.autoMerge = part.autoMerge
   }

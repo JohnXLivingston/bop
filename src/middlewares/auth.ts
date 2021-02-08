@@ -10,9 +10,11 @@ import { Notifier } from '../lib/notifier'
  * @param res
  * @param next
  */
-async function authenticatedOrLogin (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function authenticatedOrLogin (
+  req: express.Request, res: express.Response, next: express.NextFunction
+): Promise<void> {
   try {
-    if (req.session && req.session.userId) {
+    if (req.session?.userId) {
       logger.debug('[auth:authenticatedOrLogin] There is a userId in session. Checking...')
       const user = await checkUser(req.session.userId)
       if (user) {
@@ -40,9 +42,11 @@ async function authenticatedOrLogin (req: express.Request, res: express.Response
  * @param res
  * @param next
  */
-async function authenticatedOr401 (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function authenticatedOr401 (
+  req: express.Request, res: express.Response, next: express.NextFunction
+): Promise<void> {
   try {
-    if (req.session && req.session.userId) {
+    if (req.session?.userId) {
       logger.debug('[auth:authenticatedOr401] There is a userId in session. Checking...')
       const user = await checkUser(req.session.userId)
       if (user) {
@@ -76,14 +80,14 @@ function getAuthenticateMiddleware (middlewares: express.RequestHandler[]): expr
   ]
 }
 
-function _checkPostAuthenticate (req: express.Request, res: express.Response, next: express.NextFunction) {
+function _checkPostAuthenticate (req: express.Request, res: express.Response, next: express.NextFunction): void {
   if (!res.locals.loginFailed) {
     throw new Error('Don\'t expect to be here without failing to log in.')
   }
   next()
 }
 
-async function _authenticate (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function _authenticate (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
   try {
     if (req.method !== 'POST') {
       return next('route')
@@ -141,7 +145,7 @@ async function _authenticate (req: express.Request, res: express.Response, next:
  * @param res
  * @param next
  */
-async function doLogout (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function doLogout (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
   try {
     logger.debug('[auth:doLogout]')
     await _doLogout(req).then(next)
@@ -172,8 +176,8 @@ async function _doLogout (req: express.Request): Promise<void> {
  * Check if the user is valid, and hash the right to login.
  * Return the user instance if ok, undefined otherwise.
  */
-async function checkUser(userId: number): Promise<undefined | UserModel>
-async function checkUser(user: UserModel): Promise<undefined | UserModel>
+async function checkUser (userId: number): Promise<undefined | UserModel>
+async function checkUser (user: UserModel): Promise<undefined | UserModel>
 async function checkUser (arg: any): Promise<undefined | UserModel> {
   let user: UserModel | null
   if (typeof arg === 'number') {
@@ -191,7 +195,7 @@ async function checkUser (arg: any): Promise<undefined | UserModel> {
   return user
 }
 
-function _fillResWithUser (res: express.Response, user: UserModel) {
+function _fillResWithUser (res: express.Response, user: UserModel): void {
   const context: Context = res.locals.context
   context.user = user.toFormattedJSON()
 }

@@ -4,12 +4,12 @@ import { logger } from '../helpers/log'
 
 class Redis {
   private static instance: Redis
-  private client: RedisClient
-  private prefix: string
+  private readonly client: RedisClient
+  private readonly prefix: string
 
   constructor () {
     const options = Redis.getRedisClientOptions()
-    this.prefix = options.prefix || ''
+    this.prefix = options.prefix ?? ''
     this.client = createClient(options)
 
     this.client.on('error', error => {
@@ -23,11 +23,14 @@ class Redis {
   }
 
   static getRedisClientOptions (): ClientOpts {
+    if (!CONFIG.REDIS.HOSTNAME || !CONFIG.REDIS.PORT) {
+      throw new Error('Missing redis configuration')
+    }
     const options: ClientOpts = Object.assign(
       {},
       {
-        host: CONFIG.REDIS.HOSTNAME!,
-        port: CONFIG.REDIS.PORT!,
+        host: CONFIG.REDIS.HOSTNAME,
+        port: CONFIG.REDIS.PORT,
         prefix: CONFIG.REDIS.PREFIX
       },
       (CONFIG.REDIS.DB) ? { db: CONFIG.REDIS.DB } : {},
@@ -44,7 +47,7 @@ class Redis {
     return this.prefix
   }
 
-  static initInstance () {
+  static initInstance (): void {
     this.instance = new this()
   }
 
