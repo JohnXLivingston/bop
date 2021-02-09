@@ -155,6 +155,70 @@ planningRouter.post('/test-data', asyncMiddleware(async (req: express.Request, r
     }
   })
 
+  const [task3] = await TaskModel.findOrCreate({
+    where: {
+      name: 'Task 3',
+      projectId: project1.id
+    },
+    defaults: {
+      start: '2020-09-02',
+      end: '2020-09-08',
+      work: 5 * 60 * 7
+    }
+  })
+  const [task3allocation1] = await TaskAllocationModel.findOrCreate({
+    where: {
+      taskId: task3.id,
+      resourceId: resource2.id
+    },
+    defaults: {
+      order: 1,
+      start: '2020-09-02',
+      end: '2020-09-08',
+      work: 5 * 60 * 7
+    }
+  })
+  await TaskPartModel.findOrCreate({
+    where: {
+      allocationId: task3allocation1.id,
+      start: '2020-09-02'
+    },
+    defaults: {
+      load: 4 * 60,
+      autoMerge: true
+    }
+  })
+  await TaskPartModel.findOrCreate({
+    where: {
+      allocationId: task3allocation1.id,
+      start: '2020-09-05'
+    },
+    defaults: {
+      load: 0,
+      autoMerge: true
+    }
+  })
+  await TaskPartModel.findOrCreate({
+    where: {
+      allocationId: task3allocation1.id,
+      start: '2020-09-07'
+    },
+    defaults: {
+      load: 1 * 60,
+      autoMerge: true
+    }
+  })
+  await TaskPartModel.findOrCreate({
+    where: {
+      allocationId: task3allocation1.id,
+      start: '2020-09-08'
+    },
+    defaults: {
+      load: 0,
+      autoMerge: true
+    }
+  })
+
   res.json(true)
 }))
 

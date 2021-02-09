@@ -3,6 +3,7 @@ import { BopObject, MessageObject, MessagesObject } from 'bop/shared/objects'
 import { nunjucksContext, Template } from 'bop/public/js/utils/nunjucks'
 import { parseWidgets } from 'bop/public/js/utils/widgets'
 import getLogger from 'bop/public/js/utils/logger'
+import { DateLayout } from 'bop/shared/utils/date-layout'
 
 const logger = getLogger('lib/planning/tree/classes/tree')
 
@@ -14,6 +15,7 @@ export interface PlanningTreeOptions {
 abstract class PlanningTree extends PlanningNode {
   private readonly widget: JQuery
   private readonly _planningProperties: PlanningProperties
+  readonly dateLayout: DateLayout
   objects: {[key: string]: BopObject} = {}
 
   constructor (options: PlanningTreeOptions) {
@@ -21,6 +23,11 @@ abstract class PlanningTree extends PlanningNode {
     this.tree = this
     this.widget = options.widget
     this._planningProperties = options.planningProperties
+    this.dateLayout = new DateLayout({
+      cellWidth: options.planningProperties.cellWidth,
+      start: '2020-08-31',
+      nbWeeks: options.planningProperties.nbWeeks
+    })
   }
 
   get planningProperties (): PlanningProperties {

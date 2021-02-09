@@ -1,6 +1,7 @@
 import { BaseObject } from '../base.object'
 import { ResourceObject } from '../resource/resource.object'
 import { TaskAllocationObject } from './task.allocation.object'
+import type { DateLayout } from 'bop/shared/utils/date-layout'
 
 export class TaskObject extends BaseObject {
   version: number
@@ -46,6 +47,13 @@ export class TaskObject extends BaseObject {
       allocations: allocationsJSON
     }
     return json
+  }
+
+  toCalendarContent (_dateLayout: DateLayout, _allocationId: number): NodeCalendarContent {
+    // TODO.
+    return {
+      items: []
+    }
   }
 
   isResourceAllocated (resource: undefined | number | ResourceObject | string): boolean {

@@ -47,7 +47,8 @@
               </div>
             </div>
             {% for stub in item.stubs %}
-              {% if (not stub.on) and (not loop.last) and (stub.width != null) %}
+              {% if (not stub.on) %}
+                {# Rendering «off» parts #}
                 <div
                   class="widget-planning-item-part widget-planning-item-part-off"
                   style="

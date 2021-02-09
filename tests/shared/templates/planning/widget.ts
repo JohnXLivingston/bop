@@ -2,6 +2,7 @@
 import { describe, before, after, it } from 'mocha'
 import * as chai from 'chai'
 import { flushTests, testNunjucksTemplate } from '../../../test-utils'
+import { planningProperties } from '../../../test-utils/examples'
 
 chai.use(require('chai-match'))
 const expect = chai.expect
@@ -11,9 +12,6 @@ describe('Shared templates/planning/widget', function () {
   after(flushTests)
 
   it('Should render correct html', async function () {
-    const planningProperties: PlanningProperties = {
-      nbWeeks: 2
-    }
     const vars = {
       planningProperties
     }

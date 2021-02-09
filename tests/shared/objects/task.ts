@@ -4,7 +4,12 @@ import { describe, before, after, it } from 'mocha'
 import * as chai from 'chai'
 
 import { flushTests } from '../../test-utils'
-import { task1, taskWithUnallocatedLines, resource1 } from '../../test-utils/examples'
+import {
+  task1,
+  taskWithUnallocatedLines,
+  resource1,
+  dateLayout
+} from '../../test-utils/examples'
 
 import { TaskObject } from '../../../src/shared/objects/task/task.object'
 import { ResourceObject } from '../../../src/shared/objects/resource/resource.object'
@@ -28,6 +33,15 @@ describe('shared/objects/task/task.object.ts', function () {
     it('should return an object deeply equal to the original', function () {
       const task = new TaskObject(task1)
       expect(task.toFormattedJSON()).to.be.deep.equal(task1)
+    })
+  })
+
+  describe('toCalendarContent', function () {
+    it('should return an object deeply equal to what is expected', function () {
+      const task = new TaskObject(task1)
+      expect(task.toCalendarContent(dateLayout, task.allocations[0]?.id)).to.be.deep.equal({
+        items: []
+      })
     })
   })
 

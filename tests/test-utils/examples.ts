@@ -1,3 +1,17 @@
+import { DateLayout } from 'bop/shared/utils/date-layout'
+
+const originDate = '2020-08-31'
+
+const planningProperties: PlanningProperties = {
+  nbWeeks: 2,
+  cellWidth: 45
+}
+const dateLayout = new DateLayout({
+  cellWidth: planningProperties.cellWidth,
+  nbWeeks: planningProperties.cellWidth,
+  start: originDate
+})
+
 const user1: User = {
   type: 'user',
   id: 0,
@@ -156,6 +170,9 @@ const taskWithUnallocatedLines: Task = {
 }
 
 export {
+  originDate,
+  planningProperties,
+  dateLayout,
   user1,
   project1,
   resource1,

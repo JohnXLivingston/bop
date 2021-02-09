@@ -2,8 +2,8 @@
 import { describe, before, after, it } from 'mocha'
 import * as chai from 'chai'
 import { flushTests, testNunjucksTemplate } from '../../../test-utils'
-import { TaskObject } from '../../../../src/shared/objects'
-import { task1 } from '../../../test-utils/examples'
+import { TaskObject } from 'bop/shared/objects'
+import { task1, planningProperties, dateLayout } from '../../../test-utils/examples'
 
 chai.use(require('chai-match'))
 const expect = chai.expect
@@ -14,14 +14,12 @@ describe('Shared templates/planning/render', function () {
 
   it('Should render correct html', async function () {
     const task = new TaskObject(task1)
-    const planningProperties: PlanningProperties = {
-      nbWeeks: 2
-    }
     const vars: NodeRenderVars = {
       planningProperties,
       node: {
         type: 'object',
-        object: task
+        object: task,
+        calendarContent: task.toCalendarContent(dateLayout, task.allocations[0]?.id)
       }
     }
     const html = await testNunjucksTemplate('shared/templates/planning/render.njk', vars)

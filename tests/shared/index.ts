@@ -1,6 +1,7 @@
 import './test'
 import './utils/logger'
 import './utils/date'
+import './utils/date-layout'
 import './templates/planning'
 import './objects/user'
 import './objects/project'

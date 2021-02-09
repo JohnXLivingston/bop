@@ -18,13 +18,25 @@ export abstract class PlanningNodeObjectTask extends PlanningNodeObject {
     vars.node.calendarContent = {
       items: [{
         color: project.color,
-        left: 100,
-        width: 400,
+        left: this.tree.dateLayout.computeAttributes(task.start, task.end).left,
+        width: this.tree.dateLayout.computeAttributes(task.start, task.end).width,
         label: 'Test',
         type: 'taskpart',
         stubs: [
           {
-            on: true
+            on: true,
+            left: 100,
+            width: 200
+          },
+          {
+            on: false,
+            left: 200,
+            width: 100
+          },
+          {
+            on: true,
+            left: 300,
+            width: 100
           }
         ]
       }] // TODO

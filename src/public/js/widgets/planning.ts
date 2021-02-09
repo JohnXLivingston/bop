@@ -61,7 +61,11 @@ $.widget('bop.bopPlanning', $.bop.bop, {
     if (!tpl) {
       tpl = require('bop/shared/templates/planning/widget.njk')
     }
-    const planningProperties: PlanningProperties = { nbWeeks: options.nbWeeks ?? 1 }
+    logger.error('TODO: compute cell width from CSS...')
+    const planningProperties: PlanningProperties = {
+      cellWidth: this.__getCellWidth(),
+      nbWeeks: options.nbWeeks ?? 1
+    }
     const widget = $(tpl.render(nunjucksContext({
       planningProperties
     })))
@@ -73,6 +77,18 @@ $.widget('bop.bopPlanning', $.bop.bop, {
     })
 
     this.requestData()
+  },
+
+  __getCellWidth: function (): number {
+    const el = $(this.element).find('.widget-planning-week-days>*:first')
+    if (el.length > 0) {
+      const width = el.width()
+      if (width) {
+        return width
+      }
+    }
+    logger.error('Can\'t compute cellWidth.')
+    return 45
   },
 
   getTree: function (): PlanningTree {

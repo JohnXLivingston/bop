@@ -5,7 +5,12 @@
 			"path": "../tsconfig.json"
 		}
 	],
-	"compilerOptions": {},
+	"compilerOptions": {
+		"paths": {
+			"*": ["../node_modules/*"],
+			"bop/*": ["../src/*"]
+		}
+	},
 	"include": [
 		"**/*",
 		"../src/shared/@types/**/*"

@@ -1,6 +1,7 @@
 /// <reference path="bop/shared/objects" />
 
 declare interface PlanningProperties {
+  cellWidth: number
   nbWeeks: number
 }
 
@@ -16,27 +17,28 @@ declare interface NodeRenderVars extends NodeRenderVarsPartial {
   }
 }
 
-declare interface SummaryNodeCalendarContent {
-  items: Array<{
-    color?: BopColor
+declare interface SummaryNodeCalendarContentItem {
+  color?: BopColor
+  left: number
+  width: number
+  label?: string
+  type: 'summary'
+}
+declare interface TaskNodeCalendarContentItem {
+  color?: BopColor
+  left: number
+  width: number
+  label?: string
+  type: 'taskpart'
+  previousEnd?: number
+  nextStart?: number
+  stubs?: Array<{
+    on: boolean
     left: number
-    width: number
-    label?: string
-    type: 'summary'
+    width?: number
   }>
 }
-declare interface TaskNodeCalendarContent {
-  items: Array<{
-    color?: BopColor
-    left: number
-    width: number
-    label?: string
-    type: 'taskpart'
-    previousEnd?: number
-    nextStart?: number
-    stubs?: {
-      on: boolean
-    }
-  }>
+
+declare interface NodeCalendarContent {
+  items: Array<SummaryNodeCalendarContentItem | TaskNodeCalendarContentItem>
 }
-declare type NodeCalendarContent = TaskNodeCalendarContent | SummaryNodeCalendarContent
