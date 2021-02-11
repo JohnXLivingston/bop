@@ -1,7 +1,8 @@
 import { BaseObject } from '../base.object'
-import { ResourceObject } from '../resource/resource.object'
 import { TaskAllocationObject } from './task.allocation.object'
+import { TaskPartObject } from './task.part.object'
 import type { DateLayout } from 'bop/shared/utils/date-layout'
+import { ensureId, EnsurableId } from 'bop/shared/utils/object-id'
 
 export class TaskObject extends BaseObject {
   version: number
@@ -49,27 +50,15 @@ export class TaskObject extends BaseObject {
     return json
   }
 
-  toCalendarContent (_dateLayout: DateLayout, _allocationId: number): NodeCalendarContent {
+  toCalendarContent (_dateLayout: DateLayout, _allocationId: number): NodeContent.Calendar {
     // TODO.
     return {
       items: []
     }
   }
 
-  isResourceAllocated (resource: undefined | number | ResourceObject | string): boolean {
-    let resourceId: number | undefined
-    if (typeof resource === 'object') {
-      resourceId = resource.id
-    } else if (typeof resource === 'string') {
-      const m = resource.match(/^resource\/(\d+)$/)
-      if (m) {
-        resourceId = +m[1]
-      } else {
-        throw new Error(`Can't convert the string ${resource} to a resource ID`)
-      }
-    } else {
-      resourceId = resource
-    }
+  isResourceAllocated (resource: EnsurableId): boolean {
+    const resourceId = ensureId('resource', resource)
     if (resourceId === 0) {
       // id=0 means 'unsaved'. If you call this method with an unsaved resource,
       // it is probably a bug.
@@ -82,5 +71,18 @@ export class TaskObject extends BaseObject {
       }
     }
     return false
+  }
+
+  resourceParts (resource: EnsurableId): TaskPartObject[] {
+    const resourceId = ensureId('resource', resource)
+    const r: TaskPartObject[] = []
+    for (let i = 0; i < this.allocations.length; i++) {
+      const allocation = this.allocations[i]
+      if (allocation.resourceId === resourceId) {
+        const parts = allocation.parts
+        r.push(...parts)
+      }
+    }
+    return r
   }
 }

@@ -13,7 +13,7 @@ declare interface Task {
 declare interface TaskAllocation {
   id: number
   type: 'taskallocation'
-  resourceId?: number
+  resourceId: number | null
   order: number
   start: string
   end: string

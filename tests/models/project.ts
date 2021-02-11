@@ -81,19 +81,22 @@ describe('models/project/project.ts', function () {
   })
 
   describe('Project methods', function () {
-    describe('toFormattedJSON', function () {
+    describe('toFormattedJSON and toObject', function () {
       it('Should work', async function () {
         let project: ProjectModel | null = new ProjectModel(project1Data)
         await project.save()
         const projectId = project?.id
         project = await ProjectModel.findByPk(projectId)
-        expect(project?.toFormattedJSON()).to.be.deep.equal({
+        const expectedResult = {
           id: projectId,
           type: 'project',
           color: '1',
           version: 0,
           name: project1Data.name
-        })
+        }
+        expect(project?.toFormattedJSON(), 'toFormattedJSON').to.be.deep.equal(expectedResult)
+        // NB: Project.toFormattedJSON is tested in another file. We can consider it as working here.
+        expect(project?.toObject().toFormattedJSON(), 'toObject').to.be.deep.equal(expectedResult)
       })
     })
   })

@@ -21,21 +21,10 @@ export abstract class PlanningNodeObjectTask extends PlanningNodeObject {
         left: this.tree.dateLayout.computeAttributes(task.start, task.end).left,
         width: this.tree.dateLayout.computeAttributes(task.start, task.end).width,
         label: 'Test',
-        type: 'taskpart',
-        stubs: [
+        type: 'tasksegment',
+        daysOff: [
           {
-            on: true,
-            left: 100,
-            width: 200
-          },
-          {
-            on: false,
             left: 200,
-            width: 100
-          },
-          {
-            on: true,
-            left: 300,
             width: 100
           }
         ]

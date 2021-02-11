@@ -41,6 +41,15 @@ describe('models/user/user.ts', function () {
           username: 'Administrator'
         })
       })
+      it('The toObject method should return the correct value.', function () {
+        // NB: User.toFormattedJSON is tested in another file. We can consider it as working here.
+        expect(user.toObject().toFormattedJSON()).to.be.deep.equal({
+          id: 1,
+          type: 'user',
+          version: 0,
+          username: 'Administrator'
+        })
+      })
     })
   })
 

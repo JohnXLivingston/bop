@@ -54,9 +54,9 @@ module.exports = {
       to: { path: '^src/helpers/|^node_modules/|^(path|fs)$'}
     },
     {
-      comment: 'Models can only include helpers code',
+      comment: 'Models can only include helpers code. Can also include shared/objects',
       from: { path: '^src/models/' },
-      to: { path: '^src/(helpers|models)/|^node_modules/'}
+      to: { path: '^src/(helpers|models)/|^node_modules/|^src/shared/objects/'}
     },
     {
       comment: 'Controllers can only include low level code or middlewares.',

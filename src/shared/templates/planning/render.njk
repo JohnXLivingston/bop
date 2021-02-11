@@ -12,25 +12,12 @@
           "
         >
           <div class="widget-planning-item-inner">
-            <div class="widget-planning-item-part">
+            <div class="widget-planning-item-content">
               <div class="widget-planning-item-txt">{{ item.label }}</div>
             </div>
           </div>
         </div>
-      {% elif item.type === 'taskpart' %}
-        {% if item.previousEnd and item.previousEnd <= 0 %}
-          {# There is something to the left, outis #}
-          <div class="widget-planning-item"
-            style="
-              left: {{ item.previousEnd }}px;
-              width: {{ item.left - item.previousEnd }}px;
-            "
-          >
-            <div class="widget-planning-split">
-              <div class="widget-planning-split-inner"></div>
-            </div>
-          </div>
-        {% endif %}
+      {% elif item.type === 'tasksegment' %}
         <div class="widget-planning-item"
           style="
             left: {{ item.left }}px;
@@ -38,7 +25,7 @@
           "
         >
           <div class="widget-planning-item-inner">
-            <div class="widget-planning-item-part"
+            <div class="widget-planning-item-content"
               data-widget="bopWheelmenu"
               data-widget-wheelmenu-items="{{ nodeMenuItem(node) }}"
             >
@@ -46,32 +33,28 @@
                 {{ item.label }}
               </div>
             </div>
-            {% for stub in item.stubs %}
-              {% if (not stub.on) %}
-                {# Rendering «off» parts #}
-                <div
-                  class="widget-planning-item-part widget-planning-item-part-off"
-                  style="
-                    left: {{ stub.left - item.left }}px;
-                    width: {{ stub.width }}px;
-                  "
-                ></div>
-              {% endif %}
+            {% for dayOff in item.daysOff %}
+              <div
+                class="widget-planning-item-content widget-planning-item-content-off"
+                style="
+                  left: {{ dayOff.left - item.left }}px;
+                  width: {{ dayOff.width }}px;
+                "
+              ></div>
             {% endfor %}
           </div>
         </div>
-        {% if item.nextStart and item.nextStart > item.left + item.width %}
-          <div class="widget-planning-item"
-            style="
-                left: {{ item.left + item.width }}px;
-                width: {{ item.nextStart - (item.left + item.width) }}px;
-              "
-          >
-            <div class="widget-planning-split">
-              <div class="widget-planning-split-inner"></div>
-            </div>
+      {% elif item.type === 'tasksplit' %}
+        <div class="widget-planning-item"
+          style="
+              left: {{ item.left }}px;
+              width: {{ item.width }}px;
+            "
+        >
+          <div class="widget-planning-split">
+            <div class="widget-planning-split-inner"></div>
           </div>
-        {% endif %}
+        </div>
       {% endif %}
     {% endfor %}
   </div>

@@ -3,7 +3,7 @@ import { TaskPartObject } from './task.part.object'
 export class TaskAllocationObject {
   readonly id: number
   readonly type: string = 'taskallocation'
-  resourceId?: number
+  resourceId: number | null
   order: number
   start: string
   end: string

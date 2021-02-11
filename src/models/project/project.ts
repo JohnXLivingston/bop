@@ -9,6 +9,7 @@ import {
   Unique
 } from 'sequelize-typescript'
 import { CONSTRAINTS } from 'bop/helpers/config'
+import { ProjectObject } from 'bop/shared/objects/project/project.object'
 
 @Table({
   tableName: 'project',
@@ -41,5 +42,9 @@ export class ProjectModel extends Model<ProjectModel> {
       version: this.version
     }
     return json
+  }
+
+  toObject (): ProjectObject {
+    return new ProjectObject(this.toFormattedJSON())
   }
 }

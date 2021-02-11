@@ -4,3 +4,4 @@ import { TaskObject } from './task/task.object'
 import { UserObject } from './user/user.object'
 
 export type BopObject = UserObject | ProjectObject | ResourceObject | TaskObject
+export type BopObjectType = 'user' | 'project' | 'resource' | 'task'

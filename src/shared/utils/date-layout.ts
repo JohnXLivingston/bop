@@ -34,8 +34,7 @@ class DateLayout {
       throw new Error(`The date ${end ?? this.endDay} is less or equal the date ${start}.`)
     }
     const left = (startDay - this.startDay) * this.cellWidth
-    const right = (endDay - this.startDay) * this.cellWidth
-    const width = right - left
+    const width = (endDay - startDay) * this.cellWidth
     return {
       left,
       width

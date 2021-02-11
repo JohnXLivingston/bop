@@ -63,19 +63,22 @@ describe('models/resource/resource.ts', function () {
   })
 
   describe('Resource methods', function () {
-    describe('toFormattedJSON', function () {
+    describe('toFormattedJSON and toObject', function () {
       it('Should work', async function () {
         let resource: ResourceModel | null = new ResourceModel(resource1Data)
         await resource.save()
         const resourceId = resource?.id
         resource = await ResourceModel.findByPk(resourceId)
-        expect(resource?.toFormattedJSON()).to.be.deep.equal({
+        const expectedResult = {
           id: resourceId,
           type: 'resource',
           version: 0,
           name: resource1Data.name,
           resourceType: resource1Data.resourceType
-        })
+        }
+        expect(resource?.toFormattedJSON(), 'toFormattedJSON').to.be.deep.equal(expectedResult)
+        // NB: Resource.toFormattedJSON is tested in another file. We can consider it as working here.
+        expect(resource?.toObject().toFormattedJSON(), 'toObject').to.be.deep.equal(expectedResult)
       })
     })
   })

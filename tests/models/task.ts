@@ -282,7 +282,7 @@ describe('models/task/task.ts', function () {
   })
 
   describe('Task methods', function () {
-    describe('toFormattedJSON', function () {
+    describe('toFormattedJSON and toObject', function () {
       it('Should work', async function () {
         let task: TaskModel | null = new TaskModel({
           name: 'This is a task',
@@ -364,7 +364,7 @@ describe('models/task/task.ts', function () {
         expect(taskId, 'Should have an id').to.not.be.null
         task = await TaskModel.findByPk(taskId)
         expect(task, 'Should be able to retrieve the task').to.not.be.null
-        expect(task?.toFormattedJSON(), 'Calling toFormattedJSON').to.be.deep.equal({
+        const expectedResult = {
           id: taskId,
           type: 'task',
           version: 0,
@@ -425,7 +425,10 @@ describe('models/task/task.ts', function () {
               ]
             }
           ]
-        })
+        }
+        expect(task?.toFormattedJSON(), 'Calling toFormattedJSON').to.be.deep.equal(expectedResult)
+        // NB: Task.toFormattedJSON is tested in another file. We can consider it as working here.
+        expect(task?.toObject().toFormattedJSON(), 'Calling toObject').to.be.deep.equal(expectedResult)
       })
     })
   })

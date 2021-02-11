@@ -1,6 +1,7 @@
 import { Model, Table, AllowNull, IsIn, Column, DataType, Length, HasMany } from 'sequelize-typescript'
 import { CONSTRAINTS } from '../../helpers/config'
 import { TaskAllocationModel } from '../task/task'
+import { ResourceObject } from 'bop/shared/objects/resource/resource.object'
 
 @Table({
   tableName: 'resource',
@@ -40,5 +41,9 @@ export class ResourceModel extends Model<ResourceModel> {
       name: this.name,
       resourceType: this.resourceType
     }
+  }
+
+  toObject (): ResourceObject {
+    return new ResourceObject(this.toFormattedJSON())
   }
 }

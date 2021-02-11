@@ -16,6 +16,7 @@ import {
 import { CONSTRAINTS } from 'bop/helpers/config'
 import { comparePassword, cryptPassword } from 'bop/helpers/crypto'
 import { logger } from 'bop/helpers/log'
+import { UserObject } from 'bop/shared/objects/user/user.object'
 
 @Table({
   tableName: 'user',
@@ -110,5 +111,9 @@ export class UserModel extends Model<UserModel> {
       username: this.username
     }
     return json
+  }
+
+  toObject (): UserObject {
+    return new UserObject(this.toFormattedJSON())
   }
 }

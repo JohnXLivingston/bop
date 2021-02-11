@@ -17,6 +17,7 @@ import {
 import { ProjectModel } from '../project'
 import { CONSTRAINTS } from 'bop/helpers/config'
 import { ResourceModel } from '../resource/resource'
+import { TaskObject } from 'bop/shared/objects/task/task.object'
 
 @DefaultScope(() => ({
   include: [{
@@ -101,6 +102,10 @@ class TaskModel extends Model<TaskModel> {
     }
     return json
   }
+
+  toObject (): TaskObject {
+    return new TaskObject(this.toFormattedJSON())
+  }
 }
 
 @DefaultScope(() => ({
@@ -133,9 +138,10 @@ class TaskAllocationModel extends Model<TaskAllocationModel> {
   @ForeignKey(() => ResourceModel)
   @AllowNull(true)
   @Column({
-    comment: 'An optional allocated resource.'
+    comment: 'An optional allocated resource.',
+    type: DataType.INTEGER
   })
-  resourceId?: number
+  resourceId!: number | null
 
   @AllowNull(false)
   @IsDate
