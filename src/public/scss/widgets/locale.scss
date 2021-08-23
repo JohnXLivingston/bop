@@ -3,6 +3,6 @@
 
 [data-widget='bopLocaleChange'] {
   a {
-    @include link-clickable
+    @include link-clickable;
   }
 }

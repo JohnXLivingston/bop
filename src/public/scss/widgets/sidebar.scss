@@ -3,6 +3,7 @@
 
 .sidebar-wrapper {
   @include flex-v;
+
   background-color: $background-color-light;
   border: solid 1px $border-color-dark;
   height: 100%;
@@ -12,6 +13,7 @@
 
 .sidebar-header {
   @include flex;
+
   background-color: $background-color-filled;
   border-bottom: solid 1px $border-color-dark;
   color: $color-filled;

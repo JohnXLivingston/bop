@@ -10,23 +10,22 @@ $zindex-planning-item: 10;
 
 $widget-planning-default-color: rgb(34, 34, 34);
 
-$widget-planning-colors:
-'1' rgb(49, 74, 225),
-'2' rgb(39, 122, 245),
-'3' rgb(72, 177, 237),
-'4' rgb(56, 180, 176),
-'5' rgb(147, 182, 25),
-'6' rgb(226, 144, 0),
-'7' rgb(238, 103, 29),
-'8' rgb(120, 60, 37),
-'9' rgb(203, 27, 106),
-'10' rgb(162, 62, 187),
-'11' rgb(108, 55, 205),
-'unallocated' rgb(153, 153, 153),
-'partially' rgb(136, 205, 164),
-'full' rgb(34, 161, 85),
-'overloaded' rgb(237, 47, 54),
-'off' rgb(90, 95, 115);
+$widget-planning-colors: '1' rgb(49, 74, 225),
+  '2' rgb(39, 122, 245),
+  '3' rgb(72, 177, 237),
+  '4' rgb(56, 180, 176),
+  '5' rgb(147, 182, 25),
+  '6' rgb(226, 144, 0),
+  '7' rgb(238, 103, 29),
+  '8' rgb(120, 60, 37),
+  '9' rgb(203, 27, 106),
+  '10' rgb(162, 62, 187),
+  '11' rgb(108, 55, 205),
+  'unallocated' rgb(153, 153, 153),
+  'partially' rgb(136, 205, 164),
+  'full' rgb(34, 161, 85),
+  'overloaded' rgb(237, 47, 54),
+  'off' rgb(90, 95, 115);
 
 [data-widget='bopPlanning'] {
   height: 100%;
@@ -77,14 +76,14 @@ $widget-planning-colors:
   width: max-content;
   z-index: $zindex-planning-header;
 
-  &>* {
+  > * {
     height: 100%;
   }
 }
 
 // The planning's content (the lower part).
 .widget-planning-content {
-  // width: max-content : 
+  // width: max-content :
   // This is a trick that's make the
   // sticky work for
   // .widget-planning-label.
@@ -163,18 +162,22 @@ $widget-planning-colors:
 }
 
 // And a week is filled with days.
+/* stylelint-disable no-descending-specificity */
 .widget-planning-week-days {
+  /* stylelint-enable no-descending-specificity */
   @include flex;
 
-  &>* {
+  > * {
     width: 45px;
   }
 
   // In the planning content, days are here to draw a grid.
+  /* stylelint-disable no-descending-specificity */
   .widget-planning-content & {
+    /* stylelint-enable no-descending-specificity */
     height: 100%;
 
-    &>* {
+    > * {
       @include flex-full-fix;
 
       border: solid 1px $border-color-light;
@@ -203,7 +206,9 @@ $widget-planning-colors:
 
   height: 45px;
 
-  &>* {
+  /* stylelint-disable no-descending-specificity */
+  > * {
+    /* stylelint-enable no-descending-specificity */
     // The node content must use all available height.
     height: 100%;
   }
@@ -256,6 +261,7 @@ $widget-planning-colors:
 
 .widget-planning-item-content {
   @include flex-v;
+
   background-color: $widget-planning-default-color;
   bottom: 0;
   position: absolute;

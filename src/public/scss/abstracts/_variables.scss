@@ -1,23 +1,23 @@
 $color-base: #000;
-$color-error: #F00;
-$color-filled: #FFF;
+$color-error: #f00;
+$color-filled: #fff;
 
 $border-color-dark: #000;
-$border-color-light: rgba(0, 0, 0, .06);
-$border-color-filled-light: rgba(255, 255, 255, .15);
+$border-color-light: rgba(0, 0, 0, 0.06);
+$border-color-filled-light: rgba(255, 255, 255, 0.15);
 
 $background-color-disabled: rgb(128, 128, 128);
-$background-color-empty: #FFF;
-$background-color-light: #F2F2F2;
-$background-color-light-hover: #F6F6F6;
-$background-color-filled: #4268D5;
-$background-color-filled-light: rgba(255, 255, 255, .15);
+$background-color-empty: #fff;
+$background-color-light: #f2f2f2;
+$background-color-light-hover: #f6f6f6;
+$background-color-filled: #4268d5;
+$background-color-filled-light: rgba(255, 255, 255, 0.15);
 
 $hover-transition-time: 150ms;
 
 $background-stripes-width: 5px;
 
-$waiting-wheel-border-color1: rgba(0, 0, 0, .1);
-$waiting-wheel-border-color2: rgba(0, 0, 0, .5);
+$waiting-wheel-border-color1: rgba(0, 0, 0, 0.1);
+$waiting-wheel-border-color2: rgba(0, 0, 0, 0.5);
 
-$waiting-mask-background-color: rgba(255, 255, 255, .6);
+$waiting-mask-background-color: rgba(255, 255, 255, 0.6);

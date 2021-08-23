@@ -1,8 +1,6 @@
 @import 'abstracts/variables';
 @import 'abstracts/mixins';
-
 @import 'common';
-
 @import 'utils';
 
 body {
@@ -12,6 +10,7 @@ body {
 
 header {
   @include flex;
+
   background-color: $background-color-filled;
   border-bottom: solid 1px $border-color-dark;
   color: $color-filled;
@@ -27,6 +26,7 @@ header {
 
     a {
       @include flex;
+
       color: $color-filled;
       height: 42px;
       margin-left: 5px;
@@ -36,7 +36,7 @@ header {
       text-align: center;
       text-decoration: none;
 
-      &>* {
+      > * {
         margin: 0 5px;
       }
 
@@ -65,17 +65,20 @@ header {
   .header-first-block {
     @include flex-full-fix;
     @include flex;
+
     padding: 0 20px;
   }
 
   .header-last-block {
     @include flex-fix;
+
     border-left: solid 1px $border-color-filled-light;
     padding: 0 20px;
   }
 
   [data-main-sidebar-open] {
     @include button-picto;
+
     font-size: 2rem;
     padding: 0 5px;
     transition: $hover-transition-time;

@@ -1,6 +1,5 @@
 @import 'abstracts/variables';
 @import 'abstracts/mixins';
-
 @import 'common/common';
 @import 'widgets/locale';
 
@@ -15,11 +14,11 @@ body {
   margin: auto;
   max-width: 380px;
 
-  &>h1 {
+  > h1 {
     text-align: center;
   }
 
-  &>footer {
+  > footer {
     @include flex-fix;
 
     border-top: solid 1px $border-color-light;
