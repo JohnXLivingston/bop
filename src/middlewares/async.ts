@@ -10,7 +10,7 @@ function asyncMiddleware (fun: RequestPromiseHandler | RequestPromiseHandler[]):
   return (req: Request, res: Response, next: NextFunction) => {
     if (Array.isArray(fun)) {
       eachSeries(fun as RequestHandler[], (f, cb) => {
-        Promise.resolve(f(req, res, cb))
+        Promise.resolve(f(req, res, (err: any) => cb(err)))
           .catch(err => next(err))
       }, next)
       return

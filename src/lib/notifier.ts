@@ -38,7 +38,7 @@ class Notifier {
         type: 5, // see socket.io-redis/index.js: requestTypes.customRequest
         data
       })
-      const requestChannel = emitter.prefix + '-request#' + emitter.nsp + '#'
+      const requestChannel = `${emitter.prefix as string}-request#${emitter.nsp as string}#`
       // For now, we dont have to wait the response.
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       emitter.redis.publish(requestChannel, request)

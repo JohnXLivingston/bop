@@ -294,7 +294,7 @@ async function updateConfigKey (): Promise<void> {
   }
 
   for (const key in updates) {
-    _injectConfig(data, key.split('.'), updates[key])
+    _injectConfig(data as {[key: string]: any}, key.split('.'), updates[key])
   }
   const yaml = jsYaml.dump(data, {
     styles: {
