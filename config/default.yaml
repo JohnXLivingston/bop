@@ -14,11 +14,18 @@ database:
   dbname: ~
   username: ~
   password: ~
-  log: false
+  log: false # sequelize deprecated ?
+  prefix: ~
   pool:
     # max pools by workers. You have to multiply by cluster.workers to have the real number of connections.
     # NB: the master will use the same number of pools, but will disconnect as soon as migrations are done.
     max: 5
+    # leaktimeout: Permit to indicate a timeout to log connection borrowed from pool.
+    # When a connection is borrowed from pool and this timeout is reached, a message
+    # will be logged to console indicating a possible connection leak. Another message
+    # will tell if the possible logged leak has been released.
+    # A value of 0 (default) meaning Leak detection is disable
+    leaktimeout: 60
 
 log:
   level: info

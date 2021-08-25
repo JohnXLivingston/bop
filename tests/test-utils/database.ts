@@ -8,6 +8,7 @@ import * as chai from 'chai'
 import { omit } from 'lodash'
 
 import { Model } from 'sequelize-typescript'
+import { BaseCrud } from '../../src/crud/base'
 
 const expect = chai.expect
 chai.use(require('chai-as-promised'))
@@ -33,6 +34,66 @@ function resolveData (data: any): any {
     return data()
   }
   return data
+}
+
+function testCrudCreationAndDeletion<T extends BaseCrud<T, O>> ({
+  name,
+  CrudClass,
+  data,
+  mandatoryFields,
+  expectedObjectId,
+  optimisticLocking
+}: TestArgsCreationAndDeletion<T>): void {
+  describe(name + ' creation', function () {
+    let object: T | null
+    let objectId: number
+    it('Should be able to create a ' + name, async function () {
+      const resolvedData = resolveData(data)
+      object = new CrudClass()
+      await object.save(data)
+
+      expect(object.id, 'Id not null').to.be.not.null
+      objectId = object.id
+
+      if (optimisticLocking) {
+        expect(object.version, 'Opimistic Locking').to.be.equal(0)
+      } else if (object.version !== undefined) {
+        throw new Error(name + ' seems to have a version column, but dont use the optimisticLocking option.')
+      }
+
+      object = await CrudClass.findByPk(objectId)
+      expect(object, 'Not null').to.be.not.null
+      expect(object, 'Include initial datas').to.deep.include(resolvedData)
+      if (optimisticLocking) {
+        expect(object?.version, 'Opimistic Locking').to.be.equal(0)
+      }
+    })
+
+    if (expectedObjectId) {
+      it('The created object should have the id ' + expectedObjectId, function () {
+        expect(object?.id).to.be.equal(expectedObjectId)
+      })
+    }
+
+    if (mandatoryFields) {
+      for (let i = 0; i < mandatoryFields.length; i++) {
+        const field = mandatoryFields[i]
+        it(`Should not create a ${name} with missing mandatory field "${field}"`, async function () {
+          const resolvedData = resolveData(data)
+          const project = new CrudClass(omit(resolvedData, field))
+          await expect(project.save()).to.be.rejectedWith(new RegExp(`\\.${field} cannot be null`))
+        })
+      }
+    }
+
+    it('Should be able to delete a ' + name, async function () {
+      let object = await CrudClass.findByPk(objectId)
+      expect(object, 'Get the object').not.to.be.null
+      await object!.destroy()
+      object = await CrudClass.findByPk(objectId)
+      expect(object, 'Object should be delete.').to.be.null
+    })
+  })
 }
 
 function testModelCreationAndDeletion<T extends Model> ({
@@ -435,6 +496,7 @@ function testModelConstraint<T extends Model> ({
 }
 
 export {
+  testCrudCreationAndDeletion,
   testModelCreationAndDeletion,
   testModelUpdate,
   testModelConstraint

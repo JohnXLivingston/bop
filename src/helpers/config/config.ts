@@ -31,15 +31,17 @@ const CONFIG = {
     }
   },
   DATABASE: {
-    TYPE: get<SequelizeDialect | null>('database.type', null),
+    TYPE: get<SequelizeDialect | null>('database.type', null), // sequelize deprecated
     HOSTNAME: get<string | null>('database.hostname', null),
     PORT: get<number>('database.PORT', 3306),
     DBNAME: get<string | null>('database.dbname', null),
     USERNAME: get<string | null>('database.username', null),
     PASSWORD: get<string | null>('database.password', null),
-    LOG: get<boolean>('database.log', false),
+    LOG: get<boolean>('database.log', false), // sequelize deprecated
+    PREFIX: get<string | null>('database.prefix', null),
     POOL: {
-      MAX: get<number>('database.pool.max', 5)
+      MAX: get<number>('database.pool.max', 5),
+      LEAKTIMEOUT: get<number>('database.pool.leaktimeout', 0)
     }
   },
   LOG: {

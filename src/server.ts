@@ -14,6 +14,7 @@ import * as httpContext from 'express-http-context'
 
 import { CONFIG, checkConfig } from './helpers/config'
 import { logger } from './helpers/log'
+import { initPool } from './helpers/database/connection'
 import { setSharedLogger } from './shared/utils/logger'
 
 import { Notifier } from './lib/notifier'
@@ -59,6 +60,7 @@ async function init (): Promise<void> {
     await sequelizeTypescript.close()
   } else {
     await initDatabaseModels()
+    await initPool()
   }
 
   if (cluster.isMaster) {

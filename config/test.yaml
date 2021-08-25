@@ -10,6 +10,7 @@ database:
   dbname: 'bop_test'
   username: 'bop_test'
   password: 'bop'
+  prefix: 'bop_test'
   log: true
 
 log:

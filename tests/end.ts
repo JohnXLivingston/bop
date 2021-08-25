@@ -13,6 +13,7 @@ describe('Tests environment', function () {
       generateMissingTests('helpers', n => !/\/register-ts-path.ts/.test(n))
       generateMissingTests('initializers')
       generateMissingTests('lib')
+      generateMissingTests('crud')
       generateMissingTests('models')
       generateMissingTests('views', n => { return /views\/.*\//.test(n) }) // only test first level templates.
     })

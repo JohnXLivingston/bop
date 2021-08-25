@@ -10,7 +10,8 @@ database:
   dbname: 'bop_dev'
   username: 'bop_dev'
   password: 'bop'
-  log: true
+  log: true # sequelize deprecated ?
+  prefix: 'bop_dev'
 
 log:
   level: debug
