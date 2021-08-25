@@ -32,7 +32,7 @@ import { TaskObject } from 'bop/shared/objects/task/task.object'
   timestamps: true,
   version: true
 })
-class TaskModel extends Model<TaskModel> {
+class TaskModel extends Model {
   @ForeignKey(() => ProjectModel)
   projectId!: number
 
@@ -121,7 +121,7 @@ class TaskModel extends Model<TaskModel> {
   timestamps: false,
   version: false
 })
-class TaskAllocationModel extends Model<TaskAllocationModel> {
+class TaskAllocationModel extends Model {
   @ForeignKey(() => TaskModel)
   @Column
   taskId!: number
@@ -196,7 +196,7 @@ class TaskAllocationModel extends Model<TaskAllocationModel> {
   timestamps: false,
   version: false
 })
-class TaskPartModel extends Model<TaskPartModel> {
+class TaskPartModel extends Model {
   @ForeignKey(() => TaskAllocationModel)
   @Column
   allocationId!: number

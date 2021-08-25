@@ -16,7 +16,7 @@ import { ProjectObject } from 'bop/shared/objects/project/project.object'
   timestamps: true,
   version: true
 })
-export class ProjectModel extends Model<ProjectModel> {
+export class ProjectModel extends Model {
   @AllowNull(false)
   @Length(CONSTRAINTS.PROJECT.NAME)
   @Unique

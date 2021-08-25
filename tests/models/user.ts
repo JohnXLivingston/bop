@@ -19,7 +19,8 @@ describe('models/user/user.ts', function () {
 
   describe('The default admin user', function () {
     it('There should be an admin user', async function () {
-      const user = await UserModel.findByPk(1)
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const user = (await UserModel.findByPk(1))!
       it('The admin user must be found and have valid data.', function () {
         expect(user).to.not.to.be.null
       })

@@ -8,7 +8,7 @@ import { ResourceObject } from 'bop/shared/objects/resource/resource.object'
   timestamps: true,
   version: true
 })
-export class ResourceModel extends Model<ResourceModel> {
+export class ResourceModel extends Model {
   @AllowNull(false)
   @IsIn([['person', 'room']])
   @Column({

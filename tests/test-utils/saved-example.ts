@@ -82,8 +82,10 @@ async function saveExamples (): Promise<SavedExamples> {
   }
 
   // reload tasks with allocations and parts
-  task1 = await TaskModel.findByPk(task1.id)
-  taskWithUnallocatedLines = await TaskModel.findByPk(taskWithUnallocatedLines.id)
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  task1 = (await TaskModel.findByPk(task1.id))!
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  taskWithUnallocatedLines = (await TaskModel.findByPk(taskWithUnallocatedLines.id))!
 
   return {
     project1,

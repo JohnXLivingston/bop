@@ -23,7 +23,7 @@ import { UserObject } from 'bop/shared/objects/user/user.object'
   timestamps: true,
   version: true
 })
-export class UserModel extends Model<UserModel> {
+export class UserModel extends Model {
   @AllowNull(false)
   @Is(/^[a-zA-Z0-9_-]+$/)
   @Length(CONSTRAINTS.USER.LOGIN)

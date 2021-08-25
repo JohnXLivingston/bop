@@ -4,7 +4,7 @@ import { Model, Table, Column, AllowNull, Default, IsInt } from 'sequelize-types
   tableName: 'application',
   timestamps: false
 })
-export class ApplicationModel extends Model<ApplicationModel> {
+export class ApplicationModel extends Model {
   @AllowNull(false)
   @Default(0)
   @IsInt
