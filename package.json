@@ -26,7 +26,7 @@
     "test": "scripty",
     "test:nolint": "TEST_NOLINTING=1 npm run test",
     "i18n:extract": "npx i18next -c .i18next-parser.config.js",
-    "i18n:build": "cp -r src/locales/ dist/i18n/",
+    "i18n:build": "mkdir -p dist/i18n/ && cp -r src/locales/ dist/i18n/",
     "i18n:watch": "watch 'npm run i18n:build' src/locales/",
     "database:sync:launch": "NODE_ENV=production node ./dist/scripts/database-sync.js",
     "dev:database:sync": "NODE_ENV=development npm-run-all -s clean dev:build dev:database:sync:launch",
