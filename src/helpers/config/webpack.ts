@@ -25,9 +25,24 @@ for (const key in assets) {
   const asset = assets[key]
   if (key === '') {
     // - '' : here are some images and other stuff
+    //        and since webpack5, there are common js (vendors, ...) and css
     // looking for the favicon...
     if (asset.svg && Array.isArray(asset.svg)) {
       faviconSvg = asset.svg.find((url: string) => /^\/images\/bop\.\w+\.svg$/.test(url))
+    }
+    if (asset.js) {
+      if (Array.isArray(asset.js)) {
+        jsFiles[''] = asset.js
+      } else {
+        jsFiles[''] = [asset.js]
+      }
+    }
+    if (asset.css) {
+      if (Array.isArray(asset.css)) {
+        cssFiles[''] = asset.css
+      } else {
+        cssFiles[''] = [asset.css]
+      }
     }
     continue
   }
@@ -88,16 +103,24 @@ class WebpackManifest {
   }
 
   stylesheetUrls (name: string): string[] {
+    // clone to avoid injections if variable is compromised!
+    const common = cssFiles[''] ? cssFiles[''].slice() : []
     if (!cssFiles[name]) {
-      return []
+      return common
     }
     // clone array!
-    return cssFiles[name].slice()
+    return common.concat(cssFiles[name].slice())
   }
 
   scriptUrls (name: string): string[] {
-    const r = jsFiles[name] ? jsFiles[name].slice() : []
-    return r
+    // This code will be used in templates.
+    // To avoid some code injection, we must always return
+    // clones.
+    const common = jsFiles[''] ? jsFiles[''].slice() : []
+    if (!jsFiles[name]) {
+      return common
+    }
+    return common.concat(jsFiles[name].slice())
   }
 }
 

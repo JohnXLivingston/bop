@@ -1,7 +1,7 @@
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const AssetsPlugin = require('assets-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
 const path = require('path')
 const webpack = require('webpack')
 
@@ -13,7 +13,8 @@ const isProd = process.env.NODE_ENV === 'production'
 
 const minimizers = []
 if (isProd) {
-  minimizers.push(new OptimizeCSSAssetsPlugin())
+  minimizers.push(new CssMinimizerPlugin())
+  minimizers.push('...')
 }
 
 module.exports = {
@@ -33,7 +34,8 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            plugins: ['babel-plugin-transform-class-properties'],
+            // plugins: ['babel-plugin-transform-class-properties'],
+            plugins: ['@babel/plugin-proposal-class-properties'],
             presets: [
               '@babel/typescript',
               [
@@ -91,16 +93,10 @@ module.exports = {
       {
         // exposing jQuery in window.$ and window.jQuery
         test: require.resolve('jquery'),
-        use: [
-          {
-            loader: 'expose-loader',
-            options: '$'
-          },
-          {
-            loader: 'expose-loader',
-            options: 'jQuery'
-          }
-        ]
+        loader: 'expose-loader',
+        options: {
+          exposes: ['$', 'jQuery']
+        }
       },
       {
         test: /\.njk$/,
@@ -156,6 +152,7 @@ module.exports = {
     runtimeChunk: {
       name: 'manifest'
     },
+    minimize: isProd,
     minimizer: minimizers
   },
   output: {
