@@ -14,8 +14,8 @@ let supportedLanguagesInfo: Array<{
 }>
 
 async function initI18n (): Promise<void> {
-  const supportedLanguages = readdirSync('dist/i18n').filter((fileName) => {
-    const joinedPath = join('dist/i18n', fileName)
+  const supportedLanguages = readdirSync('dist/i18n/locales').filter((fileName) => {
+    const joinedPath = join('dist/i18n/locales', fileName)
     const isDirectory = lstatSync(joinedPath).isDirectory()
     return isDirectory
   })
@@ -23,7 +23,7 @@ async function initI18n (): Promise<void> {
 
   await i18next.use(i18nextMiddleware.LanguageDetector).use(i18nextFsBackend).init({
     backend: {
-      loadPath: 'dist/i18n/{{lng}}/{{ns}}.json'
+      loadPath: 'dist/i18n/locales/{{lng}}/{{ns}}.json'
     },
     detection: {
       order: ['querystring', /* 'session', */ 'cookie', 'header'],
