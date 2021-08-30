@@ -84,11 +84,10 @@ module.exports = {
       },
       {
         test: /\.(jpe?g|png|gif|svg)$/i,
-        loader: 'file-loader',
-        options: {
-          name: '[name].[contenthash].[ext]',
-          outputPath: 'images/'
-        }
+	      type: 'asset/resource',
+	      generator: {
+          filename: 'images/[name].[hash][ext]'
+	      }
       },
       {
         // exposing jQuery in window.$ and window.jQuery
