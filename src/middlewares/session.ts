@@ -32,7 +32,7 @@ function getSessionMiddleware (): RequestHandler {
     saveUninitialized: false,
     secret: CONFIG.COOKIES.SESSION.SECRET,
     store: new RedisStore({
-      client: Redis.Instance.getClient(),
+      client: Redis.Instance.getClientDuplicate(),
       prefix: 'sess:', // No need to add Redis.Instance.getPrefix(), because it is set in redisClient
       ttl: 60 * 60 * 24 * 7, // one week ttl is more than enough
       disableTouch: false

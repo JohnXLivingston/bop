@@ -7,6 +7,7 @@ import * as express from 'express'
 import { Server } from 'http'
 import * as sharedSession from 'express-socket.io-session'
 import { Socket } from 'socket.io'
+import { createAdapter } from '@socket.io/redis-adapter'
 
 import { CONFIG, checkConfig, webUrl } from './helpers/config'
 import { logger } from './helpers/log'
@@ -81,13 +82,13 @@ class Notifier {
       origins: [url]
     })
 
-    const redisClient = Redis.Instance.getClient()
-    const redisAdapter = require('socket.io-redis')
-    io.adapter(redisAdapter({
-      key: Redis.Instance.getPrefix() + 'notifier',
-      pub: redisClient,
-      sub: redisClient
-    }))
+    io.adapter(createAdapter(
+      Redis.Instance.getClientDuplicate(),
+      Redis.Instance.getClientDuplicate(),
+      {
+        key: Redis.Instance.getPrefix() + 'notifier'
+      })
+    )
     const ioNamespace = io.of('/bop')
     // this.ioNamespace = ioNamespace
 

@@ -40,8 +40,8 @@ class Redis {
     return options
   }
 
-  getClient (): RedisClient {
-    return this.client
+  getClientDuplicate (): RedisClient {
+    return this.client.duplicate()
   }
 
   getPrefix (): string {

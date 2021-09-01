@@ -13,7 +13,7 @@ class Notifier {
   private readonly ioNamespace: Emitter<BopSocketEvent>
 
   constructor () {
-    this.io = new Emitter<BopSocketEvent>(Redis.Instance.getClient(), {
+    this.io = new Emitter<BopSocketEvent>(Redis.Instance.getClientDuplicate(), {
       key: Redis.Instance.getPrefix() + 'notifier'
     })
     this.ioNamespace = this.io.of('/bop')
