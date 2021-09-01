@@ -29,6 +29,7 @@ class Redis {
     const options: ClientOpts = Object.assign(
       {},
       {
+        return_buffers: true,
         host: CONFIG.REDIS.HOSTNAME,
         port: CONFIG.REDIS.PORT,
         prefix: CONFIG.REDIS.PREFIX
