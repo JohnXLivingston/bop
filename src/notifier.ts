@@ -84,6 +84,13 @@ class Notifier {
   init (server: HTTPServer): void {
     const url = webUrl()
     const io = new SocketIOServer<BopEvents>(server, {
+      adapter: createAdapter(
+        Redis.Instance.getClientDuplicate(),
+        Redis.Instance.getClientDuplicate(),
+        {
+          key: Redis.Instance.getPrefix() + 'notifier'
+        }
+      ),
       cookie: false,
       cors: {
         origin: url,
@@ -91,14 +98,6 @@ class Notifier {
         credentials: true
       }
     })
-
-    io.adapter(createAdapter(
-      Redis.Instance.getClientDuplicate(),
-      Redis.Instance.getClientDuplicate(),
-      {
-        key: Redis.Instance.getPrefix() + 'notifier'
-      })
-    )
 
     const ioBopNamespace = io.of('/bop')
     // this.ioBopNamespace = ioBopNamespace
