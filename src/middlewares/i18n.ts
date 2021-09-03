@@ -45,8 +45,15 @@ async function initI18n (): Promise<void> {
     returnEmptyString: false,
     saveMissing: true,
     supportedLngs: supportedLanguages,
-    missingKeyHandler: (lng: string[], ns: string, key: string, fallbackValue: string) => {
-      const l = lng.toString()
+    missingKeyHandler: (
+      lngs: readonly string[],
+      ns: string,
+      key: string,
+      fallbackValue: string,
+      _updateMissing: boolean,
+      _options: any
+    ): void => {
+      const l = lngs.toString()
       logger.error(`Missing localized string: lng=${l}, ns=${ns}, key=${key}, fallbackValue=${fallbackValue}.`)
     }
   })
