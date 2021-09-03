@@ -32,7 +32,7 @@ module.exports = {
     },
     {
       from: { path: '^src/public/js/lib'},
-      to: { path: '^node_modules/(socket.io-client/lib/)' }
+      to: { path: '^node_modules/(socket.io-client/build/)' }
     },
     {
       comment: 'Public utils are low level code.',
@@ -59,9 +59,9 @@ module.exports = {
       to: { path: '^src/(helpers|models)/|^node_modules/|^src/shared/objects/'}
     },
     {
-      comment: 'Controllers can only include low level code or middlewares.',
+      comment: 'Controllers can include low and high level code or middlewares.',
       from: { path: '^src/controllers/' },
-      to: { path: '^src/(controllers|helpers|middlewares|models)/|^node_modules/' }
+      to: { path: '^src/(controllers|helpers|middlewares|models|lib)/|^node_modules/' }
     },
     {
       comment: 'Middlewares can include most of backend code.',
