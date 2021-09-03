@@ -281,7 +281,7 @@ async function updateConfigKey (): Promise<void> {
   let content
   try {
     content = fs.readFileSync(file, 'utf-8')
-  } catch (err) {
+  } catch (err: any) {
     if (err && err.code === 'ENOENT') {
       content = ''
     } else {

@@ -150,7 +150,7 @@ class Notifier {
             next(err)
           }
         )
-      } catch (err) {
+      } catch (err: any) {
         logger.error('Something went wrong', err)
         next(err)
       }
