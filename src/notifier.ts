@@ -170,8 +170,8 @@ class Notifier {
       }
       this._disconnectSession(sessionID)
     })
-    ioBopInternalNamespace.on('serverside_emit_test', (data: any) => {
-      logger.info('Received a serverside_emit_test message', data)
+    ioBopInternalNamespace.on('serverside_emit_test', (msg: string) => {
+      logger.info('Received a serverside_emit_test message: "%s"', msg)
     })
 
     if (CONFIG.NOTIFIER.ADMINUI) {
