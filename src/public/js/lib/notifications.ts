@@ -1,4 +1,4 @@
-import * as io from 'socket.io-client'
+import { io, Socket } from 'socket.io-client'
 import getLogger from 'bop/public/js/utils/logger'
 import { getContext } from 'bop/public/js/utils/context'
 
@@ -6,7 +6,7 @@ const logger = getLogger('lib/notifications.ts')
 const AUTORELOADDELAY = 1000
 
 class Notifications {
-  private socket?: SocketIOClient.Socket
+  private socket?: Socket<BopEvents>
   private autoReloadDevModeActivated: boolean = false
 
   /**
@@ -17,7 +17,9 @@ class Notifications {
     let reloadTimeout: NodeJS.Timeout | undefined
 
     const notifierUrl = getContext().notifierBaseUrl
-    this.socket = io(notifierUrl + '/bop')
+    this.socket = io(notifierUrl + '/bop', {
+      withCredentials: true
+    })
 
     this.socket.on('connect', () => {
       connectCount++
@@ -46,8 +48,8 @@ class Notifications {
       // TODO: display something. Try to reconnect? If it is because of a session ending, reload page?
     })
 
-    this.socket.on('news', (data: any) => {
-      logger.debug(data)
+    this.socket.on('news', (news) => {
+      logger.debug(news)
     })
   }
 

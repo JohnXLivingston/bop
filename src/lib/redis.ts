@@ -29,6 +29,7 @@ class Redis {
     const options: ClientOpts = Object.assign(
       {},
       {
+        return_buffers: false,
         host: CONFIG.REDIS.HOSTNAME,
         port: CONFIG.REDIS.PORT,
         prefix: CONFIG.REDIS.PREFIX
@@ -39,8 +40,8 @@ class Redis {
     return options
   }
 
-  getClient (): RedisClient {
-    return this.client
+  getClientDuplicate (): RedisClient {
+    return this.client.duplicate()
   }
 
   getPrefix (): string {

@@ -31,3 +31,4 @@ notifier:
   hostname: localhost
   port: 12341
   https: false
+  adminui: false
