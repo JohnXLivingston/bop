@@ -55,3 +55,7 @@ notifier:
   hostname: ~
   post: ~
   https: ~
+  # adminui: enable the socket-io admin interface.
+  # This is experimental, and there is currently no authentication mecanism.
+  # Don't enable this in production:
+  adminui: false

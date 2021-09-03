@@ -76,7 +76,8 @@ const CONFIG = {
   NOTIFIER: {
     HOSTNAME: config.get<string>('notifier.hostname'),
     PORT: config.get<number>('notifier.port'),
-    HTTPS: get<boolean>('notifier.https', false)
+    HTTPS: get<boolean>('notifier.https', false),
+    ADMINUI: get<boolean>('notifier.adminui', false)
   }
 }
 

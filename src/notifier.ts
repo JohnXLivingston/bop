@@ -2,12 +2,14 @@
 import { registerTSPaths } from './helpers/register-ts-paths'
 registerTSPaths()
 
+import * as path from 'path'
 import * as cluster from 'cluster'
 import * as express from 'express'
-import { Server } from 'http'
+import { createServer, Server as HTTPServer } from 'http'
+import { Server as SocketIOServer, Socket, Handshake } from 'socket.io'
 import * as sharedSession from 'express-socket.io-session'
-import { Socket } from 'socket.io'
 import { createAdapter } from '@socket.io/redis-adapter'
+import { instrument } from '@socket.io/admin-ui'
 
 import { CONFIG, checkConfig, webUrl } from './helpers/config'
 import { logger } from './helpers/log'
@@ -52,12 +54,16 @@ init().catch((err) => {
 /**
  * newServer creates the express app and the http server.
  */
-function newServer (): Server {
+function newServer (): HTTPServer {
   const app = express()
-  const server = new Server(app)
+  const server = createServer(app)
 
   Redis.initInstance()
   Notifier.Instance.init(server)
+
+  if (CONFIG.NOTIFIER.ADMINUI) {
+    app.use(express.static(path.join(__dirname, './socketioadmin')))
+  }
 
   return server
 }
@@ -68,18 +74,22 @@ class Notifier {
   private userSockets: { [userId: string]: Socket[] }
   // sessionSockets: sockets by sessionId
   private sessionSockets: { [sessionId: string]: Socket[] }
-  // private ioNamespace?: any
+  // private ioBopNamespace?: any
 
   constructor () {
     this.userSockets = {}
     this.sessionSockets = {}
   }
 
-  init (server: Server): void {
+  init (server: HTTPServer): void {
     const url = webUrl()
-    const io = require('socket.io')(server, {
+    const io = new SocketIOServer<BopEvents>(server, {
       cookie: false,
-      origins: [url]
+      cors: {
+        origin: url,
+        methods: ['GET', 'POST'],
+        credentials: true
+      }
     })
 
     io.adapter(createAdapter(
@@ -89,63 +99,87 @@ class Notifier {
         key: Redis.Instance.getPrefix() + 'notifier'
       })
     )
-    const ioNamespace = io.of('/bop')
-    // this.ioNamespace = ioNamespace
 
-    ioNamespace.use(sharedSession(getSessionMiddleware()))
-    ioNamespace.use(async (socket: Socket, next: express.NextFunction) => {
-      const sessionId = socket.handshake?.session?.id
-      const userId = socket.handshake?.session?.userId
-      if (!sessionId || !userId) {
-        logger.debug('New notifier connection for an unlogged user, refusing.')
-        return next(new Error('You must have a valid session to connect to Notifier'))
+    const ioBopNamespace = io.of('/bop')
+    // this.ioBopNamespace = ioBopNamespace
+
+    ioBopNamespace.use(sharedSession(getSessionMiddleware(), {
+      autoSave: false // Session should not be modified from the notifier.
+    }))
+    ioBopNamespace.use((socket, next: (err?: Error) => void) => {
+      try {
+        const handshake = socket.handshake as Handshake
+        const sessionId = handshake?.session?.id
+        const userId = handshake?.session?.userId
+        if (!sessionId || !userId) {
+          logger.debug('New notifier connection for an unlogged user, refusing.')
+          return next(new Error('You must have a valid session to connect to Notifier'))
+        }
+        const userPromise = checkUser(userId)
+        userPromise.then(
+          user => {
+            if (!user) {
+              logger.error('The user in the session is no more valid. Refusing.')
+              return next(new Error('The user has no right to log in.'))
+            }
+
+            logger.debug(
+              'New notifier connection for user %s, session %s',
+              userId,
+              sessionId.substring(0, 4) + '...'
+            )
+
+            if (!this.userSockets[userId]) { this.userSockets[userId] = [] }
+            this.userSockets[userId].push(socket)
+
+            if (!this.sessionSockets[sessionId]) { this.sessionSockets[sessionId] = [] }
+            this.sessionSockets[sessionId].push(socket)
+
+            this._countSockets(userId, sessionId)
+
+            socket.on('disconnect', () => {
+              logger.debug('Disconnecting a socket for user %s.', userId)
+              this.userSockets[userId] = this.userSockets[userId].filter(s => s !== socket)
+              this.sessionSockets[sessionId] = this.sessionSockets[sessionId].filter(s => s !== socket)
+              this._countSockets(userId, sessionId)
+            })
+
+            next()
+          },
+          err => {
+            logger.error('checkUser failed with:', err)
+            next(err)
+          }
+        )
+      } catch (err) {
+        logger.error('Something went wrong', err)
+        next(err)
       }
-      const user = await checkUser(userId)
-      if (!user) {
-        logger.error('The user in the session is no more valid. Refusing.')
-        return next(new Error('The user has no right to log in.'))
-      }
-
-      logger.debug('New notifier connection for user %s, session %s', userId, sessionId.substring(0, 4) + '...')
-
-      if (!this.userSockets[userId]) { this.userSockets[userId] = [] }
-      this.userSockets[userId].push(socket)
-
-      if (!this.sessionSockets[sessionId]) { this.sessionSockets[sessionId] = [] }
-      this.sessionSockets[sessionId].push(socket)
-
-      this._countSockets(userId, sessionId)
-
-      socket.on('disconnect', () => {
-        logger.debug('Disconnecting a socket for user %s.', userId)
-        this.userSockets[userId] = this.userSockets[userId].filter(s => s !== socket)
-        this.sessionSockets[sessionId] = this.sessionSockets[sessionId].filter(s => s !== socket)
-        this._countSockets(userId, sessionId)
-      })
-
-      next()
     })
 
-    ioNamespace.adapter.customHook = (data: string, cb: () => {}) => {
-      const m = data.match(/^(\w+):(.*)$/)
-      if (!m) {
-        cb()
-        return
-      }
-      const key = m[1]
-      const val = m[2]
-      if (key === 'disconnect') {
-        // val is a sessionId
-        logger.debug('Received a request to disconnect a session.')
-        this._disconnectSession(val)
-      }
-      cb()
-    }
-
-    ioNamespace.on('connection', (socket: Socket) => {
+    ioBopNamespace.on('connection', (socket) => {
       socket.emit('news', { msg: `Welcome on process ${process.pid}` })
       socket.broadcast.emit('news', { msg: `We have a new incomer on process ${process.pid}` })
     })
+
+    const ioBopInternalNamespace = io.of('/bop_internal')
+    ioBopInternalNamespace.on('disconnect_session', (sessionID: any) => {
+      logger.debug('Received a request to disconnect a session.')
+      if (typeof sessionID !== 'string') {
+        logger.error('Invalid sessionID')
+        return
+      }
+      this._disconnectSession(sessionID)
+    })
+    ioBopInternalNamespace.on('serverside_emit_test', (data: any) => {
+      logger.info('Received a serverside_emit_test message', data)
+    })
+
+    if (CONFIG.NOTIFIER.ADMINUI) {
+      instrument(io, {
+        auth: false
+      })
+    }
   }
 
   private _countSockets (userId: number, sessionId: string): void {
