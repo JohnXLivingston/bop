@@ -4,6 +4,9 @@
   "private": true,
   "main": "dist/server.js",
   "description": "Bop Open Planning",
+  "engines": {
+    "node": ">=14.0.0"
+  },
   "scripts": {
     "clean": "rimraf dist/*",
     "lint": "npm-run-all -s config:lint sass:lint tsc:lint dependencies:lint",
